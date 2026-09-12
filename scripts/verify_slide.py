@@ -126,10 +126,8 @@ def main():
         'deckTitleText',
         'deckRatioText',
         'deckSlideCountText',
-        'tabBtnEdit',
-        'tabBtnPresent',
-        'headerControlsEdit',
-        'headerControlsPresent',
+        'toggleEditBtn',
+        'copyCommentsBtn',
         'presentationModal'
     ]
 
@@ -153,7 +151,6 @@ def main():
     # 5. JavaScript ランタイム整合性 (基本プレゼン・推敲機能)
     # ========================================================
     required_js_functions = [
-        'switchHeaderTab',
         'toggleEditMode',
         'startPresentation',
         'stopPresentation',

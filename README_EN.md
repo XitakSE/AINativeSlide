@@ -26,9 +26,9 @@
    - [1. Autonomous AI Quality Testing (Zero-Dependency Python CLI)](#1-autonomous-ai-quality-testing-zero-dependency-python-cli)
    - [2. Robust CSS Box Model & Forced Overflow Prevention (Line-Clamping)](#2-robust-css-box-model--forced-overflow-prevention-line-clamping)
    - [3. Headless Zero-Margin PDF Export CLI](#3-headless-zero-margin-pdf-export-cli)
-   - [4. LocalStorage Auto-Save & Recovery](#4-localstorage-auto-save--recovery)
+   - [4. LocalStorage Background Auto-Save & Recovery](#4-localstorage-background-auto-save--recovery)
    - [5. Fullscreen Presentation Mode (Slideshow)](#5-fullscreen-presentation-mode-slideshow)
-   - [6. In-Browser Direct Text Editing & Floating Formatting Bar](#6-in-browser-direct-text-editing--floating-formatting-bar)
+   - [6. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)](#6-in-browser-direct-editing--edit-mode-toggle-selection-disabled-when-off)
    - [7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#7-corporate-design-templates-civi-compliance--pptx-migration)
    - [8. Inline SVG Business Charts & Comparison Matrix Tables](#8-inline-svg-business-charts--comparison-matrix-tables)
    - [9. Per-Slide Feedback Comments & AI Iteration Loop](#9-per-slide-feedback-comments--ai-iteration-loop)
@@ -63,7 +63,7 @@ Before delivering code to the user, the AI executes background validation to aut
   - 1:1 matching between slide count and metadata boxes (`slide-meta-box`).
   - Sequence integrity, missing slide indices, and duplicate checks.
   - **Character Overflow Heuristic**: Detects potential vertical overflow (>700 characters per 16:9 720px slide).
-  - UI ID integrity (Header, tabs, presentation modal, zero-margin print CSS).
+  - UI ID integrity (Header, presentation modal, zero-margin print CSS).
 - **Zero Human Debugging Burden**: The AI reads the CLI error output, autonomously rebalances text density, and delivers only validated code passing with Exit Code 0.
 
 ### 2. Robust CSS Box Model & Forced Overflow Prevention (Line-Clamping)
@@ -77,10 +77,9 @@ To guarantee that AI-generated text never breaks visual layouts regardless of in
 node scripts/export_pdf.js <input.html> [output.pdf]
 ```
 
-### 4. LocalStorage Auto-Save & Recovery
-All text edits made directly on the slide, as well as speaker notes, feedback comments, and font scales, are automatically persisted to your browser's `localStorage` in real time.
+### 4. LocalStorage Background Auto-Save & Recovery
+All text edits made directly on the slide, as well as speaker notes and feedback comments, are automatically persisted to your browser's `localStorage` in the background.
 - **Zero Data Loss**: Accidentally reloading (F5) or closing the tab preserves your work immediately.
-- **One-Click Reset**: Click the "Reset" button in the header at any time to discard changes and revert to the original HTML.
 
 ### 5. Fullscreen Presentation Mode (Slideshow)
 Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard to launch presentation mode.
@@ -90,10 +89,9 @@ Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard
   - `←` / `↑` / `PageUp` / Click left side: Previous slide
 - **Instant Exit (`Esc` key)**: Quickly return to the standard editing mode at any time.
 
-### 6. In-Browser Direct Text Editing & Floating Formatting Bar
-- **Direct Editing**: Click any text element on the slide to edit it immediately.
-- **Floating Mini Toolbar**: Selecting text automatically reveals a floating format bar above the selection (Bold, font scaling, highlighter, clear formatting).
-- **Global Typography Scaling**: Adjust slide font sizes from 85% to 125% using header controls.
+### 6. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)
+- **Direct Editing & Floating Mini Toolbar**: In edit mode (ON), click any text on the slide to edit directly. Selecting text reveals a floating format bar for bold, font sizing (per selection), highlighting, and clearing format.
+- **Edit Mode OFF (Read-Only)**: Toggle via header button or **`E`** key. When OFF, `user-select: none; pointer-events: none;` disables text selection and clicks on slide content entirely, preventing accidental text modification during review.
 
 ### 7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
 To enforce enterprise branding and prevent arbitrary styling divergences, casual color palette pickers have been eliminated.
