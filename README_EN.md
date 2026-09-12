@@ -103,9 +103,7 @@ To enforce enterprise branding and prevent arbitrary styling divergences, casual
 - **Sophisticated Matrix Tables**: Option A vs Option B vs Option C evaluation grids with clear badges and border highlights.
 
 ### 9. Per-Slide Feedback Comments & AI Iteration Loop
-- Enter specific change requests into the **"💬 Feedback"** box under any slide.
-- **"📋 Copy Instructions"**: Automatically formats all comments across slides into an organized prompt and copies it to your clipboard.
-- **"📥 Save HTML"**: Download the current HTML with all edits preserved.
+- **"📋 Copy Instructions"**: Automatically formats all feedback comments across slides into an organized prompt and copies it to your clipboard for instant pasting into the AI chat.
 
 ### 10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)
 - Decouples verbal speaker notes from HTML slides to produce a clean, reusable Markdown document (`speech_script.md`).
