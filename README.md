@@ -28,12 +28,14 @@
    - [13. 言語の自動適応（ボタンレス・プロンプト言語連動）](#13-言語の自動適応ボタンレスプロンプト言語連動)
 3. [キーボードショートカット一覧](#キーボードショートカット一覧)
 4. [ディレクトリ・ファイル構成](#ディレクトリファイル構成)
-5. [使い方ガイド（各種生成AI・社内Skill運用）](#使い方ガイド各種生成ai社内skill運用)
+5. [スキルの導入方法（インストール）](#スキルの導入方法インストール)
+6. [使い方ガイド（各種生成AI・社内Skill運用）](#使い方ガイド各種生成ai社内skill運用)
    - [① スライド作成の依頼手順（プロンプト例）](#-スライド作成の依頼手順プロンプト例)
    - [② ブラウザ推敲と反復修正（Iteration）](#-ブラウザ推敲と反復修正iteration)
    - [③ プレゼンテーション本番 & PDF保存](#-プレゼンテーション本番--pdf保存)
    - [④ 社内AIアシスタント（GPTs / Claude Projects / Gems等）の共通設定](#-社内aiアシスタントgpts--claude-projects--gems等の共通設定)
-6. [ライセンス](#ライセンス)
+7. [ライセンス](#ライセンス)
+
 
 ---
 
@@ -183,7 +185,29 @@ NativeSlide/
 
 ---
 
+## スキルの導入方法（インストール）
+
+Antigravity、Claude Code、Cursor等のAIエージェント環境では、リポジトリを `.agents/skills/` 配下に配置することで、スキルとして自動認識されます。
+
+### 方法1. Git Clone による導入（推奨）
+
+```bash
+git clone https://github.com/XitakSE/NativeSlide.git .agents/skills/nativeslide
+```
+
+### 方法2. ZIPダウンロードによる直接配置（社内プロキシ制限環境・Git CLI不要）
+
+社内セキュリティポリシーにより `git clone` が禁止されている場合や、GitがインストールされていないPCでも利用できます。
+
+1. GitHubリポジトリ（[NativeSlide](https://github.com/XitakSE/NativeSlide)）の **「<> Code」➔「Download ZIP」** からZIPファイルを保存。
+2. ZIPファイルを解凍。
+3. 解凍したフォルダ（`NativeSlide-main`）を `nativeslide` にリネームし、作業スペースの `.agents/skills/nativeslide` に直接配置します。
+   *(※ フォルダ直下に `SKILL.md` がある状態にしてください)*
+
+---
+
 ## 使い方ガイド（各種生成AI・社内Skill運用）
+
 
 社内環境（ChatGPT Enterprise, Claude for Work, Gemini for Workspace, Antigravity, Cursor等）で「Skill機能」が利用可能な場合、**社員側でのテンプレート管理や手動ナレッジ登録は一切不要** です。
 

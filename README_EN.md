@@ -29,8 +29,10 @@
    - [14. Buttonless Automatic Language Adaptation](#14-buttonless-automatic-language-adaptation)
 3. [Keyboard Shortcuts](#keyboard-shortcuts)
 4. [Directory & File Structure](#directory--file-structure)
-5. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
-6. [License](#license)
+5. [Installation Methods](#installation-methods)
+6. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
+7. [License](#license)
+
 
 ---
 
@@ -169,7 +171,29 @@ NativeSlide/
 
 ---
 
+## Installation Methods
+
+In AI agent environments such as Antigravity, Claude Code, or Cursor, NativeSlide is automatically recognized as an agent skill when placed inside the `.agents/skills/` directory.
+
+### Method 1: Git Clone (Recommended)
+
+```bash
+git clone https://github.com/XitakSE/NativeSlide.git .agents/skills/nativeslide
+```
+
+### Method 2: Direct ZIP Download (Enterprise Firewalls & No Git CLI)
+
+If your enterprise network restricts external `git clone` or you do not have Git installed:
+
+1. Click **"<> Code" ➔ "Download ZIP"** on the [NativeSlide GitHub page](https://github.com/XitakSE/NativeSlide).
+2. Extract the downloaded ZIP file.
+3. Rename the extracted folder (`NativeSlide-main`) to `nativeslide` and place it directly into your workspace's `.agents/skills/nativeslide` directory.
+   *(Make sure `SKILL.md` is located directly inside the folder).*
+
+---
+
 ## User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)
+
 
 When using NativeSlide in enterprise AI environments (ChatGPT Enterprise, Claude for Work, Google Gemini, Antigravity, Cursor, etc.) where Skill integration is available, **users do NOT need to upload or manage template files manually**.
 
