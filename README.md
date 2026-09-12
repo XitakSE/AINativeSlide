@@ -336,6 +336,16 @@ node scripts/export_pdf.js presentation.html output.pdf
 
 ---
 
+## Pull Request 自動レビュー (Gemini Code Assist)
+
+本リポジトリでは、GitHub Actions を通じて **Gemini Code Assist による自動コードレビュー** が常時稼働しています。
+
+- **自動起動**: Pull Request が作成・更新されると自動でトリガー。
+- **検証連携**: `scripts/verify_slide.py` の実行結果および `AGENTS.md` の設計規約を読み込み、スライド構造の崩れやアスペクト比の破綻、余白ゼロ印刷CSSの不備がないかを自動判定。
+- **インラインレポート**: PRのコメント欄に日本語の要約と改善提案が自動投稿されます。
+
+---
+
 ## ライセンス
 
 MIT License © 2026 AINativeSlide Contributors. 商用・非商用問わず自由にご利用いただけます。
