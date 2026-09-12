@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全社次世代データ基盤 導入計画 (4:3)</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+              950: '#1e1b4b',
+            },
+            accent: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 4:3 スライド基本設定 */
+    @page {
+      size: 4in 3in;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #0f172a;
+    }
+
+    /* 印刷時の設定 */
+    @media print {
+      body {
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .slide-viewport {
+        padding: 0 !important;
+        gap: 0 !important;
+        display: block !important;
+      }
+      .slide {
+        width: 4in !important;
+        height: 3in !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+    }
+
+    /* 画面表示時のスライドサイズ (4:3: 1024 x 768) */
+    .slide {
+      width: 1024px;
+      height: 768px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      border-radius: 12px;
+      background-color: #ffffff;
+      outline: none;
+    }
+
+    /* 編集可能モードのアウトライン視覚化 */
+    [contenteditable="true"]:focus {
+      outline: 2px solid #6366f1;
+      outline-offset: -2px;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
+
+  <!-- 上部操作ツールバー（印刷時は非表示） -->
+  <header class="no-print sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white px-6 py-3 shadow-lg flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-500 font-bold text-sm shadow">
+        4:3
+      </div>
+      <div>
+        <h1 class="text-sm font-semibold tracking-wide">全社次世代データ基盤 導入計画</h1>
+        <div class="flex items-center gap-2 text-xs text-slate-400">
+          <span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+          <span>4:3 スタンダード (1024 × 768)</span>
+          <span class="text-slate-600">|</span>
+          <span>全5スライド</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <!-- 編集モードトグル -->
+      <button id="toggleEditBtn" onclick="toggleEditMode()" class="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-200 transition-all flex items-center gap-2">
+        <svg id="editIcon" class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+        </svg>
+        <span id="editStatusText">編集モード: ON</span>
+      </button>
+
+      <!-- PDF保存ボタン -->
+      <button onclick="window.print()" class="px-4 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-2 active:scale-95">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+        </svg>
+        <span>PDFとして保存 / 印刷</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- スライド一覧コンテナ -->
+  <main class="slide-viewport flex flex-col items-center gap-12 p-8 pt-10">
+
+    <!-- ============================================== -->
+    <!-- SLIDE 1: 表紙 (Title Slide 4:3) -->
+    <!-- ============================================== -->
+    <section class="slide p-14 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800" contenteditable="true">
+      <div class="absolute -right-20 -top-20 w-80 h-80 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -left-16 -bottom-16 w-72 h-72 bg-accent-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- ヘッダーメタ -->
+      <div class="flex items-center justify-between z-10">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-accent-400 animate-pulse"></div>
+          <span class="text-xs font-semibold tracking-widest text-accent-400 uppercase">Executive Briefing</span>
+        </div>
+        <span class="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">CONFIDENTIAL</span>
+      </div>
+
+      <!-- メインタイトル部 -->
+      <div class="z-10 my-auto">
+        <div class="inline-block px-3 py-1 rounded-md bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold mb-4 tracking-wide">
+          PROJECT PROPOSAL (4:3)
+        </div>
+        <h1 class="text-4xl font-extrabold tracking-tight text-white leading-tight mb-4">
+          全社次世代データ基盤<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-brand-300 to-indigo-200">Modern Data Stack</span><br>
+          導入計画
+        </h1>
+        <p class="text-base text-slate-300 max-w-xl font-light leading-relaxed">
+          サイロ化された事業部データを統合し、意思決定の迅速化と生成AI・自律的データ駆動を実現する基盤構築
+        </p>
+      </div>
+
+      <!-- フッターメタ -->
+      <div class="z-10 pt-4 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
+        <div>データエンジニアリング推進部 | 2026年9月</div>
+        <div class="font-mono text-slate-500">01 / 05</div>
+      </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- SLIDE 2: 課題と目指す姿 (4:3 垂直スタック型) -->
+    <!-- ============================================== -->
+    <section class="slide p-10 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">01. 現状と変革</div>
+          <h2 class="text-xl font-extrabold text-slate-900 mt-1">現行データ活用の課題と目指す姿</h2>
+        </div>
+        <div class="text-xs font-medium text-slate-400 bg-white px-2.5 py-1 rounded border border-slate-200">
+          全社基盤構想
+        </div>
+      </div>
+
+      <!-- 上下スタック対比 (4:3の縦長さを活用) -->
+      <div class="flex flex-col gap-4 my-auto">
+        <!-- Before -->
+        <div class="bg-white rounded-xl p-5 border border-rose-100 shadow-sm">
+          <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-2.5">
+            <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xs">✕</span>
+            <span>AS-IS: 現行の課題（データサイロと集計負荷）</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 text-xs text-slate-600">
+            <div class="p-3 bg-rose-50/50 rounded-lg">
+              <strong class="text-rose-900 block mb-1">データの孤立</strong>
+              事業部ごとにSaaS・DBが分散し、全社横断の顧客行動が見えない。
+            </div>
+            <div class="p-3 bg-rose-50/50 rounded-lg">
+              <strong class="text-rose-900 block mb-1">手動エクセル集計</strong>
+              月次集計に毎月20時間以上を費やし、意思決定が後手に回る。
+            </div>
+            <div class="p-3 bg-rose-50/50 rounded-lg">
+              <strong class="text-rose-900 block mb-1">品質の不透明さ</strong>
+              定義の不一致により、会議ごとに「どの数字が正しいか」議論が発生。
+            </div>
+          </div>
+        </div>
+
+        <!-- After -->
+        <div class="bg-white rounded-xl p-5 border border-emerald-100 shadow-sm">
+          <div class="flex items-center gap-2 text-emerald-600 font-bold text-sm mb-2.5">
+            <span class="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs">✓</span>
+            <span>TO-BE: 本基盤導入後の姿（自律的データ駆動）</span>
+          </div>
+          <div class="grid grid-cols-3 gap-3 text-xs text-slate-600">
+            <div class="p-3 bg-emerald-50/50 rounded-lg">
+              <strong class="text-emerald-900 block mb-1">一元レイクハウス</strong>
+              全社データを自動集約。安全なアクセス権限下で誰でも即座に分析。
+            </div>
+            <div class="p-3 bg-emerald-50/50 rounded-lg">
+              <strong class="text-emerald-900 block mb-1">自動ダッシュボード</strong>
+              BIが日次・時間単位で自動同期。最新の業績推移をリアルタイム共有。
+            </div>
+            <div class="p-3 bg-emerald-50/50 rounded-lg">
+              <strong class="text-emerald-900 block mb-1">AIエージェント連携</strong>
+              社内LLMと直結し、自然言語で誰でもデータ問い合わせが可能に。
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+        <div>全社次世代データ基盤導入計画</div>
+        <div class="font-mono">02 / 05</div>
+      </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- SLIDE 3: 新アーキテクチャ (4:3) -->
+    <!-- ============================================== -->
+    <section class="slide p-10 justify-between bg-white border border-slate-200" contenteditable="true">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">02. システム構成</div>
+          <h2 class="text-xl font-extrabold text-slate-900 mt-1">Modern Data Stack 3層アーキテクチャ</h2>
+        </div>
+        <div class="text-xs font-medium text-slate-400 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
+          技術構成案
+        </div>
+      </div>
+
+      <!-- 3層のカード -->
+      <div class="grid grid-cols-3 gap-4 my-auto">
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-accent-600 uppercase">Layer 01</span>
+            <h3 class="text-sm font-bold text-slate-900 mb-1">データ収集・抽出</h3>
+            <p class="text-[11px] text-slate-500 mb-3">SaaS / 基幹DB連携</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">Connector: Fivetran</div>
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">Stream: Kafka</div>
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">対象: Salesforce, DB</div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
+            ノーコードで高速自動連携
+          </div>
+        </div>
+
+        <div class="bg-brand-50/50 rounded-xl p-4 border border-brand-200 flex flex-col justify-between shadow-sm">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-brand-600 uppercase">Layer 02 [CORE]</span>
+            <h3 class="text-sm font-bold text-slate-900 mb-1">蓄積 & モデリング</h3>
+            <p class="text-[11px] text-slate-500 mb-3">DWH & dbt変換</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="bg-white p-2 rounded border border-brand-200 font-medium">DWH: Snowflake</div>
+              <div class="bg-white p-2 rounded border border-brand-200 font-medium">Transform: dbt Core</div>
+              <div class="bg-white p-2 rounded border border-brand-200 font-medium">CI/CD: GitHub Actions</div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2 border-t border-brand-200 text-[11px] text-brand-700 font-medium">
+            SQLコードでの品質担保
+          </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <span class="text-[10px] font-mono font-bold text-emerald-600 uppercase">Layer 03</span>
+            <h3 class="text-sm font-bold text-slate-900 mb-1">分析 & AI活用</h3>
+            <p class="text-[11px] text-slate-500 mb-3">BI & 自然言語AI</p>
+            <div class="space-y-1.5 text-xs">
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">BI: Lightdash / Looker</div>
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">Reverse ETL: Census</div>
+              <div class="bg-white p-2 rounded border border-slate-200 font-medium">AI: LLM / Text-to-SQL</div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500">
+            現場主導のセルフサービス化
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+        <div>全社次世代データ基盤導入計画</div>
+        <div class="font-mono">03 / 05</div>
+      </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- SLIDE 4: 導入ロードマップ (4:3) -->
+    <!-- ============================================== -->
+    <section class="slide p-10 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">03. スケジュール</div>
+          <h2 class="text-xl font-extrabold text-slate-900 mt-1">段階的導入ロードマップ（全6ヶ月）</h2>
+        </div>
+        <div class="text-xs font-medium text-slate-400 bg-white px-2.5 py-1 rounded border border-slate-200">
+          マイルストーン
+        </div>
+      </div>
+
+      <!-- 2x2 グリッド配置 (4:3の画面比率に最適) -->
+      <div class="grid grid-cols-2 gap-4 my-auto">
+        <!-- Phase 1 -->
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-xs flex-shrink-0">
+            M1
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-brand-600 block">Phase 01: PoC検証</span>
+            <h4 class="text-xs font-bold text-slate-900 mb-1">インフラ選定 & 疎通確認</h4>
+            <p class="text-[11px] text-slate-500 leading-normal">
+              主要SaaSパイプライン疎通・セキュリティ審査完了・モデリング規約策定
+            </p>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="bg-white rounded-xl p-4 border border-brand-200 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-lg bg-brand-50 text-brand-700 font-bold flex items-center justify-center text-xs flex-shrink-0">
+            M2-3
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-brand-600 block">Phase 02: 基幹連携</span>
+            <h4 class="text-xs font-bold text-slate-900 mb-1">DWH構築 & dbt実装</h4>
+            <p class="text-[11px] text-slate-500 leading-normal">
+              基幹DB取込・α版ダッシュボード稼働・データ品質テスト自動化
+            </p>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-lg bg-slate-100 text-slate-700 font-bold flex items-center justify-center text-xs flex-shrink-0">
+            M4-5
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-brand-600 block">Phase 03: 全社展開</span>
+            <h4 class="text-xs font-bold text-slate-900 mb-1">社内展開 & ハンズオン</h4>
+            <p class="text-[11px] text-slate-500 leading-normal">
+              各事業部キーマン講習・データカタログ公開・ガバナンス統制本番化
+            </p>
+          </div>
+        </div>
+
+        <!-- Phase 4 -->
+        <div class="bg-white rounded-xl p-4 border border-accent-200 shadow-sm flex items-start gap-3">
+          <div class="w-10 h-10 rounded-lg bg-accent-50 text-accent-700 font-bold flex items-center justify-center text-xs flex-shrink-0">
+            M6+
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-accent-600 block">Phase 04: AI連携</span>
+            <h4 class="text-xs font-bold text-slate-900 mb-1">LLM直結 & 高度自律化</h4>
+            <p class="text-[11px] text-slate-500 leading-normal">
+              自然言語クエリAI導入・リバースETL連動・全社自律活用基盤確立
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+        <div>全社次世代データ基盤導入計画</div>
+        <div class="font-mono">04 / 05</div>
+      </div>
+    </section>
+
+
+    <!-- ============================================== -->
+    <!-- SLIDE 5: 期待される効果とROI (4:3) -->
+    <!-- ============================================== -->
+    <section class="slide p-10 justify-between bg-white border border-slate-200" contenteditable="true">
+      <div class="flex items-start justify-between border-b border-slate-200 pb-3">
+        <div>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">04. 成果指標</div>
+          <h2 class="text-xl font-extrabold text-slate-900 mt-1">期待される導入効果とKPI目標</h2>
+        </div>
+        <div class="text-xs font-medium text-slate-400 bg-slate-50 px-2.5 py-1 rounded border border-slate-200">
+          ROI / 投資対効果
+        </div>
+      </div>
+
+      <!-- 3つの効果カード -->
+      <div class="grid grid-cols-3 gap-4 my-auto">
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">集計工数削減</div>
+            <div class="text-3xl font-extrabold text-slate-900 mb-1">
+              <span class="text-brand-600">▲ 75</span>%
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-2">月間 320 時間削減</div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              手作業によるエクセル集計をゼロ化し、本質的な施策分析に工数をシフト。
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500 font-medium">
+            年2,400万円相当の工数創出
+          </div>
+        </div>
+
+        <div class="bg-brand-50/50 rounded-xl p-5 border border-brand-200 flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-brand-600 uppercase tracking-wider mb-1">意思決定迅速化</div>
+            <div class="text-3xl font-extrabold text-slate-900 mb-1">
+              <span class="text-brand-600">5</span>倍速
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-2">検証サイクルを日次化</div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              経営・事業KPIを即時把握。変化への初動を劇的に高め機会損失を防止。
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-brand-200 text-[11px] text-brand-700 font-medium">
+            ダッシュボード毎時自動同期
+          </div>
+        </div>
+
+        <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
+          <div>
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">AI活用レディネス</div>
+            <div class="text-3xl font-extrabold text-slate-900 mb-1">
+              <span class="text-accent-600">100</span>%
+            </div>
+            <div class="text-[11px] font-semibold text-slate-600 mb-2">ガバナンス統制完了</div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              セキュアな単一マスタを整備し、社内LLMとの直結環境を確立。
+            </p>
+          </div>
+          <div class="mt-3 pt-2 border-t border-slate-200 text-[11px] text-slate-500 font-medium">
+            セルフサービス利用率 80%目標
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
+        <div>全社次世代データ基盤導入計画</div>
+        <div class="font-mono">05 / 05</div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let isEditable = true;
+    function toggleEditMode() {
+      isEditable = !isEditable;
+      const slides = document.querySelectorAll('.slide');
+      slides.forEach(slide => {
+        slide.setAttribute('contenteditable', isEditable ? 'true' : 'false');
+      });
+      const statusText = document.getElementById('editStatusText');
+      const editIcon = document.getElementById('editIcon');
+      if (isEditable) {
+        statusText.innerText = '編集モード: ON';
+        editIcon.classList.add('text-brand-400');
+        editIcon.classList.remove('text-slate-400');
+      } else {
+        statusText.innerText = '編集モード: OFF (プレビュー)';
+        editIcon.classList.remove('text-brand-400');
+        editIcon.classList.add('text-slate-400');
+      }
+    }
+  </script>
+</body>
+</html>
