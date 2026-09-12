@@ -92,6 +92,11 @@
 ### 8. 厳格な比率制御（16:9 / 4:3）& 余白ゼロPDF印刷
 - CSS `@page { size: 16in 9in; margin: 0; }` と `.slide { page-break-inside: avoid; }` の厳格な設計により、ブラウザの「印刷（PDFに保存）」で改ページずれゼロ・余白ゼロのピクセルパーフェクトなPDFを出力できます。
 
+### 9. 言語の自動適応（ボタンレス・プロンプト言語連動）
+UIの煩雑化を防ぐため、画面上に手動の言語切り替えボタンは配置していません。
+- **日本語でのプロンプト依頼**: AIが `<html lang="ja">` でスライドを生成。スライド本文・見出し・要約がすべて日本語で構成されます。
+- **日本語以外（英語等）での依頼**: AIが `<html lang="en">` でスライドを生成。スライド本文・見出し・要約が英語で構成され、HTMLテンプレート側のスクリプトが自動的にヘッダーボタン（Menu, Copy Feedback, Save HTML, Present, Save PDF）、目次ドロワー（Table of Contents）、メタボックスタブ（Feedback, Speaker Notes）、プレースホルダー、AI修正指示コピーフォーマット（`【Slide X Feedback】`）を完全英語表示へと自動適応させます。
+
 ---
 
 ## キーボードショートカット一覧
@@ -119,8 +124,9 @@ NativeSlide/
 ├── resources/
 │   └── template_base.html   # 全機能内蔵の汎用HTMLベーステンプレート
 ├── examples/                # 実装サンプルHTML
-│   ├── slide_16_9_example.html # 16:9 プレゼン実例スライド
-│   └── slide_4_3_example.html  # 4:3 プレゼン実例スライド
+│   ├── slide_16_9_example.html    # 16:9 プレゼン実例スライド（日本語）
+│   ├── slide_16_9_en_example.html # 16:9 プレゼン実例スライド（英語）
+│   └── slide_4_3_example.html     # 4:3 プレゼン実例スライド（日本語）
 └── references/              # 体系化された詳細技術リファレンス
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
     ├── ratio-and-print-specs.md # 16:9 / 4:3 比率・印刷CSS仕様

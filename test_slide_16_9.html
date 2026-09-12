@@ -949,6 +949,11 @@
 
   <script>
     // ----------------------------------------------------
+    // 言語自動判定 (html lang属性に基づく)
+    // ----------------------------------------------------
+    const isJapanese = !document.documentElement.lang || document.documentElement.lang.toLowerCase().startsWith('ja');
+
+    // ----------------------------------------------------
     // 1. 編集モードトグル
     // ----------------------------------------------------
     let isEditable = true;
@@ -961,11 +966,11 @@
       const statusText = document.getElementById('editStatusText');
       const editIcon = document.getElementById('editIcon');
       if (isEditable) {
-        statusText.innerText = '編集モード: ON';
+        statusText.innerText = isJapanese ? '編集モード: ON' : 'Edit Mode: ON';
         editIcon.classList.add('text-brand-400');
         editIcon.classList.remove('text-slate-400');
       } else {
-        statusText.innerText = '編集モード: OFF (プレビュー)';
+        statusText.innerText = isJapanese ? '編集モード: OFF (プレビュー)' : 'Edit Mode: OFF (Preview)';
         editIcon.classList.remove('text-brand-400');
         editIcon.classList.add('text-slate-400');
       }
@@ -1293,20 +1298,28 @@
       const originalHtml = copyBtn ? copyBtn.innerHTML : '';
 
       if (comments.length === 0) {
-        alert('修正指示が入力されていません。\n各スライドの下にある「💬 修正指示」欄に修正要望を入力してください。');
+        alert(isJapanese
+          ? '修正指示が入力されていません。\n各スライドの下にある「💬 修正指示」欄に修正要望を入力してください。'
+          : 'No revision feedback entered.\nPlease enter change requests in the "💬 Feedback" tab under each slide.'
+        );
         return;
       }
 
-      let formatted = '以下のスライド修正指示に基づき、Single-File HTMLコードを改訂してください。指示のないスライドは元の推敲テキストやレイアウトを維持してください。\n\n';
+      let formatted = isJapanese
+        ? '以下のスライド修正指示に基づき、Single-File HTMLコードを改訂してください。指示のないスライドは元の推敲テキストやレイアウトを維持してください。\n\n'
+        : 'Please revise the Single-File HTML code based on the following slide revision instructions. Preserve the existing layout and content for slides without changes.\n\n';
+
       comments.forEach(c => {
-        formatted += `【スライド ${c.slideNumber} への修正指示】\n${c.comment}\n\n`;
+        formatted += isJapanese
+          ? `【スライド ${c.slideNumber} への修正指示】\n${c.comment}\n\n`
+          : `【Slide ${c.slideNumber} Feedback】\n${c.comment}\n\n`;
       });
 
       navigator.clipboard.writeText(formatted.trim()).then(() => {
         if (copyBtn) {
           copyBtn.innerHTML = `
             <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-emerald-300">コピー完了!</span>
+            <span class="text-emerald-300">${isJapanese ? 'コピー完了!' : 'Copied!'}</span>
           `;
           setTimeout(() => {
             copyBtn.innerHTML = originalHtml;
@@ -1314,7 +1327,11 @@
         }
       }).catch(err => {
         console.error('Copy failed:', err);
-        prompt('以下の修正指示をコピーしてエージェントに貼り付けてください:', formatted);
+        prompt(isJapanese 
+          ? '以下の修正指示をコピーしてAIに貼り付けてください:' 
+          : 'Copy the following revision instructions and paste into your AI assistant:', 
+          formatted
+        );
       });
     }
 
@@ -1344,7 +1361,8 @@
 
       slides.forEach((slide, idx) => {
         const heading = slide.querySelector('h1, h2');
-        const title = heading ? heading.innerText.trim().replace(/\s+/g, ' ') : `スライド ${idx + 1}`;
+        const fallbackTitle = isJapanese ? `スライド ${idx + 1}` : `Slide ${idx + 1}`;
+        const title = heading ? heading.innerText.trim().replace(/\s+/g, ' ') : fallbackTitle;
         const item = document.createElement('div');
         const isActive = isPresentationMode ? (currentPresentationIndex === idx) : false;
         
@@ -1543,12 +1561,16 @@
       }
 
       if (titleEl) {
-        titleEl.innerText = `🎤 発表メモ (Slide ${currentPresentationIndex + 1})`;
+        titleEl.innerText = isJapanese 
+          ? `🎤 発表メモ (Slide ${currentPresentationIndex + 1})`
+          : `🎤 Speaker Notes (Slide ${currentPresentationIndex + 1})`;
       }
       if (noteText) {
         textEl.innerText = noteText;
       } else {
-        textEl.innerHTML = '<span class="text-slate-500 italic">（このスライドに発表メモは入力されていません）</span>';
+        textEl.innerHTML = isJapanese
+          ? '<span class="text-slate-500 italic">（このスライドに発表メモは入力されていません）</span>'
+          : '<span class="text-slate-500 italic">(No speaker notes entered for this slide)</span>';
       }
     }
 
@@ -1648,6 +1670,68 @@
       if (isPresentationMode) {
         fitPresentationSlide();
       }
+    });
+
+    // ----------------------------------------------------
+    // 13. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
+    // ----------------------------------------------------
+    function applyAutoLocalization() {
+      if (isJapanese) return; // 日本語の場合はテンプレートのデフォルト表記を維持
+
+      // 英語環境（langがja以外）時のUI自動ローカライズ
+      const tocBtn = document.querySelector('header button[onclick="toggleTocDrawer()"] span');
+      if (tocBtn) tocBtn.innerText = 'Menu';
+
+      document.querySelectorAll('header span').forEach(el => {
+        const text = el.innerText.trim();
+        if (text === 'テーマ:') el.innerText = 'Theme:';
+        if (text === '指示をコピー') el.innerText = 'Copy Feedback';
+        if (text === 'HTML保存') el.innerText = 'Save HTML';
+        if (text === '発表') el.innerText = 'Present';
+        if (text === 'PDF保存') el.innerText = 'Save PDF';
+      });
+
+      const copyBtn = document.getElementById('copyCommentsBtn');
+      if (copyBtn) copyBtn.title = 'Copy all slide feedback instructions to clipboard';
+
+      const editBtn = document.getElementById('toggleEditBtn');
+      if (editBtn) editBtn.title = 'Toggle Edit Mode';
+      const statusText = document.getElementById('editStatusText');
+      if (statusText) statusText.innerText = isEditable ? 'Edit Mode: ON' : 'Edit Mode: OFF';
+
+      const tocHeading = document.querySelector('#tocDrawer h2');
+      if (tocHeading) tocHeading.innerText = 'Table of Contents';
+      const tocFooter = document.querySelector('#tocDrawer .border-t');
+      if (tocFooter) tocFooter.innerText = 'Click to jump to slide';
+
+      // メタボックスのタブ & ボタン
+      document.querySelectorAll('.tab-btn-comment span').forEach(el => el.innerText = 'Feedback');
+      document.querySelectorAll('.tab-btn-note span').forEach(el => el.innerText = 'Speaker Notes');
+      document.querySelectorAll('.slide-meta-box button span, .slide-comment-box button span').forEach(el => {
+        if (el.innerText.trim() === 'クリア') el.innerText = 'Clear';
+      });
+
+      // プレースホルダー
+      document.querySelectorAll('.slide-comment-input').forEach(el => {
+        el.setAttribute('data-placeholder', 'Enter revision instructions or feedback for this slide...');
+      });
+      document.querySelectorAll('.slide-note-input').forEach(el => {
+        el.setAttribute('data-placeholder', 'Enter talking points, presenter script, or speaker notes...');
+      });
+
+      // プレゼンテーションバー
+      const laserBtn = document.querySelector('#laserBtn span:last-child');
+      if (laserBtn) laserBtn.innerText = 'Laser (L)';
+      const noteBtn = document.querySelector('#noteBtn span');
+      if (noteBtn) noteBtn.innerText = '🎤 Notes (N)';
+      const exitBtn = document.querySelector('#presentationModal button[onclick="stopPresentation()"]');
+      if (exitBtn) exitBtn.title = 'Exit Presentation (Esc)';
+      const speakerNotesClose = document.querySelector('#speakerNotesOverlay span.text-slate-400');
+      if (speakerNotesClose) speakerNotesClose.innerText = 'Press [N] to close';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      applyAutoLocalization();
     });
   </script>
 </body>

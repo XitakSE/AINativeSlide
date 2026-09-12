@@ -85,6 +85,11 @@ Click the **"☰ Menu"** button on the top-left to slide out a smooth drawer nav
 ### 8. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
 - Designed with `@page { size: 16in 9in; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports using your browser's Print dialog ("Save as PDF").
 
+### 9. Buttonless Automatic Language Adaptation
+To prevent UI clutter and keep the toolbar minimal and focused, there are no manual language switch buttons.
+- **Japanese Prompts**: The AI generates slides with `<html lang="ja">`, creating Japanese headings, content, and annotations.
+- **Non-Japanese Prompts (English, etc.)**: The AI generates slides with `<html lang="en">`. The embedded JavaScript silently and automatically localizes all UI controls (Menu, Copy Feedback, Save HTML, Present, Save PDF), TOC drawer (Table of Contents), meta box tabs (Feedback, Speaker Notes), input placeholders, and AI revision copy formats (`【Slide X Feedback】`) into clean English.
+
 ---
 
 ## Keyboard Shortcuts
@@ -109,18 +114,19 @@ NativeSlide/
 ├── SKILL.md                 # AI Agent Skill specification
 ├── README.md                # Japanese documentation
 ├── README_EN.md             # English documentation
-├── resources/
-│   └── template_base.html   # Universal base HTML template with full features
-├── examples/                # Example presentation slides & PDFs
-│   ├── slide_16_9_example.html # 16:9 interactive presentation example
-│   └── slide_4_3_example.html  # 4:3 presentation example
-└── references/              # In-depth technical specifications
-    ├── grill-workflow.md    # Cognitive alignment interview specification
-    ├── ratio-and-print-specs.md # 16:9 / 4:3 aspect ratio & print CSS specs
-    ├── ai-concept-imagery.md # Concept image generation prompt guidelines
-    ├── design-system.md     # Typography & robust card box model specs
-    ├── slide-patterns.md    # Reusable slide layout patterns
-    └── vision-reverse-engineering.md # Reverse-engineering image slides into HTML
+├── references/              # Detailed specifications & guidelines
+│   ├── grill-workflow.md    # Cognitive alignment interview specification
+│   ├── ratio-and-print-specs.md # 16:9 / 4:3 aspect ratio & print CSS specs
+│   ├── ai-concept-imagery.md # Concept image generation prompt guidelines
+│   ├── design-system.md     # Typography & robust card box model specs
+│   ├── slide-patterns.md    # Reusable slide layout patterns
+│   └── vision-reverse-engineering.md # Reverse-engineering image slides into HTML
+├── resources/               # Universal base HTML template
+│   └── template_base.html
+└── examples/                # Complete interactive slide examples
+    ├── slide_16_9_example.html     (16:9 Japanese sample)
+    ├── slide_16_9_en_example.html  (16:9 English sample)
+    └── slide_4_3_example.html      (4:3 Japanese sample)
 ```
 
 ---
