@@ -24,7 +24,7 @@
 3. [Keyboard Shortcuts](#keyboard-shortcuts)
 4. [Directory & File Structure](#directory--file-structure)
 5. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Cursor, etc.)](#user-guide-working-with-ai)
-6. [🚀 Future Roadmap](#-future-roadmap)
+6. [License](#license)
 
 ---
 
@@ -241,20 +241,6 @@ You are an executive presentation designer. When asked to create presentations o
 6. [Auto-Verification]:
    Before returning HTML to the user, run `python3 scripts/verify_slide.py <file.html>` in your background environment. Fix any character overflows (>700 chars) or slide index mismatches autonomously, and only deliver code that achieves Exit Code 0 (all tests passed).
 ```
-
----
-
-## 🚀 Milestones & Status
-
-- [x] **Standalone Presenter View & Stage Timer**: Multi-screen support via `BroadcastChannel`, countdown/elapsed timer, speaker notes scaling, and next-slide preview.
-- [x] **LocalStorage Auto-Save & Reset**: Zero work lost on page refresh with one-click restore.
-- [x] **Segmented Header Tabs**: "✏️ Edit" vs "🎬 Present" tabs positioned cleanly adjacent to the title without button collision on smaller viewports.
-- [x] **Dynamic Smart Grill**: Automatically bypasses questions already answered in the user prompt.
-- [x] **Inline SVG Business Charts & Comparison Tables**: Native SVG bar/line charts and high-impact matrix tables without external chart libraries.
-- [x] **Corporate Branding System**: Company logo placeholder, confidentiality badges, and standardized footers.
-- [x] **Autonomous Test & Verification CLI**: Pure Python 3 `scripts/verify_slide.py` testing slide counts, numbering, meta boxes, 700-character overflow heuristics, and print CSS with zero user debugging burden.
-- [x] **Enterprise Skill Integration**: Seamless zero-upload workflow powered by repository resources and scripts.
-- [x] **Standardized Documentation**: Unified all guides and instructions into `README.md` and `README_EN.md` following open-source best practices.
 
 ---
 
