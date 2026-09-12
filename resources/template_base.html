@@ -56,7 +56,29 @@
       --accent-600: #0284c7;
     }
 
-    /* 【比率設定】16:9 の場合 (4:3の場合は size: 4in 3in; .slide: width: 1024px; height: 768px;) */
+    /* ========================================================
+       【用紙サイズ・アスペクト比設定】
+       要件に応じて以下のいずれかを選択して設定します:
+       1) 16:9 ワイド (デフォルト)
+          @page { size: 16in 9in; margin: 0; }
+          .slide { width: 1280px; height: 720px; }
+          .slide-meta-box { width: 1280px; }
+
+       2) 4:3 スタンダード
+          @page { size: 4in 3in; margin: 0; }
+          .slide { width: 1024px; height: 768px; }
+          .slide-meta-box { width: 1024px; }
+
+       3) A4 横 (A4 Landscape - 印刷・稟議・配布用スライド)
+          @page { size: A4 landscape; margin: 0; }
+          .slide { width: 1188px; height: 840px; }
+          .slide-meta-box { width: 1188px; }
+
+       4) A4 縦 (A4 Portrait - 企画書・1枚ペーパー・報告書)
+          @page { size: A4 portrait; margin: 0; }
+          .slide { width: 840px; height: 1188px; }
+          .slide-meta-box { width: 840px; }
+       ======================================================== */
     @page {
       size: 16in 9in;
       margin: 0;
@@ -87,21 +109,18 @@
         display: block !important;
       }
       .slide {
-        width: 16in !important;
-        height: 9in !important;
-        max-width: none !important;
-        max-height: none !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
-        box-shadow: none !important;
         page-break-after: always !important;
         break-after: page !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        margin: 0 auto !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        border: none !important;
       }
     }
 
-    /* 画面表示時のスライドボックス (16:9: 1280 x 720 / 4:3: 1024 x 768) */
+    /* 画面表示時のスライドボックス */
     .slide {
       width: 1280px;
       height: 720px;

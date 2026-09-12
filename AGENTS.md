@@ -83,16 +83,18 @@ When editing or generating slide decks in this repository, strictly adhere to th
 - The total slide count (`#deckSlideCountText`), the footer slide numbering (`01 / 08`), and the meta-box count must match 100%.
 
 ### Rule 2: Strict Aspect Ratio and Overflow Prevention
-- **16:9**: Dimensions MUST be `w-[1280px] h-[720px] max-w-[1280px] max-h-[720px]` with `overflow-hidden`.
-- **4:3**: Dimensions MUST be `w-[1024px] h-[768px] max-w-[1024px] max-h-[768px]` with `overflow-hidden`.
-- Never exceed 500–600 Japanese characters per slide to prevent vertical text overflow.
+- **16:9 ワイド**: Dimensions MUST be `w-[1280px] h-[720px] max-w-[1280px] max-h-[720px]` with `overflow-hidden`.
+- **4:3 スタンダード**: Dimensions MUST be `w-[1024px] h-[768px] max-w-[1024px] max-h-[768px]` with `overflow-hidden`.
+- **A4 横 (Landscape)**: Dimensions MUST be `w-[1188px] h-[840px] max-w-[1188px] max-h-[840px]` with `overflow-hidden`.
+- **A4 縦 (Portrait)**: Dimensions MUST be `w-[840px] h-[1188px] max-w-[840px] max-h-[1188px]` with `overflow-hidden`.
+- Never exceed 500–600 Japanese characters per slide (or ~900 characters for A4 portrait) to prevent vertical text overflow.
 
 ### Rule 3: Zero-Margin Print CSS Preservation
 The following print block must never be broken:
 ```css
 @media print {
   @page {
-    size: 16in 9in; /* or 4in 3in */
+    size: 16in 9in; /* or 4in 3in / A4 landscape / A4 portrait */
     margin: 0;
   }
   body {

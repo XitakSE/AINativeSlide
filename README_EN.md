@@ -110,8 +110,14 @@ To enforce enterprise branding and prevent arbitrary styling divergences, casual
 - Offered as an optional selection during the initial Grill interview: generates slide-by-slide estimated time, key takeaways, and conversational speaker scripts alongside the slide HTML.
 - Example: [`examples/speech_script_example.md`](./examples/speech_script_example.md)
 
-### 11. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
-- Designed with `@page { size: 16in 9in; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports.
+### 11. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print
+Supports 4 purpose-built aspect ratios and paper formats:
+- **16:9 Widescreen (`1280×720`)**: Standard for modern displays and web conference presentations.
+- **4:3 Standard (`1024×768`)**: Legacy presentations, academic conferences.
+- **A4 Landscape (`1188×840`)**: Printed handouts, executive approval memos, corporate proposals.
+- **A4 Portrait (`840×1188`)**: Amazon-style 1-Pagers, executive summaries, whitepapers.
+
+Designed with `@page { size: ...; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports with exact edge-to-edge alignment on standard office/home A4 printers.
 
 ---
 

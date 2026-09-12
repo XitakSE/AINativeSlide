@@ -6,21 +6,27 @@
 
 ## 1. アスペクト比ごとの寸法仕様
 
-| アスペクト比 | 用途・特徴 | 画面表示サイズ | 印刷 `@page size` | 印刷メディアクエリサイズ |
+| アスペクト比 / 用紙サイズ | 用途・特徴 | 画面表示サイズ | 印刷 `@page size` | 印刷メディアクエリサイズ |
 | :--- | :--- | :--- | :--- | :--- |
 | **16:9**（デフォルト） | ワイド画面・モダンディスプレイ・Web投影 | `width: 1280px;`<br>`height: 720px;` | `@page { size: 16in 9in; margin: 0; }` | `.slide { width: 16in !important; height: 9in !important; }` |
-| **4:3** | 既存資料踏襲・紙配布中心・正方形ディスプレイ | `width: 1024px;`<br>`height: 768px;` | `@page { size: 4in 3in; margin: 0; }` | `.slide { width: 4in !important; height: 3in !important; }` |
+| **4:3** | 既存資料踏襲・正方形ディスプレイ・学術発表 | `width: 1024px;`<br>`height: 768px;` | `@page { size: 4in 3in; margin: 0; }` | `.slide { width: 4in !important; height: 3in !important; }` |
+| **A4 横 (Landscape)** | **印刷配布用スライド、役員稟議、提案企画書** | `width: 1188px;`<br>`height: 840px;` | `@page { size: A4 landscape; margin: 0; }` | `.slide { width: 297mm !important; height: 210mm !important; }` |
+| **A4 縦 (Portrait)** | **1枚企画書、エグゼクティブサマリー、白書** | `width: 840px;`<br>`height: 1188px;` | `@page { size: A4 portrait; margin: 0; }` | `.slide { width: 210mm !important; height: 297mm !important; }` |
 
 ---
 
 ## 2. 印刷（PDF出力）CSSの必須ルール
 
-Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改ページずれゼロ・スライド1枚につきぴったり1ページ** でPDF化するために、以下のCSSルールを必ず含めます。
+Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改ページずれゼロ・スライド1枚につきぴったり1ページ** でPDF化するために、以下のCSSルールを含めます。
 
 ```css
-/* 1. @page ルール（16:9 または 4:3 を指定） */
+/* 1. @page ルール（比率・用紙サイズに応じて指定） */
+/* 16:9 の場合: size: 16in 9in; */
+/* 4:3 の場合:  size: 4in 3in; */
+/* A4 横の場合: size: A4 landscape; */
+/* A4 縦の場合: size: A4 portrait; */
 @page {
-  size: 16in 9in; /* 4:3の場合は size: 4in 3in; */
+  size: 16in 9in;
   margin: 0;
 }
 
@@ -49,31 +55,27 @@ Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改�
 
   /* 各スライド要素の完全フィット & 強制改ページ */
   .slide {
-    /* 16:9の場合: 16in / 9in。4:3の場合: 4in / 3in */
-    width: 16in !important;
-    height: 9in !important;
-    max-width: none !important;
-    max-height: none !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    
-    /* 改ページ制御（複数ブラウザ互換） */
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
   }
 }
 ```
 
 ---
 
-## 3. なぜ `size: 16in 9in` かつ `.slide { width: 16in; height: 9in; }` なのか？
+## 3. なぜ A4（Landscape / Portrait）指定が有効なのか？
 
-- **インチ指定の利点**:
-  Chromiumの印刷エンジンは、`size: 16in 9in` のような物理インチ単位に対して高精度なベクター解像度（72pt/in = 1152×648pt）でページを割り当てます。
-  スライド自体の幅・高さを同じ `16in / 9in` に設定することで、ブラウザの自動スケーリング誤差による「ページの端に1pxの白い隙間ができる」「2ページ目に空行がはみ出す」といったトラブルを根本から防止します。
+- **A4横（297mm × 210mm ≒ 比率 1.414 : 1）**:
+  日本のビジネス現場では、プロジェクター投影用の16:9よりも「オフィス複合機で印刷して配る提案書・役員稟議資料」としてA4横が絶大な人気を誇ります。
+  `@page { size: A4 landscape; margin: 0; }` を指定することで、一般的なプリンターで「フチなし等倍（100%）」印刷した際、ミリ単位の狂いもなく用紙いっぱいにレイアウトが収まります。
 
-- **画面表示時のピクセル指定**:
-  画面表示時はディスプレイの解像度に合わせて `1280px × 720px`（4:3なら `1024px × 768px`）の固定ボックスにし、`box-shadow` や角丸（`rounded-lg`）を付与することで、まるでFigmaやKeynoteのキャンバスを操作しているかのような快適な作業体験を提供します。
+- **A4縦（210mm × 297mm）**:
+  Amazon流の「1枚ペーパー（1-Pager）」や企画要約書、事業計画サマリーの出力に最適です。スライドの概念を超えて、Web技術による崩れないビジネス文書の出力フォーマットとして活用できます。
+
+- **画面表示時のピクセル設計**:
+  画面表示時はブラウザ描画やTailwindのグリッド計算で端数誤差が出ないよう、4の倍数である `1188px × 840px`（A4横）および `840px × 1188px`（A4縦）を採用しています。これによりFigmaライクな高精細なプレビューと編集が可能です。

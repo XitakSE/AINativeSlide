@@ -84,7 +84,7 @@ def main():
             else:
                 errors.append(f'Slide {slide_num}: フッターのスライド番号表記 ("{slide_num_str} / {expected_total_str}") が見つかりません。')
 
-        # 文字数・はみ出しヒューリスティック検査 (16:9スライド 720pxの高さ基準)
+        # アスペクト比・用紙サイズの検出と文字数ヒューリスティック検査
         text_content = inner_html
         text_content = re.sub(r'<style[\s\S]*?</style>', '', text_content, flags=re.IGNORECASE)
         text_content = re.sub(r'<script[\s\S]*?</script>', '', text_content, flags=re.IGNORECASE)
@@ -92,11 +92,15 @@ def main():
         text_content = re.sub(r'<[^>]+>', ' ', text_content)
         text_content = re.sub(r'\s+', ' ', text_content).strip()
 
-        # 日本語スライドの場合、700文字以上は縦スクロール・枠外はみ出しの危険度が極めて高い
-        if len(text_content) > 700:
-            errors.append(f'Slide {slide_num}: 本文テキスト量が多すぎます ({len(text_content)}文字 > 上限700文字)。縦幅720pxから文字がはみ出すため、要約または箇条書きを短縮してください。')
-        elif len(text_content) > 520:
-            warnings.append(f'Slide {slide_num}: テキスト量が多めです ({len(text_content)}文字)。要素がスライド枠（720px）に収まっているか確認してください。')
+        # A4縦（高さ1188px）か横長（高さ720px〜840px）かでテキスト上限を調整
+        is_portrait = 'h-[1188px]' in slide.group(0) or 'h-[1123px]' in slide.group(0) or 'portrait' in html.lower()
+        max_chars = 1100 if is_portrait else 700
+        warn_chars = 850 if is_portrait else 520
+
+        if len(text_content) > max_chars:
+            errors.append(f'Slide {slide_num}: 本文テキスト量が多すぎます ({len(text_content)}文字 > 上限{max_chars}文字)。枠外はみ出し防止のため要約または箇条書きを短縮してください。')
+        elif len(text_content) > warn_chars:
+            warnings.append(f'Slide {slide_num}: テキスト量が多めです ({len(text_content)}文字)。要素がスライド枠に収まっているか確認してください。')
 
     # メタボックス内のバッジ番号チェック
     for idx, box in enumerate(meta_boxes):
@@ -136,7 +140,7 @@ def main():
             errors.append(f'必須要素 id="{rid}" がHTML内に存在しません。')
 
     # ========================================================
-    # 4. 印刷・PDF余白ゼロ設定
+    # 4. 印刷・PDF余白ゼロ設定（16:9, 4:3, A4 landscape, A4 portrait）
     # ========================================================
     if not re.search(r'@page\s*\{[^}]*margin\s*:\s*0', html, re.IGNORECASE):
         errors.append('CSSに印刷用の余白ゼロ設定 (@page { margin: 0; }) が定義されていません。')
