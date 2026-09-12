@@ -1,17 +1,19 @@
 ---
 name: nativeslide
 description: >-
-  Use this skill (NativeSlide) when the user asks to create, design, or edit presentation slides
-  in HTML/Tailwind CSS format with browser-based inline editing (contenteditable),
-  fullscreen presentation mode, speaker notes, and zero-margin PDF export (16:9 or 4:3 aspect ratios).
-  Generates slides following corporate design templates (resources/design_templates/) with standardized
-  branding and zero user debugging burden via automated Python verification.
+  Use this skill (NativeSlide) when the user asks to create presentation slides.
+  NativeSlide is an AI output stabilization framework that leverages HTML/Tailwind CSS —
+  the format LLMs generate most reliably — to produce pixel-perfect slide decks as
+  Single-File HTML with zero-margin PDF export (16:9 or 4:3). Includes automated Python
+  verification, CSS-level overflow prevention, and corporate design template enforcement.
 ---
 
-# NativeSlide (Webネイティブ・HTMLスライド生成スキル)
+# NativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
 
-ブラウザ上で直接テキストを推敲・編集でき、1クリックで余白ゼロのピクセルパーフェクトなPDFにエクスポートできる単一HTMLスライド（Single-File HTML）を生成するための日常運用スキルです。
-企業の公式CI/VIガイドラインに従い、`resources/design_templates/` のデザイン骨格に基づいた統一感のあるスライドを自動生成します。
+生成AI（LLM）にとって最も記述精度が高い HTML/Tailwind CSS を中間フォーマットとして活用し、レイアウト崩れや文字溢れのない堅牢なスライドを安定出力するためのフレームワークです。
+最終的にはブラウザから余白ゼロのピクセルパーフェクトなPDFとしてエクスポートすることを主目的とします。
+
+**なぜ HTML なのか:** `python-pptx` 等によるPPTX直接生成はテキスト溢れやフォント崩れが頻発しますが、LLMはHTML/CSSの知識が深く、CSS Flexboxによる自己修復的なレイアウトにより出力が桁違いに安定します。
 
 ---
 
@@ -23,8 +25,9 @@ flowchart TD
     B --> C{合意形成}
     C -->|比率・トーン・AI画像要否| D[Phase 2: 構成 & ビジュアル設計]
     D --> E[Phase 3: Single-File HTML生成]
-    E --> F[Phase 4: ブラウザ直接推敲 & D&D画像差替]
-    F --> G[余白ゼロ PDF出力]
+    E --> F[Phase 4: 自動テスト & 自律修正ループ]
+    F --> G[Phase 5: ブラウザ推敲 & 反復修正]
+    G --> H[余白ゼロ PDF出力]
 ```
 
 ### Phase 1: Grill（認知ドリフト防止インタビュー）
@@ -47,11 +50,15 @@ flowchart TD
 - **堅牢ボックスモデルの適用**:
   - 文字数増減でも要素の重なりや枠突き抜けが物理的に起きない `flex-shrink-0`、`min-h-0`、`flex-col`、`overflow-hidden`。
   - 詳細は [デザインシステム仕様書](./references/design-system.md) を参照。
+- **AI出力安定化: `ai-content` ラッパーの適用**:
+  - スライドの本文コンテンツエリアには `<div class="ai-content">` を配置し、その中は `h2`, `h3`, `p`, `ul`, `li` のみを使用する。
+  - CSS側で `-webkit-line-clamp` による強制的な文字溢れ防止が適用され、AIがどれだけ長い文章を出力しても物理的にスライド枠を突き抜けない堅牢性を確保。
+  - ユーティリティクラス `line-clamp-1` 〜 `line-clamp-5` も利用可能。
 - **言語の自動切替（Language Auto-Detection & Adaptation）**:
   - **切り替えボタンは配置しない**: UIの煩雑化・肥大化を防ぐため、画面上に手動の言語切り替えボタンは一切設置しません。
   - **依頼が日本語の場合**: `<html lang="ja">` を指定。スライド本文・見出し・要約・発表者名を日本語で作成。
   - **依頼が日本語以外（英語等）の場合**: `<html lang="en">` を指定。スライド本文・見出し・要約・発表者名を英語（English）で作成。
-  - **UI側の自動同期**: テンプレート側が `<html lang="...">` 属性を読み取り、目次・ボタン・ツールチップ・プレースホルダー・AI指示コピー書式を自動的に完全英語化します。
+  - **UI側の自動同期**: テンプレート側が `<html lang="...">` 属性を読み取り、ボタン・ツールチップ・プレースホルダー・AI指示コピー書式を自動的に完全英語化します。
 
 ### Phase 3: スライドパターン選定とSingle-File HTML生成
 テーマに応じて最適なパターンを組み合わせてHTMLを生成します。
@@ -76,7 +83,7 @@ flowchart TD
    - スライド枚数とメタ情報ボックス（`slide-meta-box`）の数が1対1で完全一致しているか。
    - スライド番号（`01 / 08` 等）とメタバッジ（`Slide 1 / 8` 等）の連番に欠番や重複がないか。
    - スライドごとの本文文字数が上限（700文字）を超えていないか（720px枠からの文字溢れ・オーバーフロー防止）。
-   - 必須UI ID（ヘッダー、モード切替タブ、目次、発表者ツール、印刷ゼロマージン）がすべて揃っているか。
+   - 必須UI ID（ヘッダー、モード切替タブ、印刷ゼロマージン）がすべて揃っているか。
 3. **エラー検出時の自律修正（Self-Repair）**:
    - 終了コードが `1` の場合、出力された `[ERROR]` 指示を読み取り、**ユーザーに報告する前にAIが自律的にHTMLを修正して再テスト**を実行します。
    - **全テストが合格（Exit Code 0）するまで自律修正ループを繰り返し、100%完璧な状態になって初めてユーザーへ成果物を提示します。**
@@ -95,17 +102,10 @@ flowchart TD
 2. **的確な改修**: 指示のあったスライドのみを要望に沿って構成・テキスト・ビジュアル改訂（折り返しの解消、余白調整等も反映）。
 3. **コード再出力**: 修正済みの完全なSingle-File HTMLコードブロックを出力し、スライドごとの修正概要を報告。
 
-### Phase 7: 全画面プレゼンテーション & 分離型発表者ツール・余白ゼロPDF出力
-1. **全画面スライドショー**:
-   - `F` キーまたはツールバーの「▶ 発表」ボタンで起動。
-   - 画面アスペクト比フィット、`→`/`←`/`Space` 送り、`Esc` 終了。
-   - `N` キーで発表メモを画面下部にトグル表示、`L` キーで赤色レーザーポインターを起動。
-2. **完全分離型 発表者ツール（Speaker View）**:
-   - `P` または `S` キー（またはツールバーの「発表者ツール」ボタン）で別ウィンドウを起動。
-   - プロジェクターやZoom共有にはスライド本体のみを投影し、手元画面に「現在のスライド」「次のスライド」「大きな発表メモ（カンペ）」「登壇タイマー（経過時間 & カウントダウン）」を表示。
-   - `BroadcastChannel` により、どちらの画面で操作してもリアルタイム完全同期。
-3. **余白ゼロPDF出力**:
-   - ツールバーの「PDF保存」で1スライド1ページの余白ゼロPDFを出力（メタ枠やツールバーは自動除外）。
+### Phase 7: 余白ゼロPDF出力
+- ツールバーの「PDF保存」で1スライド1ページの余白ゼロPDFを出力（メタ枠やツールバーは自動除外）。
+- Puppeteer環境がある場合は `node scripts/export_pdf.js <slide.html>` でヘッドレスPDF出力も可能。
+- 全画面スライドショー（`F` キー）も利用可能（おまけ機能）。
 
 ---
 
@@ -115,8 +115,11 @@ flowchart TD
   - Tailwind CSS CDN: `<script src="https://cdn.tailwindcss.com"></script>`
   - Google Fonts: `Plus Jakarta Sans` & `Noto Sans JP`
 - **ベース構造の参照**:
-  - 機能エンジン（UI/JS/Presenter View等）: [template_base.html](./resources/template_base.html)
+  - 機能エンジン（UI/JS等）: [template_base.html](./resources/template_base.html)
   - 企業公式デザイン骨格（CIカラー/ロゴ/枠レイアウト）: [corporate_default.html](./resources/design_templates/corporate_default.html)
+- **AI出力安定化ルール**:
+  - スライド本文は `<div class="ai-content">` で囲み、内部は `h2`, `h3`, `p`, `ul`, `li` のみを使用する（閉じタグ忘れ防止のため深いネストを避ける）。
+  - CSSの `line-clamp` により文字溢れが物理的に不可能であることを前提に、テキスト量を適度に抑える。
 - ※自社公式PPTXテンプレートの新規取り込み・登録は、初期セットアップ用スキル `nativeslide-template-builder` を利用すること。
 
 ---

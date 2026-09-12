@@ -130,7 +130,6 @@ def main():
         'tabBtnPresent',
         'headerControlsEdit',
         'headerControlsPresent',
-        'tocDrawer',
         'presentationModal'
     ]
 
@@ -151,13 +150,11 @@ def main():
         warnings.append('印刷除外用クラス (.no-print) の定義が見当たりません。')
 
     # ========================================================
-    # 5. JavaScript ランタイム整合性
+    # 5. JavaScript ランタイム整合性 (基本プレゼン・推敲機能)
     # ========================================================
     required_js_functions = [
         'switchHeaderTab',
         'toggleEditMode',
-        'toggleTocDrawer',
-        'openSpeakerView',
         'startPresentation',
         'stopPresentation',
         'copySlideComments'

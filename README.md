@@ -1,4 +1,4 @@
-# NativeSlide (次世代・WebネイティブHTMLスライドシステム)
+# NativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
 
 <p align="left">
   <strong>🌐 Language:</strong>
@@ -6,7 +6,7 @@
   <a href="README.md"><strong>日本語</strong></a>
 </p>
 
-> **PowerPointからの完全脱却** —— 単一HTMLファイル（Single-File HTML）とTailwind CSSを活用し、ブラウザ上での直接推敲、全画面プレゼンテーション、発表メモ、そして1クリックでの余白ゼロPDF出力を実現するエグゼクティブ・プレゼンテーション作成システムです。
+> **AIにスライドを作らせるなら、PPTXではなくHTML** —— LLMが最も得意とするHTML/Tailwind CSSを中間フォーマットとして活用し、レイアウト崩れや文字溢れのない堅牢なスライドを安定生成。最終的には余白ゼロのピクセルパーフェクトなPDFとしてエクスポートする、AI出力安定化フレームワークです。
 
 <p align="left">
   <a href="https://xitakse.github.io/NativeSlide/">
@@ -49,16 +49,15 @@
 
 ---
 
-## プロジェクトの思想とメリット
+## プロジェクトの思想
 
-従来のPowerPoint作成における「フォント崩れ」「ライセンス制約」「共同編集のコンフリクト」「デザインの統一しにくさ」を解消するため、Web標準技術（HTML5 + Tailwind CSS CDN + Google Fonts）のみで動作するプレゼンテーション環境を構築しました。
+`python-pptx` 等でPPTXを直接生成させるとテキスト溢れ・フォント崩れが頻発し、Markdownスライドツール（Marp等）は構図の自由度に制約があります。**「LLMにとって最も記述精度が高く、レイアウトの自由度が高い出力形式は HTML + Tailwind CSS である」** という事実に着目し、HTMLを中間フォーマットとして活用することで出力を安定化させるアプローチを採用しました。
 
-- **Single-File 完全自己完結**: 外部ビルドツール（npm/webpack等）やサーバーは一切不要。ダブルクリックするだけでブラウザで開き、即座に編集・投影可能。
-- **美しさと論理性の両立**: 洗練されたモダンデザイン美学（調和のとれたTailwindカラー、モダンタイポグラフィ、階層的カードコンポーネント）をプリセット。
-- **社内Skill機能に完全最適化（完全手ぶら）**:
-  - 社内のChatGPT Enterpriseや各種エージェント基盤の「Skill機能」として本リポジトリを登録するだけで、テンプレートの手動ナレッジ登録やファイル管理の手間は一切不要。
-  - AIがSkill内のテンプレートや自動検証スクリプトを自律的に呼び出し、不備があれば納品前に自分で修正してテスト合格品のみを納品します。
-- **AIとのシームレスな対話**: 各スライド下の指示欄と連携し、生成AIにコメントをワンクリックで渡して反復修正（Iteration）が可能。
+- **AI出力の安定性が最優先**: CSS Flexbox/Gridの自己修復的なレイアウトと `line-clamp` による強制的な文字溢れ防止により、AIがどんな長さのテキストを出力しても物理的にスライド枠を突き抜けません。
+- **自律品質検証ループ**: Pythonスクリプトによる自動テストをAIが自律実行し、不備があれば納品前に自己修正。人間がエラーを確認する必要は一切ありません。
+- **Single-File 完全自己完結**: 外部ビルドツール（npm/webpack等）やサーバーは一切不要。ダブルクリックするだけでブラウザで開き、即座に編集・PDF出力可能。
+- **社内Skill機能に完全最適化**: AIエージェント基盤の「Skill機能」として登録するだけで、テンプレート参照・スライド構築・自動検証まで完全手ぶらで実行します。
+- **AIとのシームレスな反復修正**: 各スライド下の指示欄と連携し、生成AIにコメントをワンクリックで渡して改訂版を即座に再生成可能。
 
 ---
 
@@ -174,15 +173,16 @@ NativeSlide/
 ├── README.md                # 本ドキュメント（日本語）
 ├── README_EN.md             # 英語ドキュメント
 ├── scripts/
-│   └── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
+│   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
+│   └── export_pdf.js        # Puppeteerによるヘッドレス余白ゼロPDF自動生成CLI
 ├── resources/
-│   ├── template_base.html   # 全機能内蔵の汎用HTMLベーステンプレート（機能エンジン）
-│   └── design_templates/   # 企業公式デザインテンプレート群（CI/VI統一）
+│   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
+│   └── design_templates/    # 企業公式デザインテンプレート群（CI/VI統一）
 │       └── corporate_default.html # 標準コーポレートデザイン（CIカラー/ロゴ/枠固定）
-├── examples/                # 実装サンプルHTML（全機能網羅・実演用）
-│   ├── slide_16_9_example.html    # 16:9 プレゼン実例（全8スライド・表・チャート・KPI・メモ完備）
-│   ├── slide_16_9_en_example.html # 16:9 プレゼン実例（英語完全適応版）
-│   └── slide_4_3_example.html     # 4:3 プレゼン実例
+├── examples/                # 実装サンプルHTML
+│   └── slide_16_9_example.html    # 16:9 プレゼン実例（全8スライド・表・チャート完備）
+├── legacy/                  # 削除済み機能のバックアップ
+│   └── template_base_full_features.html  # 発表者ツール・目次ドロワー等を含む旧テンプレート
 └── references/              # 詳細技術リファレンス
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
     ├── ratio-and-print-specs.md # 16:9 / 4:3 比率・印刷CSS仕様
@@ -192,6 +192,15 @@ NativeSlide/
 ```
 
 ※自社公式のPPTXやスライド画像からデザインテンプレートを生成して `resources/design_templates/` に登録する作業は、初期セットアップ専用スキル [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder) で実行できます。
+
+### 削除された機能と再実装について
+以下の機能はAI出力安定性を最優先する設計方針に基づき、テンプレートの軽量化（トークン数削減）のために現行テンプレートから除去されました。旧テンプレートは `legacy/template_base_full_features.html` として保管されています。ニーズがある場合は、このバックアップを参照して再実装を検討できます。
+
+| 削除した機能 | 削除理由 |
+| :--- | :--- |
+| 完全分離型 発表者ツール（Speaker View）＆ 登壇タイマー | BroadcastChannel通信ロジックがJSコード量を大幅に増大させ、AI生成時のトークン消費・エラー率に影響 |
+| レーザーポインター | PDF出力前提の設計において不要なギミック |
+| 目次ドロワーナビゲーション | 動的DOM走査JSが重く、PDF出力時には不要なUI要素 |
 
 ---
 
@@ -313,6 +322,21 @@ AIが出力したHTMLコードを `slide.html` として保存し、ChromeやEdg
 5. デザインはTailwind CSSを活用し、調和のとれた配色（Slate + 固定CIカラー）と堅牢ボックスモデル（flex-shrink-0, min-h-0）を徹底します。
 6. 【自動品質検証 (Auto-Verification)】:
    HTMLを出力する前に、環境内のPythonを使って `scripts/verify_slide.py` を実行して自律テストを行い、文字数超過（700文字超過による縦溢れ）やスライド番号のズレがないことを確認してください。エラーがある場合は自律修正し、全合格（Exit Code 0）を確認してからユーザーに納品すること。
+```
+
+---
+
+## ヘッドレスPDF自動生成 (CLI)
+
+Puppeteer環境がある場合、ブラウザの印刷ダイアログを介さずにコマンドラインから直接PDFを生成できます。
+
+```bash
+# セットアップ（初回のみ）
+npm install puppeteer
+npx puppeteer browsers install chrome
+
+# PDF生成
+node scripts/export_pdf.js presentation.html output.pdf
 ```
 
 ---

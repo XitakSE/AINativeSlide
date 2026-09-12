@@ -1,4 +1,4 @@
-# NativeSlide (Next-Gen Web-Native HTML Presentation System)
+# NativeSlide (Stable & High-Precision HTML Slide Framework for Generative AI)
 
 <p align="left">
   <strong>🌐 Language:</strong>
@@ -6,7 +6,7 @@
   <a href="README.md">日本語 (Japanese)</a>
 </p>
 
-> **Break Free from PowerPoint** —— An executive presentation system that leverages a single self-contained HTML file (Single-File HTML) and Tailwind CSS to enable browser-based direct editing, fullscreen presentation mode, speaker notes, and one-click zero-margin PDF export.
+> **When generating slides with AI, choose HTML over PPTX** —— LLMs generate HTML/Tailwind CSS with the highest precision and layout freedom. NativeSlide uses HTML as an intermediate scaffolding format to eliminate text overflow and layout glitches, producing pixel-perfect, zero-margin PDF slide decks with autonomous Python verification.
 
 <p align="left">
   <a href="https://xitakse.github.io/NativeSlide/">
@@ -21,134 +21,120 @@
 ---
 
 ## 📖 Table of Contents
-1. [Philosophy & Key Advantages](#philosophy--key-advantages)
+1. [Philosophy & Core Advantages](#philosophy--core-advantages)
 2. [Implemented Features](#implemented-features)
-   - [1. Dedicated Presenter View & Stage Timer](#1-dedicated-presenter-view--stage-timer)
-   - [2. LocalStorage Auto-Save & Recovery](#2-localstorage-auto-save--recovery)
-   - [3. Autonomous AI Quality Testing (Zero-Dependency Python CLI)](#3-autonomous-ai-quality-testing-zero-dependency-python-cli)
-   - [4. Fullscreen Presentation Mode (Slideshow)](#4-fullscreen-presentation-mode-slideshow)
-   - [5. Speaker Notes](#5-speaker-notes)
-   - [6. Table of Contents & Slide Index (TOC Drawer)](#6-table-of-contents--slide-index-toc-drawer)
-   - [7. In-Browser Direct Text Editing & Floating Formatting Bar](#7-in-browser-direct-text-editing--floating-formatting-bar)
-   - [8. Global Typography Scaling (Font Sizing)](#8-global-typography-scaling-font-sizing)
-   - [9. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#9-corporate-design-templates-civi-compliance--pptx-migration)
-   - [10. Inline SVG Business Charts & Comparison Matrix Tables](#10-inline-svg-business-charts--comparison-matrix-tables)
-   - [11. Per-Slide Feedback Comments & AI Iteration Loop](#11-per-slide-feedback-comments--ai-iteration-loop)
-   - [12. AI Concept Imagery & Drag-and-Drop Image Replacement](#12-ai-concept-imagery--drag-and-drop-image-replacement)
-   - [13. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print](#13-strict-aspect-ratio-control-169--43--zero-margin-pdf-print)
-   - [14. Buttonless Automatic Language Adaptation](#14-buttonless-automatic-language-adaptation)
-3. [Keyboard Shortcuts](#keyboard-shortcuts)
-4. [Directory & File Structure](#directory--file-structure)
-5. [Installation Methods](#installation-methods)
-6. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
-7. [License](#license)
+   - [1. Autonomous AI Quality Testing (Zero-Dependency Python CLI)](#1-autonomous-ai-quality-testing-zero-dependency-python-cli)
+   - [2. Robust CSS Box Model & Forced Overflow Prevention (Line-Clamping)](#2-robust-css-box-model--forced-overflow-prevention-line-clamping)
+   - [3. Headless Zero-Margin PDF Export CLI](#3-headless-zero-margin-pdf-export-cli)
+   - [4. LocalStorage Auto-Save & Recovery](#4-localstorage-auto-save--recovery)
+   - [5. Fullscreen Presentation Mode (Slideshow)](#5-fullscreen-presentation-mode-slideshow)
+   - [6. In-Browser Direct Text Editing & Floating Formatting Bar](#6-in-browser-direct-text-editing--floating-formatting-bar)
+   - [7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#7-corporate-design-templates-civi-compliance--pptx-migration)
+   - [8. Inline SVG Business Charts & Comparison Matrix Tables](#8-inline-svg-business-charts--comparison-matrix-tables)
+   - [9. Per-Slide Feedback Comments & AI Iteration Loop](#9-per-slide-feedback-comments--ai-iteration-loop)
+   - [10. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print](#10-strict-aspect-ratio-control-169--43--zero-margin-pdf-print)
+3. [Removed Features & Legacy Re-Implementation](#removed-features--legacy-re-implementation)
+4. [Keyboard Shortcuts](#keyboard-shortcuts)
+5. [Directory & File Structure](#directory--file-structure)
+6. [Installation Methods](#installation-methods)
+7. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
+8. [License](#license)
 
 
 ---
 
-## Philosophy & Key Advantages
+## Philosophy & Core Advantages
 
-Traditional presentation tools often suffer from font discrepancies across devices, expensive license requirements, collaboration conflicts, and inconsistent styling. NativeSlide solves these issues by building entirely on open Web standards (HTML5 + Tailwind CSS CDN + Google Fonts + Vanilla JS).
+Generating PPTX directly via `python-pptx` often leads to severe font inconsistencies, text overflow, and rigid layouts. Markdown slide tools (e.g., Marp) limit visual expressiveness. **"The output format that LLMs understand and code best is HTML + Tailwind CSS."** NativeSlide leverages this insight, treating HTML as a high-fidelity intermediate scaffolding format to guarantee stable generation.
 
-- **100% Self-Contained Single-File HTML**: No Node.js, npm, bundlers, or local servers required. Simply double-click to open in any modern browser, edit directly, and present instantly.
-- **Strict Brand Governance (CI/VI Compliance)**: Eliminates arbitrary user color tweaks. Slides are generated strictly from corporate design templates (`resources/design_templates/`) matching your organization's official brand guidelines.
-- **Seamless AI Iteration**: Features dedicated per-slide feedback inputs and a one-click copy button that formats your notes into structured prompt instructions ready for any LLM (ChatGPT, Claude, Gemini, Antigravity, Cursor, etc.).
+- **AI Output Stability as #1 Priority**: Self-healing CSS Flexbox/Grid layouts combined with strict `-webkit-line-clamp` and `overflow: hidden` rules ensure that no matter how long the text generated by the AI is, it never physically breaks or spills out of the slide boundaries (720px height).
+- **Autonomous Quality Verification Loop**: AI executes background Python tests before delivering code to the user. Any errors are autonomously fixed by the AI without human intervention.
+- **100% Self-Contained Single-File HTML**: No Node.js or bundlers required. Double-click to open in any browser, edit directly, and export to PDF.
+- **Seamless AI Iteration**: Built-in per-slide feedback fields allow users to copy structured notes back into prompt instructions for rapid iteration.
 
 ---
 
 ## Implemented Features
 
-### 1. Dedicated Presenter View & Stage Timer
-Click the **"Presenter"** button in the header or hit **`P`** or **`S`** on your keyboard to open a dual-monitor speaker window.
-- **Hidden Notes**: Project only the slide deck on the presentation screen/Zoom share while viewing presenter tools on your laptop.
-- **Presenter Features**:
-  - **Current Slide**: Real-time scaled preview of what the audience sees.
-  - **Next Slide Preview**: Know what is coming next at a glance.
-  - **Large-Text Speaker Notes**: High-contrast, easy-to-read talking points with `A-` / `A+` font scaling (edits made here immediately sync back to the main deck).
-  - **Stage Timer**: Elapsed time (`MM:SS`), configurable target countdown (5/10/15/20/30 min), pause, and reset. Turns amber at 2 minutes remaining and flashes red when overtime.
-- **Zero-Server Local Sync**: Communicates using browser-native `BroadcastChannel` API without any internet or server dependencies.
-
-### 2. LocalStorage Auto-Save & Recovery
-All text edits made directly on the slide, as well as speaker notes, feedback comments, and font scales, are automatically persisted to your browser's `localStorage` in real time.
-- **Zero Data Loss**: Accidentally reloading (F5) or closing the tab preserves your work immediately.
-- **One-Click Reset**: Click the "Reset" button in the header at any time to discard changes and revert to the original HTML.
-
-### 3. Autonomous AI Quality Testing (Zero-Dependency Python CLI)
+### 1. Autonomous AI Quality Testing (Zero-Dependency Python CLI)
 Before delivering code to the user, the AI executes background validation to autonomously test and repair any defects.
 - **Zero Dependencies**: Pure Python 3 script ([`scripts/verify_slide.py`](scripts/verify_slide.py)) utilizing only the standard library.
 - **Rigorous Checks**:
   - 1:1 matching between slide count and metadata boxes (`slide-meta-box`).
   - Sequence integrity, missing slide indices, and duplicate checks.
   - **Character Overflow Heuristic**: Detects potential vertical overflow (>700 characters per 16:9 720px slide).
-  - UI ID integrity (Header, tabs, TOC drawer, presenter view, zero-margin print CSS).
+  - UI ID integrity (Header, tabs, presentation modal, zero-margin print CSS).
 - **Zero Human Debugging Burden**: The AI reads the CLI error output, autonomously rebalances text density, and delivers only validated code passing with Exit Code 0.
 
-### 4. Fullscreen Presentation Mode (Slideshow)
+### 2. Robust CSS Box Model & Forced Overflow Prevention (Line-Clamping)
+To guarantee that AI-generated text never breaks visual layouts regardless of input length:
+- **`ai-content` Container**: Standardized content area inside slides accepting semantic tags (`h2`, `h3`, `p`, `ul`, `li`).
+- **CSS Line Clamping**: Strict `-webkit-line-clamp` rules (e.g., 2 lines for headings, 6 lines for body paragraphs, 3 lines for list items) with `overflow: hidden`. Text exceeding boundaries is cleanly truncated rather than spilling over slide frames.
+
+### 3. Headless Zero-Margin PDF Export CLI
+- **Automated Puppeteer CLI** ([`scripts/export_pdf.js`](scripts/export_pdf.js)): Enables AI agents or CI/CD pipelines to directly compile single-file HTML slides into pixel-perfect, margin-free PDF decks without manual browser interaction.
+```bash
+node scripts/export_pdf.js <input.html> [output.pdf]
+```
+
+### 4. LocalStorage Auto-Save & Recovery
+All text edits made directly on the slide, as well as speaker notes, feedback comments, and font scales, are automatically persisted to your browser's `localStorage` in real time.
+- **Zero Data Loss**: Accidentally reloading (F5) or closing the tab preserves your work immediately.
+- **One-Click Reset**: Click the "Reset" button in the header at any time to discard changes and revert to the original HTML.
+
+### 5. Fullscreen Presentation Mode (Slideshow)
 Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard to launch presentation mode.
 - **Smart Aspect-Ratio Auto-Fit**: Uses CSS `transform: scale()` to dynamically center and maximize slides to fill any display resolution while strictly preserving the aspect ratio (16:9 or 4:3).
 - **Smooth Navigation**:
   - `→` / `↓` / `Space` / `PageDown` / Click right side: Next slide
   - `←` / `↑` / `PageUp` / Click left side: Previous slide
-- **Laser Pointer (`L` key)**: Replaces the cursor with a glowing red laser dot for highlighting key points.
 - **Instant Exit (`Esc` key)**: Quickly return to the standard editing mode at any time.
 
-### 5. Speaker Notes
-Each slide includes a tabbed metadata box positioned directly below the canvas.
-- **During Preparation & Editing**: Click the **"🎤 Speaker Notes"** tab to draft talking points and presenter scripts (`contenteditable="true"`).
-- **During Live Presentation**: Press **`N`** to toggle a translucent dark overlay displaying your speaker notes for the current slide.
-- **Print-Safe**: Speaker notes and feedback panels are automatically hidden when printing or exporting to PDF via `@media print`.
-
-### 6. Table of Contents & Slide Index (TOC Drawer)
-Click the **"☰ Menu"** button on the top-left to slide out a smooth drawer navigation.
-- **Automatic Heading Detection**: Dynamically scans `h1` and `h2` headings across all slides to generate titles and slide numbers.
-- **One-Click Jump**: Click any title to jump directly to that slide (scrolls in edit mode, switches instantly in presentation mode).
-
-### 7. In-Browser Direct Text Editing & Floating Formatting Bar
+### 6. In-Browser Direct Text Editing & Floating Formatting Bar
 - **Direct Editing**: Click any text element on the slide to edit it immediately.
 - **Floating Mini Toolbar**: Selecting text automatically reveals a floating format bar above the selection (Bold, font scaling, highlighter, clear formatting).
+- **Global Typography Scaling**: Adjust slide font sizes from 85% to 125% using header controls.
 
-### 8. Global Typography Scaling (Font Sizing)
-- **Global Typography Scaling**: Adjust slide font sizes from 85% to 125% using the header `[A-]` `100%` `[A+]` controller to optimize readability for any room size or projector resolution.
-
-### 9. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
+### 7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
 To enforce enterprise branding and prevent arbitrary styling divergences, casual color palette pickers have been eliminated.
 - **Separation of Structure & Brand**: Grounded in [`resources/design_templates/corporate_default.html`](./resources/design_templates/corporate_default.html) with standardized CI colors, company logo, confidentiality pill, and footer positioning.
-- **Migrating Existing PPTX Decks**: Organizations with official PowerPoint templates can convert and register their design once using the setup skill [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder). Once registered, the AI produces decks with the official company look and feel automatically.
+- **Migrating Existing PPTX Decks**: Convert and register enterprise PowerPoint templates once using the setup skill [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder).
 
-### 10. Inline SVG Business Charts & Comparison Matrix Tables
-- **Zero-Dependency Pure Inline SVG**: Render high-contrast bar and line combo charts directly within the single-file HTML without external libraries like Chart.js.
-- **Sophisticated Matrix Tables**: Option A vs Option B vs Option C (Recommended) evaluation grids with clear badges, border highlights, and symbols (◎, ◯, ▲, ✕).
+### 8. Inline SVG Business Charts & Comparison Matrix Tables
+- **Zero-Dependency Pure Inline SVG**: Render high-contrast bar and line combo charts directly within the single-file HTML without external libraries.
+- **Sophisticated Matrix Tables**: Option A vs Option B vs Option C evaluation grids with clear badges and border highlights.
 
-### 11. Per-Slide Feedback Comments & AI Iteration Loop
-- Enter specific change requests into the **"💬 Feedback"** tab under any slide (e.g., "Shorten this bullet point", "Wrap text cleanly", "Update quarterly metrics").
-- **"📋 Copy Instructions"**: Automatically formats all comments across slides into an organized prompt and copies it to your clipboard. Paste it directly into your AI chat to request the updated HTML.
-- **"📥 Save HTML"**: Download the current HTML with all your edits and comments preserved.
+### 9. Per-Slide Feedback Comments & AI Iteration Loop
+- Enter specific change requests into the **"💬 Feedback"** tab under any slide.
+- **"📋 Copy Instructions"**: Automatically formats all comments across slides into an organized prompt and copies it to your clipboard.
+- **"📥 Save HTML"**: Download the current HTML with all edits preserved.
 
-### 12. AI Concept Imagery & Drag-and-Drop Image Replacement
-- Pre-configured prompt templates for AI image generators (DALL-E 3, Midjourney, Imagen) tailored for abstract business concepts (system architectures, pipelines, data unifications) without garbled text.
-- Drag-and-drop any image from your desktop directly onto a slide's `.image-dropzone` to instantly replace it.
+### 10. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
+- Designed with `@page { size: 16in 9in; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports.
 
-### 13. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
-- Designed with `@page { size: 16in 9in; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports using your browser's Print dialog ("Save as PDF").
+---
 
-### 14. Buttonless Automatic Language Adaptation
-To prevent UI clutter and keep the toolbar minimal and focused, there are no manual language switch buttons.
-- **Japanese Prompts**: The AI generates slides with `<html lang="ja">`, creating Japanese headings, content, and annotations.
-- **Non-Japanese Prompts (English, etc.)**: The AI generates slides with `<html lang="en">`. The embedded JavaScript silently and automatically localizes all UI controls (Menu, Presenter, Copy Feedback, Save HTML, Present, Save PDF), TOC drawer (Table of Contents), meta box tabs (Feedback, Speaker Notes), input placeholders, and AI revision copy formats (`【Slide X Feedback】`) into clean English.
+### Removed Features & Legacy Re-Implementation
+
+The following presentation gimmicks were intentionally removed to reduce token size and prioritize AI output stability:
+- **Dedicated Presenter View (Speaker View & Timer)**: Removed complex dual-window `BroadcastChannel` communication.
+- **Laser Pointer**: Omitted as an unnecessary gimmick for PDF-first presentations.
+- **Dynamic TOC Drawer**: Removed heavyweight DOM traversal logic.
+
+*Note: The complete feature set has been safely preserved in [`legacy/template_base_full_features.html`](legacy/template_base_full_features.html). Users who require these features can easily restore them.*
 
 ---
 
 ## Keyboard Shortcuts
 
-| Key | Mode | Action |
+| Key | Mode | Description |
 | :--- | :--- | :--- |
-| **`P`** / **`S`** | Edit / Present | Launch / focus dedicated **Presenter View** in a separate window |
-| **`F`** / **`F5`** | Edit / Present | Start / Stop fullscreen presentation mode |
-| **`Esc`** | Present / Drawer | Exit presentation mode or close TOC drawer |
-| **`→`** / **`↓`** / **`Space`** / **`PageDown`** | Present / Speaker | Next slide (syncs main deck and speaker view) |
-| **`←`** / **`↑`** / **`PageUp`** | Present / Speaker | Previous slide (syncs main deck and speaker view) |
-| **`N`** | Present | Toggle in-slide speaker notes overlay |
-| **`L`** | Present | Toggle red laser pointer mode |
+| **`F`** | Edit / Present | Toggle fullscreen slideshow mode |
+| **`E`** | Edit / Present | Toggle edit mode ON / OFF |
+| **`Esc`** | Present | Exit presentation mode back to editing view |
+| **`→` / `↓` / `Space` / `PageDown`** | Present | Advance to the next slide |
+| **`←` / `↑` / `PageUp`** | Present | Return to the previous slide |
+| **`Home` / `End`** | Present | Jump to the first / last slide |
 
 *Note: Shortcuts are automatically disabled when typing in input boxes or active `contenteditable` elements to prevent interference.*
 
@@ -158,19 +144,20 @@ To prevent UI clutter and keep the toolbar minimal and focused, there are no man
 
 ```
 NativeSlide/
-├── SKILL.md                 # AI Agent Skill specification (Smart Grill, Auto-Verification loop)
+├── SKILL.md                 # AI Agent Skill specification (Output stabilization, Scaffolding, Auto-Verification loop)
 ├── README.md                # Japanese documentation (Comprehensive user & enterprise guide)
 ├── README_EN.md             # English documentation
 ├── scripts/
-│   └── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
+│   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
+│   └── export_pdf.js        # Puppeteer-based headless PDF export CLI
+├── legacy/
+│   └── template_base_full_features.html # Full-feature base template archive (Speaker View, Laser Pointer, TOC Drawer)
 ├── resources/
-│   ├── template_base.html   # Fully functional base HTML template (Feature Engine)
+│   ├── template_base.html   # Lightweight base HTML template optimized for AI stability
 │   └── design_templates/   # Corporate brand design templates (CI/VI compliance)
 │       └── corporate_default.html # Default corporate brand template (CI colors, logo, badges)
 ├── examples/                # Complete interactive slide examples
-│   ├── slide_16_9_example.html     (16:9 Japanese sample, 8 slides, charts & tables)
-│   ├── slide_16_9_en_example.html  (16:9 English sample)
-│   └── slide_4_3_example.html      (4:3 Japanese sample)
+│   └── slide_16_9_example.html     (16:9 Japanese sample, 8 slides, charts & tables)
 └── references/              # Detailed specifications & guidelines
     ├── grill-workflow.md    # Cognitive alignment interview specification
     ├── ratio-and-print-specs.md # 16:9 / 4:3 aspect ratio & print CSS specs
