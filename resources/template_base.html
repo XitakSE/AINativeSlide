@@ -147,9 +147,9 @@
 <body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
 
   <!-- 固定操作ツールバー（印刷時は非表示） -->
-  <header class="no-print sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between">
-    <!-- 左側: タイトル & メタ情報 -->
-    <div class="flex items-center gap-3">
+  <header class="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between gap-4 min-h-[56px]">
+    <!-- 左側: タイトル & メタ情報 ＋ モード切替タブ（タイトルの右隣に配置して被りを完全防止） -->
+    <div class="flex items-center gap-4 shrink-0">
       <!-- 目次ナビゲーショントグルボタン -->
       <button onclick="toggleTocDrawer()" title="目次・スライド一覧を開く" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800/90 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
         <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -162,78 +162,115 @@
         NS
       </div>
       <div>
-        <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide">スライドタイトル</h1>
+        <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide max-w-[260px] truncate">スライドタイトル</h1>
         <div class="flex items-center gap-2 text-[11px] text-slate-400">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
           <span id="deckRatioText">16:9 ワイド (1280 × 720)</span>
           <span class="text-slate-600">|</span>
-          <span id="deckSlideCountText">全6スライド</span>
+          <span id="deckSlideCountText">全0スライド</span>
         </div>
+      </div>
+
+      <!-- 縦区切り線 -->
+      <div class="w-px h-6 bg-slate-800 hidden sm:block"></div>
+
+      <!-- モード切替タブ（スライドタイトルのすぐ右隣に配置） -->
+      <div class="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800 shrink-0 shadow-inner">
+        <button id="tabBtnEdit" onclick="switchHeaderTab('edit')" class="px-3.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-brand-600 text-white shadow">
+          <span>✏️ 編集</span>
+        </button>
+        <button id="tabBtnPresent" onclick="switchHeaderTab('present')" class="px-3.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-400 hover:text-slate-200">
+          <span>🎬 発表・出力</span>
+        </button>
       </div>
     </div>
 
-    <!-- 右側: スタイル操作 & 出力コントローラー群 -->
-    <div class="flex items-center gap-3">
-      <!-- 1. フォントサイズ変更コントローラー -->
-      <div class="flex items-center bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
-        <button onclick="changeFontScale(-0.05)" title="文字サイズ縮小" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A-</button>
-        <button onclick="resetFontScale()" title="100%にリセット" id="fontScaleText" class="px-1.5 py-0.5 text-slate-200 font-mono font-medium hover:text-white transition-colors">100%</button>
-        <button onclick="changeFontScale(0.05)" title="文字サイズ拡大" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A+</button>
+    <!-- 右側: タブ別コントローラー群 -->
+    <div class="flex items-center gap-3 shrink-0 ml-auto">
+
+      <!-- 1. 【編集タブ用コントロール群】 -->
+      <div id="headerControlsEdit" class="flex items-center gap-3">
+        <!-- 変更保存状態インジケーター & リセット -->
+        <div id="saveStatusWrapper" class="hidden md:flex items-center gap-1.5 text-[11px] text-slate-400 bg-slate-800/80 px-2 py-1 rounded-md border border-slate-700/80">
+          <span id="saveStatusDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span id="saveStatusText">自動保存: 有効</span>
+          <button id="resetSavedBtn" onclick="resetSavedChanges()" title="保存された推敲・変更を破棄して初期状態に戻す" class="text-slate-500 hover:text-rose-400 ml-1 transition-colors underline underline-offset-2">リセット</button>
+        </div>
+
+        <!-- フォントサイズ変更コントローラー -->
+        <div class="flex items-center bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
+          <button onclick="changeFontScale(-0.05)" title="文字サイズ縮小" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A-</button>
+          <button onclick="resetFontScale()" title="100%にリセット" id="fontScaleText" class="px-1.5 py-0.5 text-slate-200 font-mono font-medium hover:text-white transition-colors">100%</button>
+          <button onclick="changeFontScale(0.05)" title="文字サイズ拡大" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A+</button>
+        </div>
+
+        <!-- テーマカラーパレット切替UI -->
+        <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg px-2 py-1">
+          <span class="text-[11px] text-slate-400 mr-0.5">テーマ:</span>
+          <button onclick="applyColorPreset('indigo')" title="Indigo (モダンテック)" class="w-4 h-4 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+          <button onclick="applyColorPreset('navy')" title="Navy (堅実コーポレート)" class="w-4 h-4 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+          <button onclick="applyColorPreset('emerald')" title="Emerald (サステナビリティ)" class="w-4 h-4 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+          <button onclick="applyColorPreset('amber')" title="Amber (エネルギー)" class="w-4 h-4 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+          <button onclick="applyColorPreset('rose')" title="Rose (インパクト)" class="w-4 h-4 rounded-full bg-[#f43f5e] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+          <!-- カスタムカラーピッカー -->
+          <label title="カスタムカラー選択" class="relative flex items-center cursor-pointer ml-0.5">
+            <input type="color" onchange="applyCustomColor(this.value)" value="#6366f1" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
+            <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-rose-400 via-emerald-400 to-sky-400 ring-1 ring-white/30 hover:scale-110 transition-transform"></div>
+          </label>
+        </div>
+
+        <!-- 反復修正指示アクション（エージェント連携） -->
+        <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
+          <button id="copyCommentsBtn" onclick="copySlideComments()" title="入力された全スライドの修正指示をコピーしてAIに貼り付け" class="px-2.5 py-1 rounded bg-slate-700/80 hover:bg-brand-600 hover:text-white text-slate-200 font-medium transition-all flex items-center gap-1 active:scale-95">
+            <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+            </svg>
+            <span>指示をコピー</span>
+          </button>
+          <button onclick="downloadHtmlWithComments()" title="修正指示・推敲内容を含んだ最新HTMLファイルをダウンロード" class="px-2.5 py-1 rounded hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1">
+            <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>HTML保存</span>
+          </button>
+        </div>
       </div>
 
-      <!-- 2. テーマカラーパレット切替UI -->
-      <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg px-2 py-1">
-        <span class="text-[11px] text-slate-400 mr-0.5">テーマ:</span>
-        <button onclick="applyColorPreset('indigo')" title="Indigo (モダンテック)" class="w-4 h-4 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('navy')" title="Navy (堅実コーポレート)" class="w-4 h-4 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('emerald')" title="Emerald (サステナビリティ)" class="w-4 h-4 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('amber')" title="Amber (エネルギー)" class="w-4 h-4 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('rose')" title="Rose (インパクト)" class="w-4 h-4 rounded-full bg-[#f43f5e] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <!-- カスタムカラーピッカー -->
-        <label title="カスタムカラー選択" class="relative flex items-center cursor-pointer ml-0.5">
-          <input type="color" onchange="applyCustomColor(this.value)" value="#6366f1" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
-          <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-rose-400 via-emerald-400 to-sky-400 ring-1 ring-white/30 hover:scale-110 transition-transform"></div>
-        </label>
-      </div>
-
-      <!-- 3. 反復修正指示アクション（エージェント連携） -->
-      <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
-        <button id="copyCommentsBtn" onclick="copySlideComments()" title="入力された全スライドの修正指示をコピーしてAIに貼り付け" class="px-2.5 py-1 rounded bg-slate-700/80 hover:bg-brand-600 hover:text-white text-slate-200 font-medium transition-all flex items-center gap-1 active:scale-95">
-          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+      <!-- 2. 【発表・出力タブ用コントロール群】（初期非表示） -->
+      <div id="headerControlsPresent" class="hidden flex items-center gap-3">
+        <!-- 編集モード切替（プレビュー切替） -->
+        <button id="toggleEditBtn" onclick="toggleEditMode()" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-200 transition-all flex items-center gap-1.5">
+          <svg id="editIcon" class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
           </svg>
-          <span>指示をコピー</span>
+          <span id="editStatusText">編集モード: ON</span>
         </button>
-        <button onclick="downloadHtmlWithComments()" title="修正指示・推敲内容を含んだ最新HTMLファイルをダウンロード" class="px-2.5 py-1 rounded hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1">
-          <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+
+        <!-- 発表者ツール別画面起動 -->
+        <button onclick="openSpeakerView()" title="発表者ツール（手元カンペ・次スライド・タイマー）を別ウィンドウで開く (ショートカット: P)" class="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-xs font-bold text-amber-300 transition-all flex items-center gap-1.5 active:scale-95 shadow-sm">
+          <svg class="w-3.5 h-3.5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
-          <span>HTML保存</span>
+          <span>発表者ツール</span>
+          <kbd class="px-1 py-0.2 text-[10px] font-mono bg-slate-950 text-amber-400/80 rounded border border-amber-500/30">P</kbd>
+        </button>
+
+        <!-- 全画面プレゼンテーションモード（スライドショー） -->
+        <button onclick="startPresentation()" title="全画面スライドショー開始 (ショートカット: F)" class="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all flex items-center gap-1.5 active:scale-95">
+          <span class="text-xs">▶</span>
+          <span>全画面発表</span>
+          <kbd class="px-1 py-0.2 text-[10px] font-mono bg-emerald-950 text-emerald-200 rounded border border-emerald-500/30">F</kbd>
+        </button>
+
+        <!-- PDF保存ボタン -->
+        <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5 active:scale-95">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+          </svg>
+          <span>PDF保存</span>
         </button>
       </div>
 
-      <!-- 4. 全画面プレゼンテーションモード（スライドショー） -->
-      <button onclick="startPresentation()" title="全画面スライドショー開始 (ショートカット: F)" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
-        <span class="text-emerald-400 text-xs">▶</span>
-        <span>発表</span>
-        <kbd class="hidden md:inline-block px-1.5 py-0.2 text-[10px] font-mono bg-slate-950 text-slate-400 rounded border border-slate-700">F</kbd>
-      </button>
-
-      <!-- 5. 編集モード切替 -->
-      <button id="toggleEditBtn" onclick="toggleEditMode()" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-200 transition-all flex items-center gap-1.5">
-        <svg id="editIcon" class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-        </svg>
-        <span id="editStatusText">編集モード: ON</span>
-      </button>
-
-      <!-- 6. PDF保存ボタン -->
-      <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5 active:scale-95">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-        </svg>
-        <span>PDF保存</span>
-      </button>
     </div>
   </header>
 
@@ -367,11 +404,48 @@
 
   <script>
     // ----------------------------------------------------
-    // 1. 編集モードトグル
-    // ----------------------------------------------------
     // 言語設定判定（HTMLの lang 属性に基づく自動ローカライズ）
+    // ----------------------------------------------------
     const isJapanese = !document.documentElement.lang || document.documentElement.lang.toLowerCase().startsWith('ja');
 
+    // ----------------------------------------------------
+    // 0. ヘッダーモード切替タブ（編集 vs 発表・出力）
+    // ----------------------------------------------------
+    let currentHeaderTab = 'edit';
+    function switchHeaderTab(tabName) {
+      currentHeaderTab = tabName;
+      const editTabBtn = document.getElementById('tabBtnEdit');
+      const presentTabBtn = document.getElementById('tabBtnPresent');
+      const editControls = document.getElementById('headerControlsEdit');
+      const presentControls = document.getElementById('headerControlsPresent');
+
+      if (tabName === 'edit') {
+        if (editTabBtn) {
+          editTabBtn.className = 'px-3.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-brand-600 text-white shadow';
+        }
+        if (presentTabBtn) {
+          presentTabBtn.className = 'px-3.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-400 hover:text-slate-200';
+        }
+        if (editControls) editControls.classList.remove('hidden');
+        if (presentControls) presentControls.classList.add('hidden');
+      } else {
+        if (presentTabBtn) {
+          presentTabBtn.className = 'px-3.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 bg-emerald-600 text-white shadow';
+        }
+        if (editTabBtn) {
+          editTabBtn.className = 'px-3.5 py-1 rounded-lg text-xs font-medium transition-all flex items-center gap-1.5 text-slate-400 hover:text-slate-200';
+        }
+        if (presentControls) presentControls.classList.remove('hidden');
+        if (editControls) editControls.classList.add('hidden');
+      }
+      try {
+        localStorage.setItem('nativeslide_header_tab_' + getStorageKey(), tabName);
+      } catch(e) {}
+    }
+
+    // ----------------------------------------------------
+    // 1. 編集モードトグル
+    // ----------------------------------------------------
     let isEditable = true;
     function toggleEditMode() {
       isEditable = !isEditable;
@@ -430,11 +504,14 @@
         .slide .text-sm { font-size: calc(0.875rem * ${currentFontScale}) !important; }
         .slide .text-base { font-size: calc(1rem * ${currentFontScale}) !important; }
       `;
+      if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
     }
 
     // ----------------------------------------------------
     // 3. テーマカラー適用 (全体 or 選択箇所)
     // ----------------------------------------------------
+    let currentThemeKey = 'indigo';
+    let currentCustomBrandHex = null;
     const themePresets = {
       indigo: {
         brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81', 950: '#1e1b4b' },
@@ -465,9 +542,12 @@
         formatSelection('color', preset.brand[500]);
         return;
       }
+      currentThemeKey = presetKey;
+      currentCustomBrandHex = null;
       const root = document.documentElement;
       Object.entries(preset.brand).forEach(([k, v]) => root.style.setProperty(`--brand-${k}`, v));
       Object.entries(preset.accent).forEach(([k, v]) => root.style.setProperty(`--accent-${k}`, v));
+      if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
     }
 
     function applyCustomColor(hex) {
@@ -475,12 +555,15 @@
         formatSelection('color', hex);
         return;
       }
+      currentCustomBrandHex = hex;
+      currentThemeKey = 'custom';
       const root = document.documentElement;
       root.style.setProperty('--brand-500', hex);
       root.style.setProperty('--brand-600', hex);
       root.style.setProperty('--brand-50', hex + '15');
       root.style.setProperty('--brand-100', hex + '25');
       root.style.setProperty('--brand-200', hex + '40');
+      if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
     }
 
     // ----------------------------------------------------
@@ -848,6 +931,7 @@
     }
 
     function startPresentation(startIndex) {
+      if (typeof switchHeaderTab === 'function') switchHeaderTab('present');
       const slides = document.querySelectorAll('.slide');
       if (!slides.length) return;
 
@@ -928,6 +1012,7 @@
 
       updateSpeakerNotesContent();
       fitPresentationSlide();
+      if (typeof broadcastSyncState === 'function') broadcastSyncState();
     }
 
     function nextSlide() {
@@ -1056,6 +1141,14 @@
       }
 
       if (isEditing) return;
+
+      if (e.key === 'p' || e.key === 'P' || e.key === 's' || e.key === 'S') {
+        if (!isTocOpen) {
+          e.preventDefault();
+          openSpeakerView();
+          return;
+        }
+      }
 
       if (e.key === 'f' || e.key === 'F') {
         e.preventDefault();
@@ -1188,6 +1281,37 @@
         el.setAttribute('data-placeholder', 'Enter talking points, presenter script, or speaker notes...');
       });
 
+      // ヘッダーモード切替タブ
+      const tabEdit = document.getElementById('tabBtnEdit');
+      if (tabEdit) {
+        const span = tabEdit.querySelector('span');
+        if (span) span.innerText = '✏️ Edit';
+      }
+      const tabPresent = document.getElementById('tabBtnPresent');
+      if (tabPresent) {
+        const span = tabPresent.querySelector('span');
+        if (span) span.innerText = '🎬 Present & Export';
+      }
+      const fullPresentBtn = document.querySelector('header button[onclick="startPresentation()"] span:nth-child(2)');
+      if (fullPresentBtn) fullPresentBtn.innerText = 'Present';
+
+      // 発表者ツールボタン
+      const speakerBtn = document.querySelector('header button[onclick="openSpeakerView()"]');
+      if (speakerBtn) {
+        const span = speakerBtn.querySelector('span');
+        if (span) span.innerText = 'Presenter';
+        speakerBtn.title = 'Open Presenter View in a separate window (P)';
+      }
+
+      // 自動保存ステータス
+      const saveStatus = document.getElementById('saveStatusText');
+      if (saveStatus) saveStatus.innerText = 'Auto-Save: Active';
+      const resetBtn = document.getElementById('resetSavedBtn');
+      if (resetBtn) {
+        resetBtn.innerText = 'Reset';
+        resetBtn.title = 'Discard saved edits and restore initial slide state';
+      }
+
       // プレゼンテーションバー
       const laserBtn = document.querySelector('#laserBtn span:last-child');
       if (laserBtn) laserBtn.innerText = 'Laser (L)';
@@ -1199,8 +1323,587 @@
       if (speakerNotesClose) speakerNotesClose.innerText = 'Press [N] to close';
     }
 
+    // ----------------------------------------------------
+    // 13. LocalStorage 自動保存 & 復元
+    // ----------------------------------------------------
+    const STORAGE_PREFIX = 'nativeslide_autosave_';
+    function getStorageKey() {
+      const path = window.location.pathname || 'deck';
+      return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');
+    }
+
+    let saveDebounceTimer = null;
+    function scheduleAutoSave() {
+      const dot = document.getElementById('saveStatusDot');
+      const text = document.getElementById('saveStatusText');
+      if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse';
+      if (text) text.innerText = isJapanese ? '保存中...' : 'Saving...';
+
+      clearTimeout(saveDebounceTimer);
+      saveDebounceTimer = setTimeout(() => {
+        performAutoSave();
+      }, 400);
+    }
+
+    function performAutoSave() {
+      try {
+        const slides = document.querySelectorAll('.slide');
+        const slideData = [];
+        slides.forEach(s => slideData.push(s.innerHTML));
+
+        const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
+        const comments = [];
+        const notes = [];
+        metaBoxes.forEach(box => {
+          const c = box.querySelector('.slide-comment-input');
+          const n = box.querySelector('.slide-note-input');
+          comments.push(c ? c.innerText : '');
+          notes.push(n ? n.innerText : '');
+        });
+
+        const saveData = {
+          slides: slideData,
+          comments: comments,
+          notes: notes,
+          fontScale: currentFontScale,
+          themeKey: currentThemeKey,
+          customHex: currentCustomBrandHex,
+          updatedAt: Date.now()
+        };
+        localStorage.setItem(getStorageKey(), JSON.stringify(saveData));
+
+        const dot = document.getElementById('saveStatusDot');
+        const text = document.getElementById('saveStatusText');
+        if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-emerald-400';
+        if (text) text.innerText = isJapanese ? '自動保存: 済' : 'Auto-Saved';
+      } catch (e) {
+        console.warn('AutoSave failed:', e);
+      }
+    }
+
+    function restoreFromStorage() {
+      try {
+        const raw = localStorage.getItem(getStorageKey());
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!data) return;
+
+        if (Array.isArray(data.slides)) {
+          const slides = document.querySelectorAll('.slide');
+          data.slides.forEach((html, idx) => {
+            if (slides[idx] && html) {
+              slides[idx].innerHTML = html;
+            }
+          });
+        }
+
+        const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
+        metaBoxes.forEach((box, idx) => {
+          const c = box.querySelector('.slide-comment-input');
+          const n = box.querySelector('.slide-note-input');
+          if (c && data.comments && typeof data.comments[idx] === 'string') c.innerText = data.comments[idx];
+          if (n && data.notes && typeof data.notes[idx] === 'string') n.innerText = data.notes[idx];
+        });
+
+        if (data.fontScale && typeof data.fontScale === 'number') {
+          currentFontScale = data.fontScale;
+          applyFontScale();
+        }
+
+        if (data.themeKey && themePresets[data.themeKey]) {
+          applyColorPreset(data.themeKey);
+        } else if (data.customHex) {
+          applyCustomColor(data.customHex);
+        }
+
+        const text = document.getElementById('saveStatusText');
+        if (text) text.innerText = isJapanese ? '編集を自動復元済' : 'Edits restored';
+      } catch (e) {
+        console.warn('Restore failed:', e);
+      }
+    }
+
+    function resetSavedChanges() {
+      const msg = isJapanese 
+        ? '保存された推敲テキストやメモをすべて破棄し、初期HTMLの状態に戻しますか？'
+        : 'Discard all saved edits and reset to original HTML?';
+      if (confirm(msg)) {
+        localStorage.removeItem(getStorageKey());
+        location.reload();
+      }
+    }
+
+    function setupAutoSaveListeners() {
+      document.addEventListener('input', (e) => {
+        if (e.target.closest('.slide') || e.target.closest('.slide-meta-box') || e.target.closest('.slide-comment-box')) {
+          scheduleAutoSave();
+        }
+      });
+    }
+
+    // ----------------------------------------------------
+    // 14. 発表者ツール (Speaker View) & BroadcastChannel
+    // ----------------------------------------------------
+    let presenterBus = null;
+    try {
+      if (typeof BroadcastChannel !== 'undefined') {
+        presenterBus = new BroadcastChannel('nativeslide_bus_' + getStorageKey());
+        presenterBus.onmessage = (e) => {
+          const msg = e.data;
+          if (!msg) return;
+          if (msg.type === 'GOTO') {
+            currentPresentationIndex = msg.index;
+            if (isPresentationMode) {
+              renderPresentationSlide();
+            } else {
+              const slides = document.querySelectorAll('.slide');
+              if (slides[msg.index]) {
+                slides[msg.index].scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }
+            broadcastSyncState();
+          } else if (msg.type === 'SYNC_REQUEST') {
+            broadcastSyncState();
+          } else if (msg.type === 'UPDATE_NOTE') {
+            const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
+            if (metaBoxes[msg.index]) {
+              const noteEl = metaBoxes[msg.index].querySelector('.slide-note-input');
+              if (noteEl) {
+                noteEl.innerText = msg.text;
+                scheduleAutoSave();
+              }
+            }
+          }
+        };
+      }
+    } catch(e) {
+      console.warn('BroadcastChannel error:', e);
+    }
+
+    function broadcastSyncState() {
+      if (!presenterBus) return;
+      const slides = document.querySelectorAll('.slide');
+      const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
+      const slideSummaries = [];
+      const notes = [];
+
+      // CSS変数（テーマカラー、アクセントカラー）の取得
+      const rootStyle = getComputedStyle(document.documentElement);
+      const brandVars = [
+        '--brand-50', '--brand-100', '--brand-200', '--brand-500',
+        '--brand-600', '--brand-700', '--brand-900', '--brand-950',
+        '--accent-400', '--accent-500', '--accent-600'
+      ];
+      const cssVars = {};
+      brandVars.forEach(v => {
+        const val = rootStyle.getPropertyValue(v).trim();
+        if (val) cssVars[v] = val;
+      });
+
+      slides.forEach((s, idx) => {
+        const h = s.querySelector('h1, h2');
+        slideSummaries.push({
+          index: idx,
+          title: h ? h.innerText.trim() : (isJapanese ? `スライド ${idx+1}` : `Slide ${idx+1}`),
+          html: s.innerHTML,
+          className: s.className,
+          style: s.getAttribute('style') || ''
+        });
+        const n = metaBoxes[idx] ? metaBoxes[idx].querySelector('.slide-note-input') : null;
+        notes.push(n ? n.innerText : '');
+      });
+
+      const firstSlide = slides[0];
+      const baseWidth = firstSlide ? (firstSlide.offsetWidth || 1280) : 1280;
+      const baseHeight = firstSlide ? (firstSlide.offsetHeight || 720) : 720;
+
+      presenterBus.postMessage({
+        type: 'STATE_UPDATE',
+        currentIndex: currentPresentationIndex,
+        total: slides.length,
+        deckTitle: document.title || 'NativeSlide',
+        slides: slideSummaries,
+        notes: notes,
+        baseWidth: baseWidth,
+        baseHeight: baseHeight,
+        cssVars: cssVars
+      });
+    }
+
+    let speakerWindowRef = null;
+    function openSpeakerView() {
+      if (typeof switchHeaderTab === 'function') switchHeaderTab('present');
+      if (speakerWindowRef && !speakerWindowRef.closed) {
+        speakerWindowRef.close();
+      }
+
+      speakerWindowRef = window.open('', 'NativeSlideSpeakerView', 'width=1180,height=760,menubar=no,toolbar=no,location=no');
+      if (!speakerWindowRef) {
+        alert(isJapanese ? 'ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。' : 'Popup blocked. Please allow popups for this site.');
+        return;
+      }
+
+      const channelKey = 'nativeslide_bus_' + getStorageKey();
+      const langJa = isJapanese;
+
+      // 親ウィンドウのTailwind設定と全スタイルタグの抽出
+      const tailwindConfigScript = window.tailwind && window.tailwind.config ? `tailwind.config = ${JSON.stringify(window.tailwind.config)};` : '';
+      const customStyles = Array.from(document.querySelectorAll('style')).map(s => s.innerHTML).join('\n');
+
+      const speakerHtml = `<!DOCTYPE html>
+<html lang="${langJa ? 'ja' : 'en'}">
+<head>
+  <meta charset="UTF-8">
+  <title>${langJa ? '発表者ツール - NativeSlide' : 'Presenter View - NativeSlide'}</title>
+  <script src="https://cdn.tailwindcss.com"><\/script>
+  <script>${tailwindConfigScript}<\/script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    ${customStyles}
+    body { font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif; background-color: #090d16; color: #f1f5f9; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .slide-preview-frame {
+      box-sizing: border-box !important;
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      pointer-events: none !important;
+      user-select: none !important;
+      box-shadow: none !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col select-none overflow-hidden text-slate-100">
+  <header class="bg-slate-900 border-b border-slate-800 px-6 py-2.5 flex items-center justify-between shrink-0">
+    <div class="flex items-center gap-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <h1 id="deckTitle" class="text-xs font-bold text-slate-300 max-w-[200px] truncate">NativeSlide</h1>
+      <span class="text-slate-600">|</span>
+      <span id="slideCounter" class="mono text-xs font-bold text-brand-400 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Slide 1 / 1</span>
+    </div>
+
+    <div class="flex items-center gap-4 bg-slate-950/80 px-4 py-1.5 rounded-xl border border-slate-800">
+      <div class="flex items-center gap-1.5">
+        <span class="text-[10px] uppercase font-bold text-slate-500">${langJa ? '経過' : 'ELAPSED'}:</span>
+        <span id="elapsedTime" class="mono text-sm font-bold text-white">00:00</span>
+      </div>
+      <div class="w-px h-4 bg-slate-800"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-[10px] uppercase font-bold text-slate-500">${langJa ? '残り' : 'REMAIN'}:</span>
+        <span id="remainTime" class="mono text-sm font-bold text-emerald-400">15:00</span>
+      </div>
+      <div class="flex items-center gap-1 ml-1">
+        <button id="timerToggleBtn" onclick="toggleTimer()" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-semibold text-slate-300 transition-colors">${langJa ? '一時停止' : 'Pause'}</button>
+        <button onclick="resetTimer()" title="タイマーを0にリセット" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        </button>
+        <select onchange="setDuration(this.value)" class="bg-slate-900 border border-slate-700 rounded px-1.5 py-0.5 text-[11px] text-slate-300">
+          <option value="5">5分</option>
+          <option value="10">10分</option>
+          <option value="15" selected>15分</option>
+          <option value="20">20分</option>
+          <option value="30">30分</option>
+          <option value="45">45分</option>
+          <option value="60">60分</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 text-xs">
+      <span id="wallClock" class="mono text-slate-400 font-semibold">12:00:00</span>
+      <button onclick="window.close()" class="px-2.5 py-1 rounded bg-slate-800 hover:bg-rose-900/40 text-slate-400 hover:text-rose-300 transition-colors text-[11px]">${langJa ? '閉じる' : 'Close'}</button>
+    </div>
+  </header>
+
+  <div class="flex-1 flex min-h-0">
+    <div class="w-[58%] border-r border-slate-800 p-4 flex flex-col justify-between overflow-hidden bg-slate-950/40">
+      <div class="flex-1 flex flex-col min-h-0">
+        <div class="flex items-center justify-between pb-1.5 mb-1.5 text-[11px] font-bold text-slate-400">
+          <span class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+            ${langJa ? '現在投影中のスライド' : 'CURRENT SLIDE'}
+          </span>
+          <span id="currentSlideTitle" class="text-slate-500 font-normal truncate max-w-[300px]"></span>
+        </div>
+        <div id="currentStageWrapper" class="flex-1 relative bg-black/40 rounded-lg border border-slate-800 overflow-hidden flex items-center justify-center p-2">
+          <div id="currentStageBox" class="relative shrink-0 overflow-hidden shadow-2xl rounded" style="width: 0px; height: 0px;">
+            <div id="currentStageScaler" class="shrink-0" style="width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; flex-shrink: 0; position: absolute; top: 0; left: 0; transform-origin: 0 0;">
+              <div id="currentSlideContent" class="slide-preview-frame"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-3 pt-3 border-t border-slate-800 flex items-center justify-between gap-4 h-36">
+        <div class="flex items-center gap-2">
+          <button onclick="navPrev()" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 active:scale-95 text-white font-bold rounded-xl border border-slate-700 flex items-center gap-1.5 text-sm transition-all shadow-md">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            <span>${langJa ? '前へ (←)' : 'Prev (←)'}</span>
+          </button>
+          <button onclick="navNext()" class="px-5 py-3 bg-brand-600 hover:bg-brand-500 active:scale-95 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 flex items-center gap-1.5 text-sm transition-all">
+            <span>${langJa ? '次へ (→)' : 'Next (→)'}</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+
+        <div class="flex-1 flex flex-col h-full pl-4 border-l border-slate-800/80 min-w-0">
+          <div class="text-[10px] uppercase font-bold text-slate-500 mb-1 flex items-center justify-between gap-2 overflow-hidden min-w-0">
+            <span class="whitespace-nowrap shrink-0 text-slate-400 font-bold">${langJa ? '次のスライド' : 'NEXT SLIDE'}</span>
+            <span id="nextSlideTitle" class="text-slate-400 font-normal truncate min-w-0 flex-1 text-right"></span>
+          </div>
+          <div id="nextStageWrapper" class="flex-1 relative bg-black/40 rounded border border-slate-800/80 overflow-hidden flex items-center justify-center p-1.5 min-h-0 min-w-0">
+            <div id="nextStageBox" class="relative shrink-0 overflow-hidden shadow-lg rounded" style="width: 0px; height: 0px;">
+              <div id="nextStageScaler" class="shrink-0" style="width: 1280px; height: 720px; min-width: 1280px; min-height: 720px; flex-shrink: 0; position: absolute; top: 0; left: 0; transform-origin: 0 0;">
+                <div id="nextSlideContent" class="slide-preview-frame"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-[42%] flex flex-col bg-slate-900/30 p-5 min-h-0">
+      <div class="flex items-center justify-between pb-2 mb-3 border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="text-amber-400 text-sm">🎤</span>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300">${langJa ? '発表者ノート・原稿' : 'SPEAKER NOTES'}</h2>
+        </div>
+        <div class="flex items-center gap-1">
+          <button onclick="changeNoteFontSize(-2)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300">A-</button>
+          <button onclick="changeNoteFontSize(2)" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-[11px] font-bold text-slate-300">A+</button>
+        </div>
+      </div>
+      
+      <div id="speakerNoteArea" oninput="handleNoteEdit()" class="flex-1 overflow-y-auto p-4 bg-slate-950/70 border border-slate-800 rounded-xl text-slate-200 leading-relaxed whitespace-pre-wrap focus:outline-none focus:border-brand-500/80 text-base font-sans" contenteditable="true"></div>
+      
+      <div class="mt-2 text-[11px] text-slate-500 flex items-center justify-between">
+        <span>${langJa ? '※編集内容は自動保存・メイン同期されます' : '※ Edits auto-sync & save'}</span>
+        <span class="mono text-[10px] text-slate-600">Shortcuts: [←/→/Space]</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const bus = new BroadcastChannel('${channelKey}');
+    let currentIdx = 0;
+    let deckData = { slides: [], notes: [], total: 0 };
+    let noteFontSize = 18;
+
+    bus.onmessage = (e) => {
+      const msg = e.data;
+      if (!msg) return;
+      if (msg.type === 'STATE_UPDATE') {
+        currentIdx = msg.currentIndex;
+        deckData = msg;
+        if (msg.cssVars) {
+          Object.keys(msg.cssVars).forEach(k => {
+            document.documentElement.style.setProperty(k, msg.cssVars[k]);
+          });
+        }
+        renderAll();
+      }
+    };
+
+    function navNext() {
+      if (currentIdx < deckData.total - 1) {
+        currentIdx++;
+        notifyMainGoto();
+        renderAll();
+      }
+    }
+    function navPrev() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        notifyMainGoto();
+        renderAll();
+      }
+    }
+    function notifyMainGoto() {
+      bus.postMessage({ type: 'GOTO', index: currentIdx });
+    }
+
+    function renderAll() {
+      document.getElementById('slideCounter').innerText = 'Slide ' + (currentIdx + 1) + ' / ' + deckData.total;
+      document.getElementById('deckTitle').innerText = deckData.deckTitle || 'NativeSlide';
+
+      const baseW = deckData.baseWidth || 1280;
+      const baseH = deckData.baseHeight || 720;
+
+      const cur = deckData.slides[currentIdx];
+      const curContent = document.getElementById('currentSlideContent');
+      const curTitle = document.getElementById('currentSlideTitle');
+      if (cur) {
+        curContent.className = (cur.className || 'slide') + ' slide-preview-frame';
+        curContent.style.cssText = (cur.style || '') + '; width: ' + baseW + 'px !important; height: ' + baseH + 'px !important; min-width: ' + baseW + 'px !important; min-height: ' + baseH + 'px !important; max-width: ' + baseW + 'px !important; max-height: ' + baseH + 'px !important; overflow: hidden !important; position: absolute; top: 0; left: 0; margin: 0 !important; pointer-events: none; user-select: none; box-shadow: none;';
+        curContent.innerHTML = cur.html;
+        curTitle.innerText = cur.title || '';
+      }
+      fitPreview('currentStageWrapper', 'currentStageBox', 'currentStageScaler', baseW, baseH);
+
+      const nextIdx = currentIdx + 1;
+      const next = deckData.slides[nextIdx];
+      const nextContent = document.getElementById('nextSlideContent');
+      const nextTitle = document.getElementById('nextSlideTitle');
+      const nextBox = document.getElementById('nextStageBox');
+      if (next) {
+        nextContent.className = (next.className || 'slide') + ' slide-preview-frame';
+        nextContent.style.cssText = (next.style || '') + '; width: ' + baseW + 'px !important; height: ' + baseH + 'px !important; min-width: ' + baseW + 'px !important; min-height: ' + baseH + 'px !important; max-width: ' + baseW + 'px !important; max-height: ' + baseH + 'px !important; overflow: hidden !important; position: absolute; top: 0; left: 0; margin: 0 !important; pointer-events: none; user-select: none; box-shadow: none;';
+        nextContent.innerHTML = next.html;
+        nextTitle.innerText = next.title || '';
+        if (nextBox) nextBox.style.opacity = '1';
+      } else {
+        nextContent.className = 'slide-preview-frame';
+        nextContent.style.cssText = 'width: ' + baseW + 'px !important; height: ' + baseH + 'px !important; min-width: ' + baseW + 'px !important; min-height: ' + baseH + 'px !important; max-width: ' + baseW + 'px !important; max-height: ' + baseH + 'px !important; overflow: hidden !important; position: absolute; top: 0; left: 0; margin: 0 !important;';
+        nextContent.innerHTML = '<div class="w-full h-full flex flex-col items-center justify-center bg-slate-900/95 text-slate-300 font-bold text-5xl gap-6 border-2 border-dashed border-slate-700/80 rounded-2xl"><span>🏁</span><span class="tracking-wide">${langJa ? '発表終了 (最後のスライド)' : 'End of presentation'}</span></div>';
+        nextTitle.innerText = '${langJa ? '終了' : 'End'}';
+        if (nextBox) nextBox.style.opacity = '0.9';
+      }
+      fitPreview('nextStageWrapper', 'nextStageBox', 'nextStageScaler', baseW, baseH);
+
+      const noteArea = document.getElementById('speakerNoteArea');
+      const note = deckData.notes[currentIdx] || '';
+      noteArea.innerText = note;
+    }
+
+    function fitPreview(wrapperId, boxId, scalerId, baseW, baseH) {
+      const wrap = document.getElementById(wrapperId);
+      const box = document.getElementById(boxId);
+      const scaler = document.getElementById(scalerId);
+      if (!wrap || !box || !scaler) return;
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      if (w <= 0 || h <= 0) return;
+      const pad = 12;
+      const availW = Math.max(10, w - pad);
+      const availH = Math.max(10, h - pad);
+      const scale = Math.min(availW / baseW, availH / baseH);
+      const safeScale = Math.max(0.05, scale);
+
+      const scaledW = Math.floor(baseW * safeScale);
+      const scaledH = Math.floor(baseH * safeScale);
+
+      box.style.width = scaledW + 'px';
+      box.style.height = scaledH + 'px';
+
+      scaler.style.width = baseW + 'px';
+      scaler.style.height = baseH + 'px';
+      scaler.style.minWidth = baseW + 'px';
+      scaler.style.minHeight = baseH + 'px';
+      scaler.style.maxWidth = baseW + 'px';
+      scaler.style.maxHeight = baseH + 'px';
+      scaler.style.transform = 'scale(' + safeScale + ')';
+      scaler.style.transformOrigin = '0 0';
+    }
+
+    function handleNoteEdit() {
+      const noteArea = document.getElementById('speakerNoteArea');
+      const text = noteArea.innerText;
+      deckData.notes[currentIdx] = text;
+      bus.postMessage({ type: 'UPDATE_NOTE', index: currentIdx, text: text });
+    }
+
+    function changeNoteFontSize(delta) {
+      noteFontSize = Math.max(12, Math.min(32, noteFontSize + delta));
+      document.getElementById('speakerNoteArea').style.fontSize = noteFontSize + 'px';
+    }
+
+    window.addEventListener('keydown', (e) => {
+      const isEditing = e.target.isContentEditable || ['INPUT', 'TEXTAREA'].includes(e.target.tagName);
+      if (isEditing) return;
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        navNext();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        navPrev();
+      }
+    });
+
+    window.addEventListener('resize', () => {
+      const baseW = deckData.baseWidth || 1280;
+      const baseH = deckData.baseHeight || 720;
+      fitPreview('currentStageWrapper', 'currentStageBox', 'currentStageScaler', baseW, baseH);
+      fitPreview('nextStageWrapper', 'nextStageBox', 'nextStageScaler', baseW, baseH);
+    });
+
+    let elapsedSec = 0;
+    let targetSec = 15 * 60;
+    let isTimerRunning = true;
+    let timerInterval = setInterval(() => {
+      if (isTimerRunning) {
+        elapsedSec++;
+        updateTimerDisplay();
+      }
+      const now = new Date();
+      document.getElementById('wallClock').innerText = now.toTimeString().split(' ')[0];
+    }, 1000);
+
+    function setDuration(min) {
+      targetSec = parseInt(min, 10) * 60;
+      updateTimerDisplay();
+    }
+    function toggleTimer() {
+      isTimerRunning = !isTimerRunning;
+      document.getElementById('timerToggleBtn').innerText = isTimerRunning ? '${langJa ? '一時停止' : 'Pause'}' : '${langJa ? '再開' : 'Resume'}';
+    }
+    function resetTimer() {
+      elapsedSec = 0;
+      updateTimerDisplay();
+    }
+    function updateTimerDisplay() {
+      const elMin = String(Math.floor(elapsedSec / 60)).padStart(2, '0');
+      const elSec = String(elapsedSec % 60).padStart(2, '0');
+      document.getElementById('elapsedTime').innerText = elMin + ':' + elSec;
+
+      const remain = targetSec - elapsedSec;
+      const remEl = document.getElementById('remainTime');
+      if (remain >= 0) {
+        const rMin = String(Math.floor(remain / 60)).padStart(2, '0');
+        const rSec = String(remain % 60).padStart(2, '0');
+        remEl.innerText = rMin + ':' + rSec;
+        if (remain <= 120) {
+          remEl.className = 'mono text-sm font-bold text-amber-400 animate-pulse';
+        } else {
+          remEl.className = 'mono text-sm font-bold text-emerald-400';
+        }
+      } else {
+        const over = Math.abs(remain);
+        const oMin = String(Math.floor(over / 60)).padStart(2, '0');
+        const oSec = String(over % 60).padStart(2, '0');
+        remEl.innerText = '-' + oMin + ':' + oSec;
+        remEl.className = 'mono text-sm font-bold text-rose-500 animate-pulse';
+      }
+    }
+
+    bus.postMessage({ type: 'SYNC_REQUEST' });
+  <\/script>
+</body>
+</html>`;
+
+      speakerWindowRef.document.open();
+      speakerWindowRef.document.write(speakerHtml);
+      speakerWindowRef.document.close();
+
+      setTimeout(() => {
+        broadcastSyncState();
+      }, 200);
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      restoreFromStorage();
       applyAutoLocalization();
+      setupAutoSaveListeners();
+
+      try {
+        const savedTab = localStorage.getItem('nativeslide_header_tab_' + getStorageKey());
+        if (savedTab) {
+          switchHeaderTab(savedTab);
+        }
+      } catch(e) {}
     });
   </script>
 </body>

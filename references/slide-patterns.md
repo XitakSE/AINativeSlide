@@ -176,3 +176,161 @@ AI（LLM）がスライド内容に応じて選択すべき、代表的なスラ
 </section>
 ```
 
+---
+
+## 7. 比較評価マトリクス・テーブル (Comparison Table / Feature Matrix)
+- **用途**: ツール・アーキテクチャ選定比較、料金プラン比較、競合ベンチマーク、機能要件対比
+- **特徴**:
+  - 推奨オプション（自社推奨案）の列を `bg-brand-50/60 border-2 border-brand-500` で強調
+  - 評価記号（`◎`, `◯`, `△`, `✕`）を視認性の高いピル型バッジとして表現
+  - 文字数が増減しても崩れない固定テーブルレイアウト（`table-fixed`、`p-3.5`、`truncate`）
+
+```html
+<section class="slide p-12 justify-between bg-white border border-slate-200" contenteditable="true">
+  <!-- ヘッダー -->
+  <div class="flex items-start justify-between border-b border-slate-100 pb-3">
+    <div>
+      <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">SOLUTION BENCHMARK</div>
+      <h2 class="text-2xl font-extrabold text-slate-900 mt-1">基盤アーキテクチャ 3大選定モデルの比較評価</h2>
+    </div>
+    <div class="text-xs font-mono text-slate-500 bg-slate-100 px-3 py-1 rounded-md border border-slate-200">EVALUATION</div>
+  </div>
+
+  <!-- 比較テーブル本体 -->
+  <div class="my-auto overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
+    <table class="w-full text-left text-xs border-collapse">
+      <thead>
+        <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600">
+          <th class="p-3.5 font-bold w-1/4">評価項目</th>
+          <th class="p-3.5 font-semibold text-slate-500 w-1/4">案A: 従来型オンプレDB</th>
+          <th class="p-3.5 font-semibold text-slate-500 w-1/4">案B: 汎用SaaSデータウェアハウス</th>
+          <th class="p-3.5 font-bold text-brand-700 bg-brand-50/50 w-1/4 relative">
+            <span class="absolute -top-2.5 right-3 bg-brand-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow">推奨プラン</span>
+            案C: 自律型レイクハウス (本提案)
+          </th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 text-slate-700">
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="p-3.5 font-bold text-slate-900 bg-slate-50/30">データ統合スピード</td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-semibold text-[11px]">△ 月次バッチ</span></td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-semibold text-[11px]">◯ 日次同期</span></td>
+          <td class="p-3.5 bg-brand-50/20 font-semibold text-brand-900"><span class="px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700 font-bold text-[11px]">◎ リアルタイム (秒単位)</span></td>
+        </tr>
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="p-3.5 font-bold text-slate-900 bg-slate-50/30">AI・LLM連携ネイティブ性</td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-semibold text-[11px]">✕ API個別開発</span></td>
+          <td class="p-3.5"><span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-semibold text-[11px]">△ コネクタ限定</span></td>
+          <td class="p-3.5 bg-brand-50/20 font-semibold text-brand-900"><span class="px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-700 font-bold text-[11px]">◎ ベクトル検索・MCP標準</span></td>
+        </tr>
+        <tr class="hover:bg-slate-50/50 transition-colors">
+          <td class="p-3.5 font-bold text-slate-900 bg-slate-50/30">5年総保有コスト (TCO)</td>
+          <td class="p-3.5 text-slate-500">保守人件費が年々増大</td>
+          <td class="p-3.5 text-slate-500">クエリ課金で予算ブレ大</td>
+          <td class="p-3.5 bg-brand-50/20 font-bold text-brand-800">約35%の総コスト削減</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- フッター -->
+  <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
+    <div>全社次世代データ基盤導入計画</div>
+    <div class="font-mono">04 / 08</div>
+  </div>
+</section>
+```
+
+---
+
+## 8. インラインSVGビジネスチャート (Inline SVG Business Chart & Metrics)
+- **用途**: 投資対効果（ROI）推移、月次・年次削減工数、業績予測、定量的ビジネスインパクト
+- **特徴**:
+  - 外部JavaScriptライブラリ不要（Pure Inline SVG）。
+  - CSS変数（`var(--brand-500)` 等）と完全連動し、テーマカラー変更時にグラフの配色も自動同期。
+  - 複合グラフ（棒グラフ ＋ 折れ線グラフ）で複数の評価指標を1画面で直感的に提示。
+
+```html
+<section class="slide p-12 justify-between bg-slate-900 text-white border border-slate-800" contenteditable="true">
+  <!-- ヘッダー -->
+  <div class="flex items-start justify-between border-b border-slate-800 pb-3">
+    <div>
+      <div class="text-xs font-bold tracking-wider text-accent-400 uppercase">BUSINESS IMPACT & ROI</div>
+      <h2 class="text-2xl font-extrabold text-white mt-1">年間削減工数と累積投資対効果（ROI）の推移予測</h2>
+    </div>
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-2 text-xs">
+        <span class="inline-block w-3 h-3 rounded bg-brand-500"></span>
+        <span class="text-slate-300">工数削減 (千時間)</span>
+        <span class="inline-block w-3 h-0.5 bg-emerald-400 ml-2"></span>
+        <span class="text-slate-300">累積ROI (%)</span>
+      </div>
+      <div class="text-xs font-mono text-slate-400 bg-slate-800 px-3 py-1 rounded-md border border-slate-700">5-YEAR FORECAST</div>
+    </div>
+  </div>
+
+  <!-- インラインSVGチャート本体 -->
+  <div class="my-auto bg-slate-950/60 rounded-xl p-5 border border-slate-800/90 shadow-inner">
+    <svg viewBox="0 0 800 240" class="w-full h-48 overflow-visible">
+      <!-- グリッド背景線 -->
+      <line x1="60" y1="30" x2="760" y2="30" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
+      <line x1="60" y1="90" x2="760" y2="90" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
+      <line x1="60" y1="150" x2="760" y2="150" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
+      <line x1="60" y1="210" x2="760" y2="210" stroke="#475569" stroke-width="1.5" />
+
+      <!-- Y軸ラベル -->
+      <text x="45" y="34" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="end">300%</text>
+      <text x="45" y="94" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="end">200%</text>
+      <text x="45" y="154" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="end">100%</text>
+      <text x="45" y="214" fill="#94a3b8" font-size="10" font-family="monospace" text-anchor="end">0</text>
+
+      <!-- 棒グラフ (工数削減) -->
+      <!-- Year 1 -->
+      <rect x="120" y="160" width="50" height="50" rx="4" fill="var(--brand-600)" opacity="0.8" />
+      <text x="145" y="152" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">1.2k h</text>
+
+      <!-- Year 2 -->
+      <rect x="270" y="125" width="50" height="85" rx="4" fill="var(--brand-500)" opacity="0.85" />
+      <text x="295" y="117" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">2.4k h</text>
+
+      <!-- Year 3 -->
+      <rect x="420" y="90" width="50" height="120" rx="4" fill="var(--brand-500)" opacity="0.9" />
+      <text x="445" y="82" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">3.8k h</text>
+
+      <!-- Year 4 -->
+      <rect x="570" y="60" width="50" height="150" rx="4" fill="var(--brand-400)" />
+      <text x="595" y="52" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">5.2k h</text>
+
+      <!-- 折れ線グラフ (累積ROI) -->
+      <polyline points="145,190 295,140 445,85 595,45" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      
+      <!-- 折れ線ノード & ラベル -->
+      <circle cx="145" cy="190" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
+      <text x="145" y="180" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">45%</text>
+
+      <circle cx="295" cy="140" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
+      <text x="295" y="130" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">120%</text>
+
+      <circle cx="445" cy="85" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
+      <text x="445" y="75" fill="#34d399" font-size="10" font-weight="bold" text-anchor="middle">215%</text>
+
+      <circle cx="595" cy="45" r="5" fill="#34d399" stroke="#fff" stroke-width="2" />
+      <text x="595" y="35" fill="#34d399" font-size="11" font-extrabold" text-anchor="middle">310%</text>
+
+      <!-- X軸年次ラベル -->
+      <text x="145" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2026 (導入期)</text>
+      <text x="295" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2027 (展開期)</text>
+      <text x="445" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2028 (定着期)</text>
+      <text x="595" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2029 (自律運用期)</text>
+    </svg>
+  </div>
+
+  <!-- フッター -->
+  <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
+    <div>全社次世代データ基盤導入計画</div>
+    <div class="font-mono">05 / 08</div>
+  </div>
+</section>
+```
+
+
