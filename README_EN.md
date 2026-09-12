@@ -8,6 +8,16 @@
 
 > **Break Free from PowerPoint** —— An executive presentation system that leverages a single self-contained HTML file (Single-File HTML) and Tailwind CSS to enable browser-based direct editing, fullscreen presentation mode, speaker notes, and one-click zero-margin PDF export.
 
+<p align="left">
+  <a href="https://xitakse.github.io/NativeSlide/">
+    <img src="https://img.shields.io/badge/Live%20Demo-Try%20in%20Browser-4f46e5?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
+  </a>
+  <a href="https://github.com/XitakSE/NativeSlide/blob/main/LICENSE">
+    <img src="https://img.shields.io/badge/License-MIT-slate?style=for-the-badge" alt="License" />
+  </a>
+</p>
+
+
 ---
 
 ## 📖 Table of Contents
