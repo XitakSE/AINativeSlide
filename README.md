@@ -168,6 +168,8 @@ UIの煩雑化を防ぐため、画面上に手動の言語切り替えボタン
 
 ```
 AINativeSlide/
+├── .github/workflows/
+│   └── gemini-pr-review.yml # GitHub Actions: Gemini Code Assist 自動PRレビュー
 ├── AGENTS.md                # AIコーディングエージェント向け指示書
 ├── SKILL.md                 # スキル仕様書（スマートGrill・自律検証ループ・パターン規約）
 ├── README.md                # 本ドキュメント（日本語）
@@ -175,6 +177,7 @@ AINativeSlide/
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
 ├── scripts/
 │   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
+│   ├── gemini_pr_review.py  # 【外部依存ゼロ】Gemini API 自動PRレビュー実行スクリプト
 │   └── export_pdf.js        # Puppeteerによるヘッドレス余白ゼロPDF自動生成CLI
 ├── resources/
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）

@@ -23,6 +23,8 @@ This document provides essential context, architectural rules, and verification 
 
 ```
 AINativeSlide/
+├── .github/workflows/
+│   └── gemini-pr-review.yml        # Automated Gemini Code Assist PR review workflow
 ├── AGENTS.md                       # This file (AI coding agent instructions)
 ├── SKILL.md                        # Antigravity / Agent Skill definition file
 ├── README.md / README_EN.md        # User-facing documentation (JA / EN)
@@ -33,6 +35,7 @@ AINativeSlide/
 │   └── design_templates/           # Corporate / custom HTML templates
 ├── scripts/
 │   ├── verify_slide.py             # Automated quality & layout regression checker
+│   ├── gemini_pr_review.py         # Automated Gemini PR review script
 │   └── export_pdf.js               # Headless Puppeteer PDF export script
 └── .agents/skills/ainativeslide/   # Workspace agent skill mirror (MUST be synced)
 ```

@@ -1,0 +1,51 @@
+name: Gemini Code Assist PR Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run Gemini PR Reviewer
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          BASE_REF: ${{ github.base_ref }}
+          HEAD_REF: ${{ github.head_ref }}
+        run: |
+          python3 scripts/gemini_pr_review.py
+
+      - name: Post Review Comment to PR
+        if: success() && hashFiles('pr_review_comment.md') != ''
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          # 既存のGeminiレビューコメントがあれば更新、なければ新規投稿
+          EXISTING_COMMENT_ID=$(gh api repos/${{ github.repository }}/issues/${PR_NUMBER}/comments \
+            --jq '.[] | select(.body | contains("## 🤖 Gemini Code Assist PR Review")) | .id' | head -n 1)
+
+          if [ -n "$EXISTING_COMMENT_ID" ]; then
+            echo "Updating existing Gemini PR review comment ID: $EXISTING_COMMENT_ID"
+            gh api -X PATCH repos/${{ github.repository }}/issues/comments/${EXISTING_COMMENT_ID} \
+              -F body=@pr_review_comment.md
+          else
+            echo "Posting new Gemini PR review comment"
+            gh pr comment ${PR_NUMBER} --body-file pr_review_comment.md
+          fi

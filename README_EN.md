@@ -151,6 +151,8 @@ The following presentation gimmicks were intentionally removed to reduce token s
 
 ```
 AINativeSlide/
+├── .github/workflows/
+│   └── gemini-pr-review.yml # GitHub Actions: Gemini Code Assist Automated PR Review
 ├── AGENTS.md                # AI coding agent instructions (Jules, Gemini Code Assist, Cursor)
 ├── SKILL.md                 # AI Agent Skill specification (Output stabilization, Scaffolding, Auto-Verification loop)
 ├── README.md                # Japanese documentation (Comprehensive user & enterprise guide)
@@ -158,6 +160,7 @@ AINativeSlide/
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── scripts/
 │   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
+│   ├── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
 │   └── export_pdf.js        # Puppeteer-based headless PDF export CLI
 ├── legacy/
 │   └── template_base_full_features.html # Full-feature base template archive
