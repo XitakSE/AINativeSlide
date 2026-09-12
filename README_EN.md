@@ -78,7 +78,7 @@ node scripts/export_pdf.js <input.html> [output.pdf]
 ```
 
 ### 4. LocalStorage Background Auto-Save & Recovery
-All text edits made directly on the slide, as well as speaker notes and feedback comments, are automatically persisted to your browser's `localStorage` in the background.
+All text edits made directly on the slide, as well as feedback comments, are automatically persisted to your browser's `localStorage` in the background.
 - **Zero Data Loss**: Accidentally reloading (F5) or closing the tab preserves your work immediately.
 
 ### 5. Fullscreen Presentation Mode (Slideshow)
@@ -103,11 +103,16 @@ To enforce enterprise branding and prevent arbitrary styling divergences, casual
 - **Sophisticated Matrix Tables**: Option A vs Option B vs Option C evaluation grids with clear badges and border highlights.
 
 ### 9. Per-Slide Feedback Comments & AI Iteration Loop
-- Enter specific change requests into the **"💬 Feedback"** tab under any slide.
+- Enter specific change requests into the **"💬 Feedback"** box under any slide.
 - **"📋 Copy Instructions"**: Automatically formats all comments across slides into an organized prompt and copies it to your clipboard.
 - **"📥 Save HTML"**: Download the current HTML with all edits preserved.
 
-### 10. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
+### 10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)
+- Decouples verbal speaker notes from HTML slides to produce a clean, reusable Markdown document (`speech_script.md`).
+- Offered as an optional selection during the initial Grill interview: generates slide-by-slide estimated time, key takeaways, and conversational speaker scripts alongside the slide HTML.
+- Example: [`examples/speech_script_example.md`](./examples/speech_script_example.md)
+
+### 11. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print
 - Designed with `@page { size: 16in 9in; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports.
 
 ---
@@ -272,10 +277,10 @@ To configure an enterprise-wide presentation assistant in OpenAI Custom GPTs, An
 You are an executive presentation designer. When asked to create presentations or slide decks, create web-native HTML presentations following the NativeSlide specification.
 
 [Guidelines]
-1. Output a valid, complete Single-File HTML complying with the NativeSlide specification (Tailwind CSS CDN, Google Fonts, Presenter View, Stage Timer, LocalStorage auto-save, Segmented Edit/Present toolbar).
+1. Output a valid, complete Single-File HTML complying with the NativeSlide specification (Tailwind CSS CDN, Google Fonts, LocalStorage auto-save, Clean Unified Toolbar, Fullscreen Slideshow).
 2. Use `resources/template_base.html` for functional engine architecture and `resources/design_templates/corporate_default.html` for corporate brand styling.
-3. If essential requirements are ambiguous, clarify Audience, Ratio (16:9 recommended), and Slide Count concisely using Smart Grill.
-4. Set each slide to contenteditable="true" and include meta boxes for "Feedback" and "Speaker Notes".
+3. If essential requirements are ambiguous, clarify Audience, Ratio (16:9 recommended), Slide Count, and Speech Script requirement concisely using Smart Grill.
+4. Set each slide to contenteditable="true" and include meta boxes for "💬 Feedback" revision instructions. If requested during initial Grill, generate an accompanying Markdown speech script (speech_script.md).
 5. Use modern Tailwind color palettes (Slate + Indigo/Violet) and robust card box models (flex-shrink-0, min-h-0).
 6. [Auto-Verification]:
    Before returning HTML to the user, run `python3 scripts/verify_slide.py <file.html>` in your background environment. Fix any character overflows (>700 chars) or slide index mismatches autonomously, and only deliver code that achieves Exit Code 0 (all tests passed).
