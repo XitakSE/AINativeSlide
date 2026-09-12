@@ -17,3 +17,6 @@ Thumbs.db
 # Drafts & internal notes
 QIITA_ARTICLE.md
 QIITA_*.md
+INTERNAL_*.md
+ENTERPRISE_*.md
+
