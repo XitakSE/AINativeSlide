@@ -120,7 +120,7 @@ AIが長文を出力してもレイアウトが崩れないための物理的な
 ### 11. 発表用台本文書（Markdown: `speech_script.md`）のセット生成（Grill選択制）
 - HTMLスライド内に発表メモを無理に埋め込まず、再利用性・可読性の高い独立したMarkdownファイル（`speech_script.md`）として出力。
 - 最初の壁打ち（Grill）時に生成要否を確認し、希望された場合は各スライドの想定時間・要点・口語体トーク原稿をHTMLスライドとセットで同時生成。
-- 実例: [`examples/speech_script_example.md`](./examples/speech_script_example.md)
+- 実例: [`resources/speech_script_example.md`](./resources/speech_script_example.md)
 
 ### 12. 厳格な比率・用紙制御（16:9 / 4:3 / A4横 / A4縦）& 余白ゼロPDF印刷
 用途に合わせて4種類のアスペクト比・用紙サイズを自由に選択可能：
@@ -168,23 +168,24 @@ UIの煩雑化を防ぐため、画面上に手動の言語切り替えボタン
 
 ```
 AINativeSlide/
+├── AGENTS.md                # AIコーディングエージェント向け指示書
 ├── SKILL.md                 # スキル仕様書（スマートGrill・自律検証ループ・パターン規約）
 ├── README.md                # 本ドキュメント（日本語）
 ├── README_EN.md             # 英語ドキュメント
+├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
 ├── scripts/
 │   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
 │   └── export_pdf.js        # Puppeteerによるヘッドレス余白ゼロPDF自動生成CLI
 ├── resources/
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
+│   ├── speech_script_example.md # 発表台本文書サンプル
 │   └── design_templates/    # 企業公式デザインテンプレート群（CI/VI統一）
 │       └── corporate_default.html # 標準コーポレートデザイン（CIカラー/ロゴ/枠固定）
-├── examples/                # 実装サンプルHTML
-│   └── slide_16_9_example.html    # 16:9 プレゼン実例（全8スライド・表・チャート完備）
 ├── legacy/                  # 削除済み機能のバックアップ
 │   └── template_base_full_features.html  # 発表者ツール・目次ドロワー等を含む旧テンプレート
 └── references/              # 詳細技術リファレンス
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
-    ├── ratio-and-print-specs.md # 16:9 / 4:3 比率・印刷CSS仕様
+    ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 比率・印刷CSS仕様
     ├── ai-concept-imagery.md # コンセプト画像プロンプト設計仕様
     ├── design-system.md     # タイポグラフィ・堅牢ボックスモデル仕様
     └── slide-patterns.md    # スライド構図パターン集（表・SVGチャート含む）

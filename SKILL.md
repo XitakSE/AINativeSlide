@@ -127,5 +127,6 @@ flowchart TD
 
 ---
 
-## 実装サンプル (Examples)
-- [16:9 日本語サンプル (全8スライド・表・チャート完備)](./examples/slide_16_9_example.html)
+## 実装サンプル (Showcase & Templates)
+- [16:9 日本語実動デモ (全8スライド・表・チャート完備)](./index.html)
+- [発表台本文書サンプル (speech_script_example.md)](./resources/speech_script_example.md)

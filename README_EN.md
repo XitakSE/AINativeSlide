@@ -108,7 +108,7 @@ To enforce enterprise branding and prevent arbitrary styling divergences, casual
 ### 10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)
 - Decouples verbal speaker notes from HTML slides to produce a clean, reusable Markdown document (`speech_script.md`).
 - Offered as an optional selection during the initial Grill interview: generates slide-by-slide estimated time, key takeaways, and conversational speaker scripts alongside the slide HTML.
-- Example: [`examples/speech_script_example.md`](./examples/speech_script_example.md)
+- Example: [`resources/speech_script_example.md`](./resources/speech_script_example.md)
 
 ### 11. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print
 Supports 4 purpose-built aspect ratios and paper formats:
@@ -151,23 +151,24 @@ The following presentation gimmicks were intentionally removed to reduce token s
 
 ```
 AINativeSlide/
+├── AGENTS.md                # AI coding agent instructions (Jules, Gemini Code Assist, Cursor)
 ├── SKILL.md                 # AI Agent Skill specification (Output stabilization, Scaffolding, Auto-Verification loop)
 ├── README.md                # Japanese documentation (Comprehensive user & enterprise guide)
 ├── README_EN.md             # English documentation
+├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── scripts/
 │   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
 │   └── export_pdf.js        # Puppeteer-based headless PDF export CLI
 ├── legacy/
-│   └── template_base_full_features.html # Full-feature base template archive (Speaker View, Laser Pointer, TOC Drawer)
+│   └── template_base_full_features.html # Full-feature base template archive
 ├── resources/
 │   ├── template_base.html   # Lightweight base HTML template optimized for AI stability
+│   ├── speech_script_example.md # Speaker speech script example document
 │   └── design_templates/   # Corporate brand design templates (CI/VI compliance)
 │       └── corporate_default.html # Default corporate brand template (CI colors, logo, badges)
-├── examples/                # Complete interactive slide examples
-│   └── slide_16_9_example.html     (16:9 Japanese sample, 8 slides, charts & tables)
 └── references/              # Detailed specifications & guidelines
     ├── grill-workflow.md    # Cognitive alignment interview specification
-    ├── ratio-and-print-specs.md # 16:9 / 4:3 aspect ratio & print CSS specs
+    ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 aspect ratio & print CSS specs
     ├── ai-concept-imagery.md # Concept image generation prompt guidelines
     ├── design-system.md     # Typography & robust card box model specs
     └── slide-patterns.md    # Reusable slide layout patterns (Tables & SVG Charts)

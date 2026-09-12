@@ -29,11 +29,8 @@ AINativeSlide/
 ├── index.html                      # GitHub Pages root & 16:9 interactive showcase
 ├── resources/
 │   ├── template_base.html          # Clean base template skeleton for new decks
+│   ├── speech_script_example.md    # Speaker script document example
 │   └── design_templates/           # Corporate / custom HTML templates
-├── examples/
-│   ├── slide_16_9_example.html     # 16:9 widescreen business deck example
-│   ├── slide_4_3_example.html      # 4:3 standard deck example
-│   └── speech_script_example.md    # Speaker script document example
 ├── scripts/
 │   ├── verify_slide.py             # Automated quality & layout regression checker
 │   └── export_pdf.js               # Headless Puppeteer PDF export script
@@ -55,7 +52,6 @@ Whenever you modify any slide HTML, templates, or scripts, you **MUST** run the 
 Always run `scripts/verify_slide.py` against modified HTML files:
 ```bash
 python3 scripts/verify_slide.py index.html
-python3 scripts/verify_slide.py examples/slide_16_9_example.html
 ```
 - **Exit Code 0**: Required before presenting any HTML file to the user or submitting a PR.
 - If the exit code is `1`, read the `[ERROR]` messages, fix the issue in the HTML, and re-run until all tests pass.
