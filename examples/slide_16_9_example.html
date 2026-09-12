@@ -1465,23 +1465,23 @@
       try {
         const titleEl = document.getElementById('deckTitleText');
         const rawTitle = titleEl ? titleEl.innerText.trim() : 'slide';
-        // 半角・全角スペースや特殊記号を確実にアンダースコアに置換し、スペース起因の拡張子脱落を防止
+        // 半角・全角スペースや特殊記号をアンダースコアに完全置換
         let cleanTitle = rawTitle.replace(/[\s\t\n\r\u3000\\/:*?"<>|]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
         if (!cleanTitle) cleanTitle = 'slide';
         const filename = `${cleanTitle}_edited.html`;
 
         const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        // 重要: MIME type に ';charset=utf-8' を含めるとブラウザの拡張子マッピングが壊れる環境があるため純粋な 'text/html' を指定
+        const blob = new Blob(['\uFEFF' + fullHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url;
         a.download = filename;
         a.setAttribute('download', filename);
+        a.href = url;
         document.body.appendChild(a);
         a.click();
 
-        // revokeObjectURL の即時実行によるブラウザのファイル名・拡張子破綻を防止するため60秒遅延解放
         setTimeout(() => {
           if (a.parentNode) document.body.removeChild(a);
           URL.revokeObjectURL(url);

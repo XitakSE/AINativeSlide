@@ -1471,13 +1471,14 @@
         const filename = `${cleanTitle}_edited.html`;
 
         const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        // 重要: MIME type に ';charset=utf-8' を含めるとブラウザの拡張子マッピングが壊れる環境があるため純粋な 'text/html' を指定
+        const blob = new Blob(['\uFEFF' + fullHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.style.display = 'none';
-        a.href = url;
         a.download = filename;
         a.setAttribute('download', filename);
+        a.href = url;
         document.body.appendChild(a);
         a.click();
 
