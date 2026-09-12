@@ -1,4 +1,4 @@
-# HTML Slide Creator (次世代・編集可能HTMLスライドシステム)
+# HyperDeck (次世代・WebネイティブHTMLスライドシステム)
 
 > **PowerPointからの完全脱却** —— 単一HTMLファイル（Single-File HTML）とTailwind CSSを活用し、ブラウザ上での直接推敲、全画面プレゼンテーション、発表メモ、そして1クリックでの余白ゼロPDF出力を実現するエグゼクティブ・プレゼンテーション作成システムです。
 
@@ -107,14 +107,14 @@
 
 ```
 dev/
-├── HTMLSlideCreator/                   # 配布・運用パッケージ
+├── HyperDeck/                          # 配布・運用パッケージ
 │   ├── test_slide_16_9.html            # 16:9 実装検証スライド（全6スライド、発表機能・メモ内蔵）
 │   ├── test_slide_4_3.html             # 4:3 実装検証スライド
 │   ├── test_16_9.pdf                   # 出力検証済みPDFサンプル (16:9)
-│   └── skill-html-slide-creator/       # スキル配布用パッケージ
+│   └── skill-hyperdeck/                # スキル配布用パッケージ
 │       ├── SKILL.md
 │       └── README.md
-└── .agents/skills/html-slide-creator/  # Antigravity公式スキル
+└── .agents/skills/hyperdeck/           # Antigravity公式スキル
     ├── SKILL.md                        # スキル定義ファイル
     ├── README.md                       # 本ドキュメント（全体概要・仕様・ロードマップ）
     ├── resources/
