@@ -13,3 +13,7 @@ Thumbs.db
 *~
 *.bak
 *.tmp
+
+# Drafts & internal notes
+QIITA_ARTICLE.md
+QIITA_*.md
