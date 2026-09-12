@@ -1,4 +1,4 @@
-# NativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
+# AINativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
 
 <p align="left">
   <strong>🌐 Language:</strong>
@@ -9,10 +9,10 @@
 > **AIにスライドを作らせるなら、PPTXではなくHTML** —— LLMが最も得意とするHTML/Tailwind CSSを中間フォーマットとして活用し、レイアウト崩れや文字溢れのない堅牢なスライドを安定生成。最終的には余白ゼロのピクセルパーフェクトなPDFとしてエクスポートする、AI出力安定化フレームワークです。
 
 <p align="left">
-  <a href="https://xitakse.github.io/NativeSlide/">
+  <a href="https://xitakse.github.io/AINativeSlide/">
     <img src="https://img.shields.io/badge/Live%20Demo-%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E4%BB%8A%E3%81%99%E3%81%80%E8%A9%A6%E3%81%99%EF%BC%88%E7%99%BB%E9%8C%B2%E4%B8%8D%E8%A6%81%EF%BC%89-4f46e5?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
   </a>
-  <a href="https://github.com/XitakSE/NativeSlide/blob/main/LICENSE">
+  <a href="https://github.com/XitakSE/AINativeSlide/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-slate?style=for-the-badge" alt="License" />
   </a>
 </p>
@@ -101,7 +101,7 @@ AIが長文を出力してもレイアウトが崩れないための物理的な
 ### 7. 企業公式デザインテンプレート（CI/VI統一・自社PPTX連携）
 社員ごとの色ブレやデザイン崩れを防ぐため、安易なテーマカラー変更機能はあえて撤廃し、会社規定のブランドデザインを厳格に固定化。
 - **デザイン骨格の分離**: [`resources/design_templates/corporate_default.html`](./resources/design_templates/corporate_default.html) に企業ロゴ、CIカラー、機密区分バッジ、定位置フッターを定義。
-- **自社PPTXテンプレートからの移行**: 会社公式のPPTXやスライド画像をお持ちの場合、初期セットアップ専用スキル [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder) を利用して一度変換・登録するだけで、全社共通の公式デザインでスライドが量産されます。
+- **自社PPTXテンプレートからの移行**: 会社公式のPPTXやスライド画像をお持ちの場合、初期セットアップ専用スキル [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) を利用して一度変換・登録するだけで、全社共通の公式デザインでスライドが量産されます。
 
 ### 8. インラインSVGビジネスチャート & 比較マトリクステーブル
 - **外部ライブラリゼロのPure Inline SVG**:
@@ -162,7 +162,7 @@ UIの煩雑化を防ぐため、画面上に手動の言語切り替えボタン
 ## ディレクトリ・ファイル構成
 
 ```
-NativeSlide/
+AINativeSlide/
 ├── SKILL.md                 # スキル仕様書（スマートGrill・自律検証ループ・パターン規約）
 ├── README.md                # 本ドキュメント（日本語）
 ├── README_EN.md             # 英語ドキュメント
@@ -185,7 +185,7 @@ NativeSlide/
     └── slide-patterns.md    # スライド構図パターン集（表・SVGチャート含む）
 ```
 
-※自社公式のPPTXやスライド画像からデザインテンプレートを生成して `resources/design_templates/` に登録する作業は、初期セットアップ専用スキル [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder) で実行できます。
+※自社公式のPPTXやスライド画像からデザインテンプレートを生成して `resources/design_templates/` に登録する作業は、初期セットアップ専用スキル [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) で実行できます。
 
 ---
 
@@ -196,16 +196,16 @@ Antigravity、Claude Code、Cursor等のAIエージェント環境では、リ�
 ### 方法1. Git Clone による導入（推奨）
 
 ```bash
-git clone https://github.com/XitakSE/NativeSlide.git .agents/skills/nativeslide
+git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativeslide
 ```
 
 ### 方法2. ZIPダウンロードによる直接配置（社内プロキシ制限環境・Git CLI不要）
 
 社内セキュリティポリシーにより `git clone` が禁止されている場合や、GitがインストールされていないPCでも利用できます。
 
-1. GitHubリポジトリ（[NativeSlide](https://github.com/XitakSE/NativeSlide)）の **「<> Code」➔「Download ZIP」** からZIPファイルを保存。
+1. GitHubリポジトリ（[AINativeSlide](https://github.com/XitakSE/AINativeSlide)）の **「<> Code」➔「Download ZIP」** からZIPファイルを保存。
 2. ZIPファイルを解凍。
-3. 解凍したフォルダ（`NativeSlide-main`）を `nativeslide` にリネームし、作業スペースの `.agents/skills/nativeslide` に直接配置します。
+3. 解凍したフォルダ（`AINativeSlide-main`）を `ainativeslide` にリネームし、作業スペースの `.agents/skills/ainativeslide` に直接配置します。
    *(※ フォルダ直下に `SKILL.md` がある状態にしてください)*
 
 ---
@@ -215,11 +215,11 @@ git clone https://github.com/XitakSE/NativeSlide.git .agents/skills/nativeslide
 
 社内環境（ChatGPT Enterprise, Claude for Work, Gemini for Workspace, Antigravity, Cursor等）で「Skill機能」が利用可能な場合、**社員側でのテンプレート管理や手動ナレッジ登録は一切不要** です。
 
-本リポジトリ（または `.agents/skills/nativeslide/`）をSkillとして読み込むだけで、AIがテンプレート参照・スライド構築・Python自動検証・自律修正まで完全手ぶらで実行します。
+本リポジトリ（または `.agents/skills/ainativeslide/`）をSkillとして読み込むだけで、AIがテンプレート参照・スライド構築・Python自動検証・自律修正まで完全手ぶらで実行します。
 
 ```mermaid
 flowchart TD
-    A[社員: 「〇〇の役員向けプレゼン作って」] --> B[AIがNativeSlideスキルを自動呼出]
+    A[社員: 「〇〇の役員向けプレゼン作って」] --> B[AIがAINativeSlideスキルを自動呼出]
     B --> C[Skill内の resources/template_base.html ＆<br/>resources/design_templates/ を自動読込]
     C --> D[スライドHTMLコードを内部生成]
     D --> E[裏側のPython環境で scripts/verify_slide.py を自動実行]
@@ -236,7 +236,7 @@ flowchart TD
 お使いのAI（ChatGPT, Claude, Gemini, 社内AI等）のチャット欄に、テーマと要件を自然言語で伝えるだけで作成できます。
 
 ```markdown
-以下のテーマで、プレゼンテーションスライドをNativeSlide規格（Single-File HTML）で作成してください。
+以下のテーマで、プレゼンテーションスライドをAINativeSlide規格（Single-File HTML）で作成してください。
 
 【テーマ】
 全社次世代データ基盤 Modern Data Stack 導入計画
@@ -298,10 +298,10 @@ AIが出力したHTMLコードを `slide.html` として保存し、ChromeやEdg
 
 ```text
 あなたは全社共通のエグゼクティブ・プレゼンテーションデザイナーです。
-スライド作成の依頼を受けた際は、PowerPointではなく「WebネイティブHTMLスライド（NativeSlide規格）」を作成します。
+スライド作成の依頼を受けた際は、PowerPointではなく「WebネイティブHTMLスライド（AINativeSlide規格）」を作成します。
 
 【行動指針】
-1. 本スキル（NativeSlide）の仕様（Tailwind CSS CDN, Google Fonts, LocalStorage自動保存, 強制文字溢れ防止line-clamp）に完全準拠した単一HTML（Single-File HTML）を出力します。
+1. 本スキル（AINativeSlide）の仕様（Tailwind CSS CDN, Google Fonts, LocalStorage自動保存, 強制文字溢れ防止line-clamp）に完全準拠した単一HTML（Single-File HTML）を出力します。
 2. 機能基盤として `resources/template_base.html` を、企業ブランド骨格として `resources/design_templates/corporate_default.html` を参照して自社CI規定カラー・レイアウトでスライドを構築します。
 3. 初回リクエストで前提が曖昧な場合のみ、「目的」「比率（16:9推奨）」「枚数」をスマートGrillで簡潔に確認します。
 4. 各スライドは contenteditable="true" とし、スライド本文は `<div class="ai-content">` で囲んで文字溢れ防止規約（h2: 2行, p: 6行, li: 3行制限）を徹底します。
@@ -329,4 +329,4 @@ node scripts/export_pdf.js presentation.html output.pdf
 
 ## ライセンス
 
-MIT License © 2026 NativeSlide Contributors. 商用・非商用問わず自由にご利用いただけます。
+MIT License © 2026 AINativeSlide Contributors. 商用・非商用問わず自由にご利用いただけます。

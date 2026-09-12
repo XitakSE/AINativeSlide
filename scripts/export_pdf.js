@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * NativeSlide PDF Export CLI
+ * AINativeSlide PDF Export CLI
  * 
  * Puppeteer（または互換ブラウザ自動化ツール）を利用して、
- * NativeSlide HTMLファイルからヘッドレスで余白ゼロPDFを自動生成します。
+ * AINativeSlide HTMLファイルからヘッドレスで余白ゼロPDFを自動生成します。
  * 
  * 使用法:
  *   npx puppeteer browsers install chrome  # 初回のみ
@@ -27,13 +27,13 @@ async function main() {
 
   if (args.length === 0 || args.includes('--help') || args.includes('-h')) {
     console.log(`
-NativeSlide PDF Export CLI
+AINativeSlide PDF Export CLI
 ==========================
 Usage:
   node scripts/export_pdf.js <slide.html> [output.pdf] [options]
 
 Arguments:
-  <slide.html>   Path to the NativeSlide HTML file
+  <slide.html>   Path to the AINativeSlide HTML file
   [output.pdf]   Output PDF path (default: same name with .pdf extension)
 
 Options:

@@ -1,14 +1,14 @@
 ---
-name: nativeslide
+name: ainativeslide
 description: >-
-  Use this skill (NativeSlide) when the user asks to create presentation slides.
-  NativeSlide is an AI output stabilization framework that leverages HTML/Tailwind CSS —
+  Use this skill (AINativeSlide) when the user asks to create presentation slides.
+  AINativeSlide is an AI output stabilization framework that leverages HTML/Tailwind CSS —
   the format LLMs generate most reliably — to produce pixel-perfect slide decks as
   Single-File HTML with zero-margin PDF export (16:9 or 4:3). Includes automated Python
   verification, CSS-level overflow prevention, and corporate design template enforcement.
 ---
 
-# NativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
+# AINativeSlide (生成AIのための安定・高精度なHTMLスライド出力フレームワーク)
 
 生成AI（LLM）にとって最も記述精度が高い HTML/Tailwind CSS を中間フォーマットとして活用し、レイアウト崩れや文字溢れのない堅牢なスライドを安定出力するためのフレームワークです。
 最終的にはブラウザから余白ゼロのピクセルパーフェクトなPDFとしてエクスポートすることを主目的とします。
@@ -122,7 +122,7 @@ flowchart TD
 - **AI出力安定化ルール**:
   - スライド本文は `<div class="ai-content">` で囲み、内部は `h2`, `h3`, `p`, `ul`, `li` のみを使用する（閉じタグ忘れ防止のため深いネストを避ける）。
   - CSSの `line-clamp` により文字溢れが物理的に不可能であることを前提に、テキスト量を適度に抑える。
-- ※自社公式PPTXテンプレートの新規取り込み・登録は、初期セットアップ用スキル `nativeslide-template-builder` を利用すること。
+- ※自社公式PPTXテンプレートの新規取り込み・登録は、初期セットアップ用スキル `ainativeslide-template-builder` を利用すること。
 
 ---
 

@@ -181,7 +181,7 @@
 
 
       <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-500 font-bold text-sm shadow">
-        NS
+        ANS
       </div>
       <div>
         <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide max-w-[260px] truncate">スライドタイトル</h1>
@@ -960,7 +960,7 @@
     // ----------------------------------------------------
     // 13. LocalStorage 自動保存 & 復元
     // ----------------------------------------------------
-    const STORAGE_PREFIX = 'nativeslide_autosave_';
+    const STORAGE_PREFIX = 'ainativeslide_autosave_';
     function getStorageKey() {
       const path = window.location.pathname || 'deck';
       return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');

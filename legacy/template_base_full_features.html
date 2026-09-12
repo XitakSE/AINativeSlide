@@ -159,7 +159,7 @@
       </button>
 
       <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-500 font-bold text-sm shadow">
-        NS
+        ANS
       </div>
       <div>
         <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide max-w-[260px] truncate">スライドタイトル</h1>
@@ -424,7 +424,7 @@
         if (editControls) editControls.classList.add('hidden');
       }
       try {
-        localStorage.setItem('nativeslide_header_tab_' + getStorageKey(), tabName);
+        localStorage.setItem('ainativeslide_header_tab_' + getStorageKey(), tabName);
       } catch(e) {}
     }
 
@@ -1287,7 +1287,7 @@
     // ----------------------------------------------------
     // 13. LocalStorage 自動保存 & 復元
     // ----------------------------------------------------
-    const STORAGE_PREFIX = 'nativeslide_autosave_';
+    const STORAGE_PREFIX = 'ainativeslide_autosave_';
     function getStorageKey() {
       const path = window.location.pathname || 'deck';
       return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -1408,7 +1408,7 @@
     let presenterBus = null;
     try {
       if (typeof BroadcastChannel !== 'undefined') {
-        presenterBus = new BroadcastChannel('nativeslide_bus_' + getStorageKey());
+        presenterBus = new BroadcastChannel('ainativeslide_bus_' + getStorageKey());
         presenterBus.onmessage = (e) => {
           const msg = e.data;
           if (!msg) return;
@@ -1482,7 +1482,7 @@
         type: 'STATE_UPDATE',
         currentIndex: currentPresentationIndex,
         total: slides.length,
-        deckTitle: document.title || 'NativeSlide',
+        deckTitle: document.title || 'AINativeSlide',
         slides: slideSummaries,
         notes: notes,
         baseWidth: baseWidth,
@@ -1498,13 +1498,13 @@
         speakerWindowRef.close();
       }
 
-      speakerWindowRef = window.open('', 'NativeSlideSpeakerView', 'width=1180,height=760,menubar=no,toolbar=no,location=no');
+      speakerWindowRef = window.open('', 'AINativeSlideSpeakerView', 'width=1180,height=760,menubar=no,toolbar=no,location=no');
       if (!speakerWindowRef) {
         alert(isJapanese ? 'ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。' : 'Popup blocked. Please allow popups for this site.');
         return;
       }
 
-      const channelKey = 'nativeslide_bus_' + getStorageKey();
+      const channelKey = 'ainativeslide_bus_' + getStorageKey();
       const langJa = isJapanese;
 
       // 親ウィンドウのTailwind設定と全スタイルタグの抽出
@@ -1515,7 +1515,7 @@
 <html lang="${langJa ? 'ja' : 'en'}">
 <head>
   <meta charset="UTF-8">
-  <title>${langJa ? '発表者ツール - NativeSlide' : 'Presenter View - NativeSlide'}</title>
+  <title>${langJa ? '発表者ツール - AINativeSlide' : 'Presenter View - AINativeSlide'}</title>
   <script src="https://cdn.tailwindcss.com"><\/script>
   <script>${tailwindConfigScript}<\/script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1542,7 +1542,7 @@
   <header class="bg-slate-900 border-b border-slate-800 px-6 py-2.5 flex items-center justify-between shrink-0">
     <div class="flex items-center gap-3">
       <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-      <h1 id="deckTitle" class="text-xs font-bold text-slate-300 max-w-[200px] truncate">NativeSlide</h1>
+      <h1 id="deckTitle" class="text-xs font-bold text-slate-300 max-w-[200px] truncate">AINativeSlide</h1>
       <span class="text-slate-600">|</span>
       <span id="slideCounter" class="mono text-xs font-bold text-brand-400 px-2 py-0.5 rounded bg-slate-800 border border-slate-700">Slide 1 / 1</span>
     </div>
@@ -1689,7 +1689,7 @@
 
     function renderAll() {
       document.getElementById('slideCounter').innerText = 'Slide ' + (currentIdx + 1) + ' / ' + deckData.total;
-      document.getElementById('deckTitle').innerText = deckData.deckTitle || 'NativeSlide';
+      document.getElementById('deckTitle').innerText = deckData.deckTitle || 'AINativeSlide';
 
       const baseW = deckData.baseWidth || 1280;
       const baseH = deckData.baseHeight || 720;
@@ -1860,7 +1860,7 @@
       setupAutoSaveListeners();
 
       try {
-        const savedTab = localStorage.getItem('nativeslide_header_tab_' + getStorageKey());
+        const savedTab = localStorage.getItem('ainativeslide_header_tab_' + getStorageKey());
         if (savedTab) {
           switchHeaderTab(savedTab);
         }

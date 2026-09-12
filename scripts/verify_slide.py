@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-NativeSlide Automated Slide Deck Verifier (Python 3)
+AINativeSlide Automated Slide Deck Verifier (Python 3)
 
 外部依存なし (Pure Python 3 標準ライブラリのみ) で動作するスライド品質自動テストツール。
 AIエージェントが生成したHTMLスライドの構造、スライド番号の連続性、
@@ -165,7 +165,7 @@ def main():
     # 6. 結果の集計とAI向け出力
     # ========================================================
     print('----------------------------------------------------')
-    print(f'🔍 NativeSlide スライド自動検証レポート: {target_file.name}')
+    print(f'🔍 AINativeSlide スライド自動検証レポート: {target_file.name}')
     print(f'📊 スライド枚数: {slide_count}枚 | メタ情報ボックス: {metabox_count}個')
     print('----------------------------------------------------')
 
