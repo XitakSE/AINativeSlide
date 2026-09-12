@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Corporate Design Template - NativeSlide</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    /* ==========================================================================
+       【企業CI / ブランドカラー定義】
+       会社公式PPTXから抽出された指定カラー（CI/VI規約）をここで一元管理します。
+       ユーザーによる色変更は不可とし、全社で厳格に統一されたブランディングを担保します。
+       ========================================================================== */
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+          },
+          colors: {
+            // 企業公式プライマリカラー（例: 信頼と知性を象徴するインディゴ・ネイビー）
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#312e81',
+              950: '#1e1b4b',
+            },
+            // 企業公式アクセントカラー（例: ハイライト用スカイブルー）
+            accent: {
+              400: '#38bdf8',
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 16:9 スライド基本設定 (4:3の場合は 4in 3in / 1024px 768px に設定) */
+    @page {
+      size: 16in 9in;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', 'Noto Sans JP', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: #0f172a;
+    }
+
+    @media print {
+      body {
+        background-color: transparent !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .no-print, .slide-meta-box, #tocDrawer, #tocBackdrop, #presentationModal {
+        display: none !important;
+      }
+      .slide-viewport {
+        padding: 0 !important;
+        gap: 0 !important;
+        display: block !important;
+      }
+      .slide {
+        width: 16in !important;
+        height: 9in !important;
+        max-width: none !important;
+        max-height: none !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+    }
+
+    .slide {
+      width: 1280px;
+      height: 720px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+      border-radius: 12px;
+      background-color: #ffffff;
+      outline: none;
+    }
+
+    [contenteditable="true"]:focus {
+      outline: 2px solid #4f46e5;
+      outline-offset: -2px;
+    }
+
+    .slide-comment-input:empty:before,
+    .slide-note-input:empty:before {
+      content: attr(data-placeholder);
+      color: #64748b;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-20">
+
+  <!-- ========================================================================
+       【スライド骨格サンプル 1: 表紙スライド】
+       企業のCIロゴ、機密区分バッジ、発表者・日付の定位置レイアウト
+       ======================================================================== -->
+  <main class="slide-viewport flex flex-col items-center gap-12 p-8 max-w-7xl mx-auto">
+
+    <section class="slide p-16 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800" contenteditable="true">
+      <div class="flex justify-between items-center">
+        <!-- 企業CIロゴ配置エリア -->
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-400 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-brand-500/30">
+            NS
+          </div>
+          <div>
+            <div class="text-sm font-bold tracking-wider text-slate-200">ACME CORPORATION</div>
+            <div class="text-[11px] text-slate-400">Enterprise Strategy & Innovation Division</div>
+          </div>
+        </div>
+        <!-- 機密区分バッジ（社内規定） -->
+        <div class="px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs font-bold tracking-widest uppercase">
+          STRICTLY CONFIDENTIAL
+        </div>
+      </div>
+
+      <div class="my-auto py-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-500/20 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-6">
+          <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+          社内プロジェクト戦略提案書
+        </div>
+        <h1 class="text-5xl font-extrabold tracking-tight leading-tight mb-6 bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+          プレゼンテーション メインタイトル
+        </h1>
+        <p class="text-xl text-slate-300 font-light max-w-3xl leading-relaxed">
+          サブタイトルまたは目的の要約ステートメントをここに記載します
+        </p>
+      </div>
+
+      <!-- 定位置フッター枠 -->
+      <div class="flex justify-between items-end pt-6 border-t border-slate-800 text-sm text-slate-400 slide-footer">
+        <div class="flex items-center gap-6">
+          <div>
+            <span class="text-slate-500 text-xs block">発表部署 / 発表者</span>
+            <span class="text-slate-200 font-medium">経営企画部 / 担当者名</span>
+          </div>
+          <div class="w-px h-6 bg-slate-800"></div>
+          <div>
+            <span class="text-slate-500 text-xs block">対象オーディエンス</span>
+            <span class="text-slate-200 font-medium">役員会 / 経営会議</span>
+          </div>
+        </div>
+        <div class="font-mono text-slate-500 text-xs">
+          01 / 02
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【スライド骨格サンプル 2: 本文スライド標準枠】
+         ヘッダーカテゴリバッジ、タイトル、コンテンツエリア、フッター
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex justify-between items-center border-b border-slate-200/80 pb-4">
+        <div class="flex items-center gap-3">
+          <span class="px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">カテゴリー名</span>
+          <h2 class="text-xl font-bold text-slate-900">スライドの見出し・キーメッセージ</h2>
+        </div>
+        <div class="text-xs font-semibold text-slate-500 tracking-wider uppercase">セクション名</div>
+      </div>
+
+      <div class="my-auto py-4">
+        <!-- コンテンツ領域（カード、グリッド、表、図解など） -->
+        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-sm text-slate-600 leading-relaxed">
+            ここにスライドのメインコンテンツを配置します。企業規定のTailwindクラス（flex, grid, rounded-xl）を活用して堅牢なボックスモデルで組み立てます。
+          </p>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-4 border-t border-slate-200/80 text-xs text-slate-500 slide-footer">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">02 / 02</div>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>

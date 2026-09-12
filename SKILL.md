@@ -4,13 +4,14 @@ description: >-
   Use this skill (NativeSlide) when the user asks to create, design, or edit presentation slides
   in HTML/Tailwind CSS format with browser-based inline editing (contenteditable),
   fullscreen presentation mode, speaker notes, and zero-margin PDF export (16:9 or 4:3 aspect ratios).
-  Also use when reverse-engineering slide images into editable HTML slides, or asking for
-  conceptual AI-generated images in slides.
+  Generates slides following corporate design templates (resources/design_templates/) with standardized
+  branding and zero user debugging burden via automated Python verification.
 ---
 
 # NativeSlide (Webネイティブ・HTMLスライド生成スキル)
 
-ブラウザ上で直接テキストを推敲・編集でき、1クリックで余白ゼロのピクセルパーフェクトなPDFにエクスポートできる単一HTMLスライド（Single-File HTML）を生成するためのスキルです。
+ブラウザ上で直接テキストを推敲・編集でき、1クリックで余白ゼロのピクセルパーフェクトなPDFにエクスポートできる単一HTMLスライド（Single-File HTML）を生成するための日常運用スキルです。
+企業の公式CI/VIガイドラインに従い、`resources/design_templates/` のデザイン骨格に基づいた統一感のあるスライドを自動生成します。
 
 ---
 
@@ -82,8 +83,8 @@ flowchart TD
 
 ### Phase 5: ブラウザ直接推敲 & 自動保存・コメント入力
 - スライドに `contenteditable="true"` を付与し、ブラウザ上で直接テキスト編集可能。
-- **LocalStorage 自動保存**: 推敲したテキスト、発表メモ、修正指示、テーマカラーはブラウザの `localStorage` にリアルタイム自動保存（誤リロードによる消失ゼロ、ヘッダーからリセットも可能）。
-- 選択テキスト直上にミニ書式バーが出現（太字、サイズ変更、カラー、蛍光マーカー）。
+- **LocalStorage 自動保存**: 推敲したテキスト、発表メモ、修正指示はブラウザの `localStorage` にリアルタイム自動保存（誤リロードによる消失ゼロ、ヘッダーからリセットも可能）。
+- 選択テキスト直上にミニ書式バーが出現（太字、サイズ変更、蛍光マーカー）。
 - 画像枠はデスクトップからの **ドラッグ＆ドロップで即座に画像差し替え** 可能（`FileReader` 搭載）。
 - 各スライド直下に **メタ情報コンテナ（`slide-meta-box`）** を配置し、「💬 修正指示」と「🎤 発表メモ」をタブで切り替え。
 - ツールバーの「📋 指示をコピー」または「📥 HTML保存」で、修正指示を即座にエージェントへ共有。
@@ -113,10 +114,14 @@ flowchart TD
 - 外部依存は以下のみに限定：
   - Tailwind CSS CDN: `<script src="https://cdn.tailwindcss.com"></script>`
   - Google Fonts: `Plus Jakarta Sans` & `Noto Sans JP`
-- ベーステンプレートは [template_base.html](./resources/template_base.html) を参照。
+- **ベース構造の参照**:
+  - 機能エンジン（UI/JS/Presenter View等）: [template_base.html](./resources/template_base.html)
+  - 企業公式デザイン骨格（CIカラー/ロゴ/枠レイアウト）: [corporate_default.html](./resources/design_templates/corporate_default.html)
+- ※自社公式PPTXテンプレートの新規取り込み・登録は、初期セットアップ用スキル `nativeslide-template-builder` を利用すること。
 
 ---
 
 ## 実装サンプル (Examples)
-- [16:9 サンプルHTML (データ基盤導入計画)](./examples/slide_16_9_example.html)
-- [4:3 サンプルHTML (データ基盤導入計画)](./examples/slide_4_3_example.html)
+- [16:9 日本語サンプル (全8スライド・表・チャート完備)](./examples/slide_16_9_example.html)
+- [16:9 英語サンプル (完全適応版)](./examples/slide_16_9_en_example.html)
+- [4:3 日本語サンプル (スタンダード比率)](./examples/slide_4_3_example.html)

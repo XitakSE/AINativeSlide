@@ -203,21 +203,6 @@
           <button onclick="changeFontScale(0.05)" title="文字サイズ拡大" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A+</button>
         </div>
 
-        <!-- テーマカラーパレット切替UI -->
-        <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg px-2 py-1">
-          <span class="text-[11px] text-slate-400 mr-0.5">テーマ:</span>
-          <button onclick="applyColorPreset('indigo')" title="Indigo (モダンテック)" class="w-4 h-4 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-          <button onclick="applyColorPreset('navy')" title="Navy (堅実コーポレート)" class="w-4 h-4 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-          <button onclick="applyColorPreset('emerald')" title="Emerald (サステナビリティ)" class="w-4 h-4 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-          <button onclick="applyColorPreset('amber')" title="Amber (エネルギー)" class="w-4 h-4 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-          <button onclick="applyColorPreset('rose')" title="Rose (インパクト)" class="w-4 h-4 rounded-full bg-[#f43f5e] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-          <!-- カスタムカラーピッカー -->
-          <label title="カスタムカラー選択" class="relative flex items-center cursor-pointer ml-0.5">
-            <input type="color" onchange="applyCustomColor(this.value)" value="#6366f1" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
-            <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-rose-400 via-emerald-400 to-sky-400 ring-1 ring-white/30 hover:scale-110 transition-transform"></div>
-          </label>
-        </div>
-
         <!-- 反復修正指示アクション（エージェント連携） -->
         <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
           <button id="copyCommentsBtn" onclick="copySlideComments()" title="Copy all slide feedback instructions to clipboard" class="px-2.5 py-1 rounded bg-slate-700/80 hover:bg-brand-600 hover:text-white text-slate-200 font-medium transition-all flex items-center gap-1 active:scale-95">
@@ -1249,45 +1234,7 @@
     // ----------------------------------------------------
     // 3. テーマカラー適用 (全体 or 選択箇所)
     // ----------------------------------------------------
-    let currentThemeKey = 'indigo';
-    let currentCustomBrandHex = null;
-    const themePresets = {
-      indigo: {
-        brand: { 50: '#eef2ff', 100: '#e0e7ff', 200: '#c7d2fe', 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca', 900: '#312e81', 950: '#1e1b4b' },
-        accent: { 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7' }
-      },
-      navy: {
-        brand: { 50: '#eff6ff', 100: '#dbeafe', 200: '#bfdbfe', 500: '#2563eb', 600: '#1d4ed8', 700: '#1e40af', 900: '#1e3a8a', 950: '#172554' },
-        accent: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb' }
-      },
-      emerald: {
-        brand: { 50: '#ecfdf5', 100: '#d1fae5', 200: '#a7f3d0', 500: '#10b981', 600: '#059669', 700: '#047857', 900: '#064e3b', 950: '#022c22' },
-        accent: { 400: '#34d399', 500: '#10b981', 600: '#059669' }
-      },
-      amber: {
-        brand: { 50: '#fffbeb', 100: '#fef3c7', 200: '#fde68a', 500: '#f59e0b', 600: '#d97706', 700: '#b45309', 900: '#78350f', 950: '#451a03' },
-        accent: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' }
-      },
-      rose: {
-        brand: { 50: '#fff1f2', 100: '#ffe4e6', 200: '#fecdd3', 500: '#f43f5e', 600: '#e11d48', 700: '#be123c', 900: '#881337', 950: '#4c0519' },
-        accent: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' }
-      }
-    };
-
-    function applyColorPreset(presetKey) {
-      const preset = themePresets[presetKey];
-      if (!preset) return;
-      if (hasTextSelection()) {
-        formatSelection('color', preset.brand[500]);
-        return;
-      }
-      currentThemeKey = presetKey;
-      currentCustomBrandHex = null;
-      const root = document.documentElement;
-      Object.entries(preset.brand).forEach(([k, v]) => root.style.setProperty(`--brand-${k}`, v));
-      Object.entries(preset.accent).forEach(([k, v]) => root.style.setProperty(`--accent-${k}`, v));
-      if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
-    }
+    // Note: Corporate design template defines fixed brand CI colors in CSS
 
     function applyCustomColor(hex) {
       if (hasTextSelection()) {
@@ -1971,7 +1918,6 @@
 
       document.querySelectorAll('header span').forEach(el => {
         const text = el.innerText.trim();
-        if (text === 'テーマ:' || text === '色:') el.innerText = 'Theme:';
         if (text === '指示をコピー') el.innerText = 'Copy Feedback';
         if (text === 'HTML保存') el.innerText = 'Save HTML';
         if (text === '発表') el.innerText = 'Present';
@@ -2105,7 +2051,7 @@
           comments: comments,
           notes: notes,
           fontScale: currentFontScale,
-          themeKey: currentThemeKey,
+          
           customHex: currentCustomBrandHex,
           updatedAt: Date.now()
         };
