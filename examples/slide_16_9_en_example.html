@@ -147,109 +147,110 @@
 <body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
 
   <!-- 上部操作ツールバー（印刷時は非表示） -->
+  <!-- Header Toolbar (Hidden when printing) -->
   <header class="no-print sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between">
     <div class="flex items-center gap-3">
-      <!-- 目次ナビゲーショントグルボタン -->
-      <button onclick="toggleTocDrawer()" title="目次・スライド一覧を開く" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800/90 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
+      <!-- TOC Drawer Toggle Button -->
+      <button onclick="toggleTocDrawer()" title="Open Table of Contents (Esc to close)" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-slate-800/90 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
         <svg class="w-4 h-4 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7" />
         </svg>
-        <span>目次</span>
+        <span>Menu</span>
       </button>
 
       <div class="flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-500 font-bold text-sm shadow">
         NS
       </div>
       <div>
-        <h1 class="text-sm font-semibold tracking-wide">全社次世代データ基盤 導入計画</h1>
+        <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide">Enterprise Next-Gen Data Platform Strategy</h1>
         <div class="flex items-center gap-2 text-[11px] text-slate-400">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>16:9 ワイド (1280 × 720)</span>
+          <span id="deckRatioText">16:9 Widescreen (1280 × 720)</span>
           <span class="text-slate-600">|</span>
-          <span>全6スライド</span>
+          <span id="deckSlideCountText">6 Slides</span>
         </div>
       </div>
     </div>
 
-    <!-- スタイル操作 & 出力コントローラー群 -->
+    <!-- Controls & Actions -->
     <div class="flex items-center gap-3">
-      <!-- フォントサイズ変更コントローラー -->
+      <!-- Font scaling -->
       <div class="flex items-center bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
-        <button onclick="changeFontScale(-0.05)" title="文字サイズ縮小" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A-</button>
-        <button onclick="resetFontScale()" title="100%にリセット" id="fontScaleText" class="px-1.5 py-0.5 text-slate-200 font-mono font-medium hover:text-white transition-colors">100%</button>
-        <button onclick="changeFontScale(0.05)" title="文字サイズ拡大" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A+</button>
+        <button onclick="changeFontScale(-0.05)" title="Decrease font size" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A-</button>
+        <button onclick="resetFontScale()" title="Reset font size to 100%" id="fontScaleText" class="px-1.5 py-0.5 text-slate-200 font-mono font-medium hover:text-white transition-colors">100%</button>
+        <button onclick="changeFontScale(0.05)" title="Increase font size" class="px-2 py-0.5 rounded hover:bg-slate-700 text-slate-300 font-bold transition-all active:scale-95">A+</button>
       </div>
 
-      <!-- テーマカラーパレット切替UI -->
+      <!-- Theme color preset -->
       <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg px-2 py-1">
-        <span class="text-[11px] text-slate-400 mr-0.5">色:</span>
-        <button onclick="applyColorPreset('indigo')" title="Indigo (モダンテック)" class="w-4 h-4 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('navy')" title="Navy (堅実コーポレート)" class="w-4 h-4 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('emerald')" title="Emerald (サステナビリティ)" class="w-4 h-4 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('amber')" title="Amber (エネルギー)" class="w-4 h-4 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <button onclick="applyColorPreset('rose')" title="Rose (インパクト)" class="w-4 h-4 rounded-full bg-[#f43f5e] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
-        <label title="カスタムカラー選択" class="relative flex items-center cursor-pointer ml-0.5">
+        <span class="text-[11px] text-slate-400 mr-0.5">Theme:</span>
+        <button onclick="applyColorPreset('indigo')" title="Indigo (Modern Tech)" class="w-4 h-4 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+        <button onclick="applyColorPreset('navy')" title="Navy (Corporate)" class="w-4 h-4 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+        <button onclick="applyColorPreset('emerald')" title="Emerald (Sustainability)" class="w-4 h-4 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+        <button onclick="applyColorPreset('amber')" title="Amber (Energy)" class="w-4 h-4 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+        <button onclick="applyColorPreset('rose')" title="Rose (Impact)" class="w-4 h-4 rounded-full bg-[#f43f5e] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+        <label title="Custom Theme Color" class="relative flex items-center cursor-pointer ml-0.5">
           <input type="color" onchange="applyCustomColor(this.value)" value="#6366f1" class="opacity-0 absolute inset-0 w-full h-full cursor-pointer">
           <div class="w-4 h-4 rounded-full bg-gradient-to-tr from-rose-400 via-emerald-400 to-sky-400 ring-1 ring-white/30 hover:scale-110 transition-transform"></div>
         </label>
       </div>
 
-      <!-- 反復修正指示アクション（エージェント連携） -->
+      <!-- Revision feedback actions -->
       <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 rounded-lg p-1 text-xs">
-        <button id="copyCommentsBtn" onclick="copySlideComments()" title="入力された全スライドの修正指示をコピーしてAIに貼り付け" class="px-2.5 py-1 rounded bg-slate-700/80 hover:bg-brand-600 hover:text-white text-slate-200 font-medium transition-all flex items-center gap-1 active:scale-95">
+        <button id="copyCommentsBtn" onclick="copySlideComments()" title="Copy all slide feedback instructions to clipboard" class="px-2.5 py-1 rounded bg-slate-700/80 hover:bg-brand-600 hover:text-white text-slate-200 font-medium transition-all flex items-center gap-1 active:scale-95">
           <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
           </svg>
-          <span>指示をコピー</span>
+          <span>Copy Feedback</span>
         </button>
-        <button onclick="downloadHtmlWithComments()" title="修正指示・推敲内容を含んだ最新HTMLファイルをダウンロード" class="px-2.5 py-1 rounded hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1">
+        <button onclick="downloadHtmlWithComments()" title="Download updated HTML file with comments" class="px-2.5 py-1 rounded hover:bg-slate-700 text-slate-300 font-medium transition-colors flex items-center gap-1">
           <svg class="w-3.5 h-3.5 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
           </svg>
-          <span>HTML保存</span>
+          <span>Save HTML</span>
         </button>
       </div>
 
-      <!-- 全画面プレゼンテーションモード（スライドショー） -->
-      <button onclick="startPresentation()" title="全画面スライドショー開始 (ショートカット: F)" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
+      <!-- Presentation mode button -->
+      <button onclick="startPresentation()" title="Start Fullscreen Presentation (F)" class="px-3 py-1.5 rounded-lg bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 transition-all flex items-center gap-1.5 active:scale-95">
         <span class="text-emerald-400 text-xs">▶</span>
-        <span>発表</span>
+        <span>Present</span>
         <kbd class="hidden md:inline-block px-1.5 py-0.2 text-[10px] font-mono bg-slate-950 text-slate-400 rounded border border-slate-700">F</kbd>
       </button>
 
-      <!-- 編集モードトグル -->
+      <!-- Edit mode toggle -->
       <button id="toggleEditBtn" onclick="toggleEditMode()" class="px-3 py-1.5 rounded-lg border border-slate-700 bg-slate-800/80 hover:bg-slate-700 text-xs font-medium text-slate-200 transition-all flex items-center gap-1.5">
         <svg id="editIcon" class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
         </svg>
-        <span id="editStatusText">編集モード: ON</span>
+        <span id="editStatusText">Edit Mode: ON</span>
       </button>
 
-      <!-- PDF保存ボタン -->
-      <button onclick="window.print()" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5 active:scale-95">
+      <!-- Print / PDF export -->
+      <button onclick="window.print()" title="Print or Save as PDF" class="px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-500 hover:to-accent-500 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5 active:scale-95">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
         </svg>
-        <span>PDF保存</span>
+        <span>Save PDF</span>
       </button>
     </div>
   </header>
 
-  <!-- 目次サイドドロワー（印刷時は非表示） -->
+  <!-- TOC Drawer -->
   <div id="tocBackdrop" onclick="toggleTocDrawer(false)" class="no-print fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden transition-opacity"></div>
   <aside id="tocDrawer" class="no-print fixed inset-y-0 left-0 w-80 bg-slate-900/95 backdrop-blur-xl border-r border-slate-800 shadow-2xl z-50 transform -translate-x-full transition-transform duration-300 flex flex-col">
     <div class="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
       <div class="flex items-center gap-2">
         <span class="text-brand-400 font-bold text-base">☰</span>
-        <h2 class="text-sm font-bold text-white tracking-wide">スライド目次・一覧</h2>
+        <h2 class="text-sm font-bold text-white tracking-wide">Table of Contents</h2>
       </div>
       <button onclick="toggleTocDrawer(false)" class="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800 text-sm">✕</button>
     </div>
     <div id="tocList" class="flex-1 overflow-y-auto p-4 space-y-2">
-      <!-- スクリプトで動的生成 -->
+      <!-- Generated dynamically by script -->
     </div>
     <div class="p-3 border-t border-slate-800/80 text-[11px] text-slate-500 text-center">
-      クリックでスライドへジャンプ
+      Click to jump to slide
     </div>
   </aside>
 
@@ -372,11 +373,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 1 / 6</span>
@@ -385,13 +386,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">皆さん、本日はお集まりいただきありがとうございます。データエンジニアリング推進部の発表で、Modern Data Stack導入計画についてご説明します。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -470,7 +471,7 @@
 
       <!-- フッター -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
-        <div>全社次世代データ基盤導入計画</div>
+        <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">02 / 06</div>
       </div>
     </section>
@@ -481,11 +482,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 2 / 6</span>
@@ -494,13 +495,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">現在、事業部ごとにデータがサイロ化しており、週次の手動集計に多くのリソースを割いています。これをリアルタイム集約し、全社で一貫したKPIを追える基盤へと刷新します。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -555,7 +556,7 @@
 
       <!-- フッター -->
       <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
-        <div>全社次世代データ基盤導入計画</div>
+        <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">03 / 06</div>
       </div>
     </section>
@@ -566,11 +567,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 3 / 6</span>
@@ -579,13 +580,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">この図はデータ基盤の全体構想です。AWSおよびSaaSからFivetranで吸い上げ、Snowflakeに集約、dbtでモデリングしてBIと生成AIに提供します。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -662,7 +663,7 @@
 
       <!-- フッター -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
-        <div>全社次世代データ基盤導入計画</div>
+        <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">04 / 06</div>
       </div>
     </section>
@@ -673,11 +674,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 4 / 6</span>
@@ -686,13 +687,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">アーキテクチャの5本柱です。ELT、モデリング、カタログ、オブザーバビリティ、セマンティックレイヤーを連携させ、ガバナンスと開発速度を両立させます。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -805,7 +806,7 @@
 
       <!-- フッター -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
-        <div>全社次世代データ基盤導入計画</div>
+        <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">05 / 06</div>
       </div>
     </section>
@@ -816,11 +817,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 5 / 6</span>
@@ -829,13 +830,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">導入ロードマップです。フェーズ1で基盤構築、フェーズ2でパイロット移行、フェーズ3で全社展開を計画しています。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -844,74 +845,74 @@
     <!-- SLIDE 5: 期待される効果とROI (KPI & Metrics) -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-white border border-slate-200" contenteditable="true">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="flex items-start justify-between border-b border-slate-200 pb-4">
         <div>
-          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">04. 投資対効果</div>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">期待される導入効果とKPI目標</h2>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">04. Business Impact & ROI</div>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Target Business Impact & Strategic KPIs</h2>
         </div>
         <div class="text-xs font-medium text-slate-400 bg-slate-50 px-3 py-1 rounded-md border border-slate-200">
-          ROI / 成果指標
+          ROI / Target Metrics
         </div>
       </div>
 
-      <!-- 3大KPIカード -->
+      <!-- 3 Key KPI Cards -->
       <div class="grid grid-cols-3 gap-6 my-auto">
         <!-- KPI 1 -->
         <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
           <div>
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">集計工数の削減</div>
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Query & ETL Latency</div>
             <div class="text-4xl font-extrabold text-slate-900 mb-1">
-              <span class="text-brand-600">▲ 75</span>%
+              <span class="text-brand-600">-75</span>%
             </div>
-            <div class="text-xs font-semibold text-slate-600 mb-4">月間約 320 時間の削減効果</div>
+            <div class="text-xs font-semibold text-slate-600 mb-4">320+ engineering hours saved / mo</div>
             <p class="text-xs text-slate-500 leading-relaxed">
-              手作業によるエクセル集計・突き合わせ作業を完全撤廃。現場のアナリストが本来の「施策立案・改善」に集中できる環境を実現します。
+              Eliminates manual pipeline maintenance and spreadsheet reconciliation. Analysts focus 100% on high-value business optimizations.
             </p>
           </div>
           <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-medium text-slate-500">
-            年間想定削減コスト: 約 2,400 万円
+            Estimated Annual Cost Reduction: $1.4M / year
           </div>
         </div>
 
         <!-- KPI 2 -->
         <div class="bg-brand-50/50 rounded-2xl p-6 border border-brand-200 flex flex-col justify-between">
           <div>
-            <div class="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2">意思決定の迅速化</div>
+            <div class="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2">Decision Velocity</div>
             <div class="text-4xl font-extrabold text-slate-900 mb-1">
-              <span class="text-brand-600">5</span>倍速
+              <span class="text-brand-600">5x</span>
             </div>
-            <div class="text-xs font-semibold text-slate-600 mb-4">施策検証サイクル: 月次 → 週次・日次</div>
+            <div class="text-xs font-semibold text-slate-600 mb-4">Metric cycle: Monthly → Sub-second</div>
             <p class="text-xs text-slate-500 leading-relaxed">
-              経営陣および各事業部長が最新のKPIをワンクリックで把握可能に。事業変化に対する初動スピードを劇的に高めます。
+              Executive teams and domain leads monitor unified metrics with single-click dashboards, drastically cutting market turnaround time.
             </p>
           </div>
           <div class="mt-4 pt-3 border-t border-brand-200 text-xs font-medium text-brand-700">
-            KPIダッシュボード自動更新頻度: 毎時更新
+            Dashboard Refresh SLA: Continuous Streaming
           </div>
         </div>
 
         <!-- KPI 3 -->
         <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 flex flex-col justify-between">
           <div>
-            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">AI活用レディネス</div>
+            <div class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">GenAI Readiness</div>
             <div class="text-4xl font-extrabold text-slate-900 mb-1">
               <span class="text-accent-600">100</span>%
             </div>
-            <div class="text-xs font-semibold text-slate-600 mb-4">全社データガバナンス統制完了</div>
+            <div class="text-xs font-semibold text-slate-600 mb-4">Certified Zero-Trust Governance</div>
             <p class="text-xs text-slate-500 leading-relaxed">
-              セキュリティと権限分離が担保されたクリーンなマスタデータを構築。社内生成AIアプリへのセキュアなデータ供給ラインを確立します。
+              Supplies high-fidelity semantic context and hybrid vector indices directly to enterprise GenAI agents with fine-grained access control.
             </p>
           </div>
           <div class="mt-4 pt-3 border-t border-slate-200 text-xs font-medium text-slate-500">
-            全社セルフサービス利用率: 80%目標
+            Self-Service Data Adoption: 85%+ Target
           </div>
         </div>
       </div>
 
       <!-- フッター -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
-        <div>全社次世代データ基盤導入計画</div>
+        <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">06 / 06</div>
       </div>
     </section>
@@ -922,11 +923,11 @@
         <div class="flex items-center gap-2">
           <button onclick="switchMetaTab(this, 'comment')" class="tab-btn-comment active px-2.5 py-1 rounded text-xs font-semibold bg-brand-600/30 text-brand-300 border border-brand-500/40 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span>💬 修正指示</span>
+            <span>💬 Feedback</span>
           </button>
           <button onclick="switchMetaTab(this, 'note')" class="tab-btn-note px-2.5 py-1 rounded text-xs font-semibold bg-slate-800 text-slate-400 hover:text-slate-200 border border-slate-700 flex items-center gap-1.5 transition-all">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-            <span>🎤 発表メモ</span>
+            <span>🎤 Speaker Notes</span>
           </button>
         </div>
         <span class="text-[11px] font-mono text-slate-500">Slide 6 / 6</span>
@@ -935,13 +936,13 @@
       <!-- 修正指示ペイン -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
         <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-        <button onclick="clearMetaField(this, '.slide-comment-input')" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
       <!-- 発表メモペイン（初期非表示） -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
         <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">投資対効果として、データ集計工数を月間320時間削減し、意思決定速度を約5倍に高める見込みです。ご清聴ありがとうございました。</div>
-        <button onclick="clearMetaField(this, '.slide-note-input')" title="メモをクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
@@ -1676,20 +1677,74 @@
     // 13. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
     // ----------------------------------------------------
     function applyAutoLocalization() {
+      // スライド数の自動集計・同期 (日英共通)
+      const slideCount = document.querySelectorAll('.slide').length;
+      const countEl = document.getElementById('deckSlideCountText');
+      if (countEl) {
+        countEl.innerText = isJapanese 
+          ? `全${slideCount}スライド` 
+          : (slideCount === 1 ? '1 Slide' : `${slideCount} Slides`);
+      }
+
       if (isJapanese) return; // 日本語の場合はテンプレートのデフォルト表記を維持
 
       // 英語環境（langがja以外）時のUI自動ローカライズ
-      const tocBtn = document.querySelector('header button[onclick="toggleTocDrawer()"] span');
-      if (tocBtn) tocBtn.innerText = 'Menu';
+      // 1. ヘッダータイトル（デフォルトのままならスライド見出しから補完）
+      const deckTitle = document.getElementById('deckTitleText');
+      if (deckTitle && deckTitle.innerText.trim() === 'スライドタイトル') {
+        const firstHeading = document.querySelector('.slide h1, .slide h2');
+        if (firstHeading) {
+          deckTitle.innerText = firstHeading.innerText.trim().replace(/\s+/g, ' ');
+        }
+      }
+
+      // 2. 縦横比・スライド数の自動英語化
+      const ratioEl = document.getElementById('deckRatioText');
+      if (ratioEl) {
+        ratioEl.innerText = ratioEl.innerText
+          .replace('ワイド', 'Widescreen')
+          .replace('スタンダード', 'Standard');
+      }
+      // ID未設定スライドへのフォールバック対応
+      document.querySelectorAll('header .text-\\[11px\\] span').forEach(el => {
+        const t = el.innerText.trim();
+        if (t.includes('ワイド')) el.innerText = t.replace('ワイド', 'Widescreen');
+        if (t.includes('スタンダード')) el.innerText = t.replace('スタンダード', 'Standard');
+        if (t.startsWith('全') && (t.endsWith('スライド') || t.endsWith('枚'))) {
+          el.innerText = `${slideCount} Slides`;
+        }
+      });
+
+      // 3. ヘッダー各ボタン・ラベル
+      const tocBtn = document.querySelector('header button[onclick="toggleTocDrawer()"]');
+      if (tocBtn) {
+        const span = tocBtn.querySelector('span');
+        if (span) span.innerText = 'Menu';
+        tocBtn.title = 'Open Table of Contents';
+      }
 
       document.querySelectorAll('header span').forEach(el => {
         const text = el.innerText.trim();
-        if (text === 'テーマ:') el.innerText = 'Theme:';
+        if (text === 'テーマ:' || text === '色:') el.innerText = 'Theme:';
         if (text === '指示をコピー') el.innerText = 'Copy Feedback';
         if (text === 'HTML保存') el.innerText = 'Save HTML';
         if (text === '発表') el.innerText = 'Present';
         if (text === 'PDF保存') el.innerText = 'Save PDF';
       });
+
+      // ツールチップ（title属性）の完全英語化
+      const fontDecBtn = document.querySelector('button[onclick="changeFontScale(-0.05)"]');
+      if (fontDecBtn) fontDecBtn.title = 'Decrease font size';
+      const fontResetBtn = document.getElementById('fontScaleText');
+      if (fontResetBtn) fontResetBtn.title = 'Reset font size to 100%';
+      const fontIncBtn = document.querySelector('button[onclick="changeFontScale(0.05)"]');
+      if (fontIncBtn) fontIncBtn.title = 'Increase font size';
+      const colorPicker = document.querySelector('header label[title="カスタムカラー選択"]');
+      if (colorPicker) colorPicker.title = 'Custom Theme Color';
+      const presentBtn = document.querySelector('header button[onclick="startPresentation()"]');
+      if (presentBtn) presentBtn.title = 'Start Fullscreen Presentation (F)';
+      const printBtn = document.querySelector('header button[onclick="window.print()"]');
+      if (printBtn) printBtn.title = 'Print or Save as PDF';
 
       const copyBtn = document.getElementById('copyCommentsBtn');
       if (copyBtn) copyBtn.title = 'Copy all slide feedback instructions to clipboard';

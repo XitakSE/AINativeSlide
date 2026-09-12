@@ -161,12 +161,12 @@
         NS
       </div>
       <div>
-        <h1 class="text-sm font-semibold tracking-wide">全社次世代データ基盤 導入計画</h1>
+        <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide">全社次世代データ基盤 導入計画</h1>
         <div class="flex items-center gap-2 text-[11px] text-slate-400">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span>16:9 ワイド (1280 × 720)</span>
+          <span id="deckRatioText">16:9 ワイド (1280 × 720)</span>
           <span class="text-slate-600">|</span>
-          <span>全6スライド</span>
+          <span id="deckSlideCountText">全6スライド</span>
         </div>
       </div>
     </div>
@@ -1676,20 +1676,74 @@
     // 13. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
     // ----------------------------------------------------
     function applyAutoLocalization() {
+      // スライド数の自動集計・同期 (日英共通)
+      const slideCount = document.querySelectorAll('.slide').length;
+      const countEl = document.getElementById('deckSlideCountText');
+      if (countEl) {
+        countEl.innerText = isJapanese 
+          ? `全${slideCount}スライド` 
+          : (slideCount === 1 ? '1 Slide' : `${slideCount} Slides`);
+      }
+
       if (isJapanese) return; // 日本語の場合はテンプレートのデフォルト表記を維持
 
       // 英語環境（langがja以外）時のUI自動ローカライズ
-      const tocBtn = document.querySelector('header button[onclick="toggleTocDrawer()"] span');
-      if (tocBtn) tocBtn.innerText = 'Menu';
+      // 1. ヘッダータイトル（デフォルトのままならスライド見出しから補完）
+      const deckTitle = document.getElementById('deckTitleText');
+      if (deckTitle && deckTitle.innerText.trim() === 'スライドタイトル') {
+        const firstHeading = document.querySelector('.slide h1, .slide h2');
+        if (firstHeading) {
+          deckTitle.innerText = firstHeading.innerText.trim().replace(/\s+/g, ' ');
+        }
+      }
+
+      // 2. 縦横比・スライド数の自動英語化
+      const ratioEl = document.getElementById('deckRatioText');
+      if (ratioEl) {
+        ratioEl.innerText = ratioEl.innerText
+          .replace('ワイド', 'Widescreen')
+          .replace('スタンダード', 'Standard');
+      }
+      // ID未設定スライドへのフォールバック対応
+      document.querySelectorAll('header .text-\\[11px\\] span').forEach(el => {
+        const t = el.innerText.trim();
+        if (t.includes('ワイド')) el.innerText = t.replace('ワイド', 'Widescreen');
+        if (t.includes('スタンダード')) el.innerText = t.replace('スタンダード', 'Standard');
+        if (t.startsWith('全') && (t.endsWith('スライド') || t.endsWith('枚'))) {
+          el.innerText = `${slideCount} Slides`;
+        }
+      });
+
+      // 3. ヘッダー各ボタン・ラベル
+      const tocBtn = document.querySelector('header button[onclick="toggleTocDrawer()"]');
+      if (tocBtn) {
+        const span = tocBtn.querySelector('span');
+        if (span) span.innerText = 'Menu';
+        tocBtn.title = 'Open Table of Contents';
+      }
 
       document.querySelectorAll('header span').forEach(el => {
         const text = el.innerText.trim();
-        if (text === 'テーマ:') el.innerText = 'Theme:';
+        if (text === 'テーマ:' || text === '色:') el.innerText = 'Theme:';
         if (text === '指示をコピー') el.innerText = 'Copy Feedback';
         if (text === 'HTML保存') el.innerText = 'Save HTML';
         if (text === '発表') el.innerText = 'Present';
         if (text === 'PDF保存') el.innerText = 'Save PDF';
       });
+
+      // ツールチップ（title属性）の完全英語化
+      const fontDecBtn = document.querySelector('button[onclick="changeFontScale(-0.05)"]');
+      if (fontDecBtn) fontDecBtn.title = 'Decrease font size';
+      const fontResetBtn = document.getElementById('fontScaleText');
+      if (fontResetBtn) fontResetBtn.title = 'Reset font size to 100%';
+      const fontIncBtn = document.querySelector('button[onclick="changeFontScale(0.05)"]');
+      if (fontIncBtn) fontIncBtn.title = 'Increase font size';
+      const colorPicker = document.querySelector('header label[title="カスタムカラー選択"]');
+      if (colorPicker) colorPicker.title = 'Custom Theme Color';
+      const presentBtn = document.querySelector('header button[onclick="startPresentation()"]');
+      if (presentBtn) presentBtn.title = 'Start Fullscreen Presentation (F)';
+      const printBtn = document.querySelector('header button[onclick="window.print()"]');
+      if (printBtn) printBtn.title = 'Print or Save as PDF';
 
       const copyBtn = document.getElementById('copyCommentsBtn');
       if (copyBtn) copyBtn.title = 'Copy all slide feedback instructions to clipboard';
