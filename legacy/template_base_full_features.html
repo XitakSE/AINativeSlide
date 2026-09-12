@@ -781,16 +781,31 @@
     }
 
     function downloadHtmlWithComments() {
-      const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'slide_with_comments.html';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      try {
+        const titleEl = document.getElementById('deckTitleText');
+        const rawTitle = titleEl ? titleEl.innerText.trim() : 'slide';
+        const sanitizedTitle = rawTitle.replace(/[\\/:*?"<>|]/g, '_').slice(0, 50) || 'slide';
+        const filename = `${sanitizedTitle}_edited.html`;
+
+        const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = filename;
+        a.setAttribute('download', filename);
+        document.body.appendChild(a);
+        a.click();
+
+        // revokeObjectURL の即時実行によるブラウザのファイル名・拡張子破綻を防止するため遅延解放
+        setTimeout(() => {
+          if (a.parentNode) document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 1500);
+      } catch (e) {
+        console.error('HTML download failed:', e);
+      }
     }
 
     // ----------------------------------------------------
