@@ -123,5 +123,3 @@ flowchart TD
 
 ## 実装サンプル (Examples)
 - [16:9 日本語サンプル (全8スライド・表・チャート完備)](./examples/slide_16_9_example.html)
-- [16:9 英語サンプル (完全適応版)](./examples/slide_16_9_en_example.html)
-- [4:3 日本語サンプル (スタンダード比率)](./examples/slide_4_3_example.html)
