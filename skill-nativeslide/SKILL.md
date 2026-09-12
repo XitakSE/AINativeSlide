@@ -1,14 +1,14 @@
 ---
-name: hyperdeck
+name: nativeslide
 description: >-
-  Use this skill (HyperDeck) when the user asks to create, design, or edit presentation slides
+  Use this skill (NativeSlide) when the user asks to create, design, or edit presentation slides
   in HTML/Tailwind CSS format with browser-based inline editing (contenteditable),
   fullscreen presentation mode, speaker notes, and zero-margin PDF export (16:9 or 4:3 aspect ratios).
   Also use when reverse-engineering slide images into editable HTML slides, or asking for
   conceptual AI-generated images in slides.
 ---
 
-# HyperDeck (Webネイティブ・HTMLスライド生成スキル)
+# NativeSlide (Webネイティブ・HTMLスライド生成スキル)
 
 ブラウザ上で直接テキストを推敲・編集でき、1クリックで余白ゼロのピクセルパーフェクトなPDFにエクスポートできる単一HTMLスライド（Single-File HTML）を生成するためのスキルです。
 
