@@ -15,7 +15,7 @@
 - **Cinematic Conceptual 3D**: 重厚感と未来感。表紙やビジョン提示に最適。
 
 ### ② 文字入れ禁止指示 (No Text Rule)
-- AI画像生成モデル（DALL-E 3等）に文字を描かせると崩れたり誤字になりがちです。
+- AI画像生成モデル（DALL-E 3, Midjourney, Imagen 等）に文字を描かせると崩れたり誤字になりがちです。
 - **必ず `clean composition, no typography, no letters, no text watermark` を付加** し、文字はHTML側のTailwindで重ねるか隣接配置します。
 
 ### ③ プロンプトのテンプレート例

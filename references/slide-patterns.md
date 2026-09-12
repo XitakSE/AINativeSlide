@@ -1,6 +1,6 @@
 # スライドパターン集 (Slide Layout Patterns)
 
-ChatGPT（GPT-5.6）がスライド内容に応じて選択すべき、代表的なスライドレイアウトのHTML/Tailwind構造パターン集です。
+AI（LLM）がスライド内容に応じて選択すべき、代表的なスライドレイアウトのHTML/Tailwind構造パターン集です。
 
 ---
 
