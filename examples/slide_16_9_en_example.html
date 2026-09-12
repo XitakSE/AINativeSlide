@@ -41,7 +41,7 @@
   </script>
 
   <style>
-    /* CSS変数による動的カラー制御（デフォルト: Indigo） */
+    /* Dynamic theme color variables (Default: Indigo) */
     :root {
       --brand-50: #eef2ff;
       --brand-100: #e0e7ff;
@@ -56,7 +56,7 @@
       --accent-600: #0284c7;
     }
 
-    /* 16:9 スライド基本設定 */
+    /* 16:9 Slide Base Layout */
     @page {
       size: 16in 9in;
       margin: 0;
@@ -69,7 +69,7 @@
       background-color: #0f172a;
     }
 
-    /* 印刷時の設定 */
+    /* Print & Zero-Margin PDF Settings */
     @media print {
       body {
         background-color: transparent !important;
@@ -101,7 +101,7 @@
       }
     }
 
-    /* 画面表示時のスライドサイズ */
+    /* Screen Display Sizing */
     .slide {
       width: 1280px;
       height: 720px;
@@ -116,13 +116,13 @@
       outline: none;
     }
 
-    /* 編集可能モードのアウトライン視覚化 */
+    /* Contenteditable Outline Styling */
     [contenteditable="true"]:focus {
       outline: 2px solid var(--brand-500, #6366f1);
       outline-offset: -2px;
     }
 
-    /* スライドコメント（修正指示）＆ 発表メモ入力ボックス */
+    /* Slide Feedback & Speaker Notes Box */
     .slide-comment-input:empty:before,
     .slide-note-input:empty:before {
       content: attr(data-placeholder);
@@ -146,7 +146,7 @@
 </head>
 <body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
 
-  <!-- 上部操作ツールバー（印刷時は非表示） -->
+  <!-- Header Toolbar (Hidden when printing) -->
   <!-- Header Toolbar (Hidden when printing) -->
   <header class="no-print sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between">
     <div class="flex items-center gap-3">
@@ -254,60 +254,60 @@
     </div>
   </aside>
 
-  <!-- 全画面プレゼンテーションモーダル（印刷時は非表示） -->
+  <!-- Fullscreen Presentation Modal (Hidden when printing) -->
   <div id="presentationModal" class="no-print fixed inset-0 bg-black z-50 hidden select-none flex flex-col justify-center items-center overflow-hidden">
-    <!-- スライド描画ステージ -->
+    <!-- Slide Stage -->
     <div id="presentationStageWrapper" onclick="handleStageClick(event)" class="relative flex items-center justify-center w-full h-full cursor-pointer">
       <div id="presentationStage" class="transition-transform duration-100 ease-out origin-center"></div>
     </div>
 
-    <!-- レーザーポインター要素 -->
+    <!-- Laser Pointer Element -->
     <div id="laserPointer" class="hidden pointer-events-none fixed w-3.5 h-3.5 bg-rose-500 rounded-full shadow-[0_0_12px_4px_rgba(244,63,94,0.9)] -translate-x-1/2 -translate-y-1/2 z-[60]"></div>
 
-    <!-- 発表者メモオーバーレイパネル -->
+    <!-- Speaker Notes Overlay Panel -->
     <div id="speakerNotesOverlay" class="hidden absolute bottom-16 left-1/2 -translate-x-1/2 w-11/12 max-w-3xl bg-slate-950/90 backdrop-blur-md border border-slate-700/80 rounded-xl p-4 shadow-2xl z-50 text-slate-100 transition-all">
       <div class="flex items-center justify-between pb-2 mb-2 border-b border-slate-800">
         <div class="flex items-center gap-2 text-xs font-bold text-amber-400">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z"/></svg>
-          <span id="speakerNotesTitle">🎤 発表メモ (Slide 1)</span>
+          <span id="speakerNotesTitle">🎤 Speaker Notes (Slide 1)</span>
         </div>
-        <span class="text-[11px] text-slate-400">[N] キーで閉じる</span>
+        <span class="text-[11px] text-slate-400">Press [N] to close</span>
       </div>
       <div id="speakerNotesText" class="text-sm leading-relaxed text-slate-200 max-h-36 overflow-y-auto whitespace-pre-wrap font-sans"></div>
     </div>
 
-    <!-- 下部フローティングコントローラーバー -->
+    <!-- Bottom Floating Controls -->
     <div class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-slate-900/85 backdrop-blur-md border border-slate-700/80 rounded-full px-4 py-1.5 shadow-2xl flex items-center gap-3 text-xs text-white opacity-40 hover:opacity-100 transition-opacity">
-      <button onclick="prevSlide()" title="前のスライド (← / ↑ / PageUp)" class="p-1.5 hover:bg-slate-700 rounded-full transition-colors">
+      <button onclick="prevSlide()" title="Previous slide (← / ↑ / PageUp)" class="p-1.5 hover:bg-slate-700 rounded-full transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
       </button>
       <span id="presentationCounter" class="font-mono text-xs text-slate-300 min-w-[50px] text-center">1 / 6</span>
-      <button onclick="nextSlide()" title="次のスライド (→ / ↓ / Space / PageDown)" class="p-1.5 hover:bg-slate-700 rounded-full transition-colors">
+      <button onclick="nextSlide()" title="Next slide (→ / ↓ / Space / PageDown)" class="p-1.5 hover:bg-slate-700 rounded-full transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
       </button>
       <div class="w-px h-4 bg-slate-700"></div>
-      <button id="laserBtn" onclick="toggleLaser()" title="レーザーポインター (L)" class="px-2.5 py-1 rounded-full text-[11px] font-medium hover:bg-slate-700 text-slate-300 flex items-center gap-1 transition-colors">
+      <button id="laserBtn" onclick="toggleLaser()" title="Laser pointer (L)" class="px-2.5 py-1 rounded-full text-[11px] font-medium hover:bg-slate-700 text-slate-300 flex items-center gap-1 transition-colors">
         <span class="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
-        <span>レーザー (L)</span>
+        <span>Laser (L)</span>
       </button>
-      <button id="noteBtn" onclick="toggleSpeakerNotes()" title="発表メモ表示 (N)" class="px-2.5 py-1 rounded-full text-[11px] font-medium hover:bg-slate-700 text-slate-300 flex items-center gap-1 transition-colors">
-        <span>🎤 メモ (N)</span>
+      <button id="noteBtn" onclick="toggleSpeakerNotes()" title="Toggle speaker notes (N)" class="px-2.5 py-1 rounded-full text-[11px] font-medium hover:bg-slate-700 text-slate-300 flex items-center gap-1 transition-colors">
+        <span>🎤 Notes (N)</span>
       </button>
       <div class="w-px h-4 bg-slate-700"></div>
-      <button onclick="stopPresentation()" title="発表終了 (Esc)" class="p-1.5 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-full transition-colors">
+      <button onclick="stopPresentation()" title="Exit presentation (Esc)" class="p-1.5 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 rounded-full transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
       </button>
     </div>
   </div>
 
-  <!-- テキスト選択時ミニフローティング書式バー（印刷時は非表示） -->
+  <!-- Floating Selection Formatting Bar -->
   <div id="selectionToolbar" class="no-print absolute hidden z-50 bg-slate-900/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs text-white transform -translate-x-1/2 -translate-y-full transition-opacity duration-150 pointer-events-auto">
-    <button onclick="formatSelection('bold')" title="太字 (Bold)" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">B</button>
+    <button onclick="formatSelection('bold')" title="Bold" class="w-6 h-6 flex items-center justify-center font-bold text-xs hover:bg-slate-800 rounded text-slate-200">B</button>
     <div class="w-px h-3.5 bg-slate-700"></div>
-    <button onclick="changeSelectionFontSize(-0.15)" title="選択文字 縮小" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A-</button>
-    <button onclick="changeSelectionFontSize(0.15)" title="選択文字 拡大" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A+</button>
+    <button onclick="changeSelectionFontSize(-0.15)" title="Decrease selected text size" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A-</button>
+    <button onclick="changeSelectionFontSize(0.15)" title="Increase selected text size" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A+</button>
     <div class="w-px h-3.5 bg-slate-700"></div>
-    <!-- 選択文字カラー -->
+    <!-- Selected Text Color -->
     <div class="flex items-center gap-1">
       <button onclick="formatSelection('color', '#6366f1')" title="Indigo" class="w-3.5 h-3.5 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
       <button onclick="formatSelection('color', '#2563eb')" title="Blue" class="w-3.5 h-3.5 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
@@ -316,25 +316,25 @@
       <button onclick="formatSelection('color', '#ef4444')" title="Red" class="w-3.5 h-3.5 rounded-full bg-[#ef4444] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
     </div>
     <div class="w-px h-3.5 bg-slate-700"></div>
-    <!-- 蛍光ペンハイライト -->
-    <button onclick="formatSelection('highlight', '#fef08a')" title="黄色マーカー" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-300 text-slate-900 hover:bg-amber-200 transition-colors">蛍光黄</button>
-    <button onclick="formatSelection('highlight', '#a7f3d0')" title="緑色マーカー" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-emerald-300 text-slate-900 hover:bg-emerald-200 transition-colors">蛍光緑</button>
-    <!-- リセット -->
-    <button onclick="clearSelectionFormat()" title="書式解除" class="w-5 h-5 flex items-center justify-center text-xs hover:bg-slate-800 rounded text-slate-400 hover:text-white ml-0.5">✕</button>
+    <!-- Highlighter -->
+    <button onclick="formatSelection('highlight', '#fef08a')" title="Yellow highlight" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-300 text-slate-900 hover:bg-amber-200 transition-colors">Yellow</button>
+    <button onclick="formatSelection('highlight', '#a7f3d0')" title="Green highlight" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-emerald-300 text-slate-900 hover:bg-emerald-200 transition-colors">Green</button>
+    <!-- Reset -->
+    <button onclick="clearSelectionFormat()" title="Clear selection formatting" class="w-5 h-5 flex items-center justify-center text-xs hover:bg-slate-800 rounded text-slate-400 hover:text-white ml-0.5">✕</button>
   </div>
 
-  <!-- スライド一覧コンテナ -->
+  <!-- Slide Viewport Container -->
   <main class="slide-viewport flex flex-col items-center gap-12 p-8 pt-10">
 
     <!-- ============================================== -->
-    <!-- SLIDE 1: 表紙 (Title Slide) -->
+    <!-- SLIDE 1: Title Slide -->
     <!-- ============================================== -->
     <section class="slide p-16 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800" contenteditable="true">
-      <!-- 背景デコレーション -->
+      <!-- Background Accents -->
       <div class="absolute -right-24 -top-24 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
       <div class="absolute -left-20 -bottom-20 w-80 h-80 bg-accent-500/15 rounded-full blur-3xl pointer-events-none"></div>
 
-      <!-- ヘッダーメタ -->
+      <!-- Header Meta -->
       <div class="flex items-center justify-between z-10">
         <div class="flex items-center gap-2.5">
           <div class="w-2.5 h-2.5 rounded-full bg-accent-400 animate-pulse"></div>
@@ -343,31 +343,31 @@
         <span class="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">CONFIDENTIAL</span>
       </div>
 
-      <!-- メインタイトル部 -->
+      <!-- Main Title -->
       <div class="z-10 my-auto">
         <div class="inline-block px-3.5 py-1 rounded-md bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold mb-4 tracking-wide">
           PROJECT PROPOSAL
         </div>
         <h1 class="text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-          全社次世代データ基盤<br>
-          <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-brand-300 to-indigo-200">Modern Data Stack</span> 導入計画
+          Enterprise Modern Data Stack<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 via-brand-300 to-indigo-200">Next-Gen Architecture</span> Strategic Deck
         </h1>
         <p class="text-lg text-slate-300 max-w-2xl font-light leading-relaxed">
-          サイロ化された事業部データを一元統合し、全社的なデータドリブン経営と生成AI活用を支えるスケーラブルな分析プラットフォームの構築
+          Unifying fragmented departmental data silos to empower automated enterprise analytics, data-driven decisions, and generative AI activation.
         </p>
       </div>
 
-      <!-- フッターメタ -->
+      <!-- Footer Meta -->
       <div class="z-10 pt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
         <div class="flex items-center gap-6">
-          <div><span class="text-slate-500 mr-2">発表部門:</span>データエンジニアリング推進部</div>
-          <div><span class="text-slate-500 mr-2">日付:</span>2026年9月</div>
+          <div><span class="text-slate-500 mr-2">Department:</span>Enterprise Data Architecture Group</div>
+          <div><span class="text-slate-500 mr-2">Date:</span>September 2026</div>
         </div>
         <div class="font-mono text-slate-500">01 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 1 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 1 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -383,61 +383,61 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 1 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">皆さん、本日はお集まりいただきありがとうございます。データエンジニアリング推進部の発表で、Modern Data Stack導入計画についてご説明します。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">Good morning everyone. The Data Architecture Group is presenting our strategic proposal for modernizing enterprise data infrastructure to power real-time analytics and GenAI integration.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
 
     <!-- ============================================== -->
-    <!-- SLIDE 2: 課題と目指す姿 (Before vs After) -->
+    <!-- SLIDE 2: As-Is vs To-Be -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="flex items-start justify-between border-b border-slate-200 pb-4">
         <div>
-          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">01. 現状分析と変革テーマ</div>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">現行データ活用の課題と目指す姿</h2>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">01. Problem Statement & Vision</div>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Current Data Bottlenecks vs Target Architecture</h2>
         </div>
         <div class="text-xs font-medium text-slate-400 bg-white px-3 py-1 rounded-md border border-slate-200 shadow-sm">
-          全社データ基盤構想
+          Modern Lakehouse Strategy
         </div>
       </div>
 
-      <!-- コンテンツエリア：2カラム対比 -->
+      <!-- Two-Column Comparison -->
       <div class="grid grid-cols-2 gap-8 my-auto">
         <!-- Before -->
         <div class="bg-white rounded-xl p-6 border border-rose-100 shadow-sm flex flex-col justify-between">
           <div>
             <div class="flex items-center gap-2 text-rose-600 font-bold text-sm mb-4">
               <span class="flex items-center justify-center w-6 h-6 rounded-full bg-rose-100 text-rose-600 text-xs">✕</span>
-              <span>AS-IS: 現行の課題（サイロ化と形骸化）</span>
+              <span>AS-IS: Critical Operational Bottlenecks</span>
             </div>
             <ul class="space-y-3.5 text-sm text-slate-600">
               <li class="flex items-start gap-2.5">
                 <span class="text-rose-400 font-bold">•</span>
-                <span><strong>データサイロ:</strong> 事業部ごとにDB・SaaSが独立し、横断的な顧客分析が不可能</span>
+                <span><strong>Siloed Datastores:</strong> Fragmented databases and SaaS tools prevent cross-functional customer journey analysis.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-rose-400 font-bold">•</span>
-                <span><strong>手動集計の工数肥大:</strong> 月次レポート作成に毎回20時間以上を要し、意思決定が遅延</span>
+                <span><strong>Manual Reporting:</strong> Monthly reporting requires 20+ hours of manual spreadsheet extraction, delaying leadership decisions.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-rose-400 font-bold">•</span>
-                <span><strong>データ品質の不透明性:</strong> 定義やマスタの不一致で「数字が合わない」議論が頻発</span>
+                <span><strong>Ambiguous Data Quality:</strong> Discrepancies in master definitions trigger recurring debates over metric validity.</span>
               </li>
             </ul>
           </div>
           <div class="mt-4 p-3 bg-rose-50/70 rounded-lg text-xs text-rose-700 font-medium">
-            ボトルネック: データ探索・加工に全リソースの80%が消費されている
+            Core Bottleneck: Over 80% of analyst bandwidth is squandered on repetitive data cleaning and wrangling.
           </div>
         </div>
 
@@ -446,37 +446,37 @@
           <div>
             <div class="flex items-center gap-2 text-emerald-600 font-bold text-sm mb-4">
               <span class="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 text-xs">✓</span>
-              <span>TO-BE: 本基盤導入後の姿（自律的データ駆動）</span>
+              <span>TO-BE: Autonomous Data-Driven Target</span>
             </div>
             <ul class="space-y-3.5 text-sm text-slate-600">
               <li class="flex items-start gap-2.5">
                 <span class="text-emerald-500 font-bold">•</span>
-                <span><strong>一元レイクハウス:</strong> 全社データを自動集約し、即座にクエリ可能な状態を担保</span>
+                <span><strong>Unified Lakehouse:</strong> Continuously streams transactional data into certified tables, ensuring instant query readiness.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-emerald-500 font-bold">•</span>
-                <span><strong>リアルタイム可視化:</strong> BIおよびダッシュボードが日次・時間単位で自動更新</span>
+                <span><strong>Real-Time Analytics:</strong> Executive dashboards and operational KPIs refresh continuously with zero lag.</span>
               </li>
               <li class="flex items-start gap-2.5">
                 <span class="text-emerald-500 font-bold">•</span>
-                <span><strong>AI基盤への直結:</strong> LLM/生成AIとの安全な連携インターフェースを標準提供</span>
+                <span><strong>GenAI Orchestration:</strong> Governed semantic layer serves enterprise LLMs with certified context APIs and vector embeddings.</span>
               </li>
             </ul>
           </div>
           <div class="mt-4 p-3 bg-emerald-50/70 rounded-lg text-xs text-emerald-700 font-medium">
-            期待成果: データ分析への着手時間を即日化し、施策検証サイクルを5倍高速化
+            Target Outcome: Reduces time-to-insight to same-day activation and speeds up market experiment cycles by 5x.
           </div>
         </div>
       </div>
 
-      <!-- フッター -->
+      <!-- Footer -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
         <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">02 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 2 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 2 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -492,76 +492,76 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 2 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">現在、事業部ごとにデータがサイロ化しており、週次の手動集計に多くのリソースを割いています。これをリアルタイム集約し、全社で一貫したKPIを追える基盤へと刷新します。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">Currently, fragmented data silos waste massive engineering hours on manual reporting. This proposal migrates our data estate into a unified Lakehouse for real-time, governed intelligence.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
 
     <!-- ============================================== -->
-    <!-- SLIDE 3: コンセプトビジョン (AI生成画像スプリット) -->
+    <!-- SLIDE 3: Concept Vision -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-slate-900 text-white border border-slate-800" contenteditable="true">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="flex items-start justify-between border-b border-slate-800 pb-4">
         <div>
-          <div class="text-xs font-bold tracking-wider text-accent-400 uppercase">02. コンセプト & ビジョン</div>
-          <h2 class="text-2xl font-extrabold text-white mt-1">自律型データハブがもたらす次世代エコシステム</h2>
+          <div class="text-xs font-bold tracking-wider text-accent-400 uppercase">02. Architectural Vision</div>
+          <h2 class="text-2xl font-extrabold text-white mt-1">Next-Gen Vision: Autonomous Enterprise Data Hub</h2>
         </div>
         <div class="text-xs font-mono text-slate-400 bg-slate-800 px-3 py-1 rounded-md border border-slate-700">
           AI CONCEPT
         </div>
       </div>
 
-      <!-- 2カラムスプリット: 左AI画像 / 右解説 -->
+      <!-- Split Layout: AI Image & Architecture -->
       <div class="grid grid-cols-2 gap-8 items-center my-auto">
-        <!-- AI画像枠 (ドラッグ＆ドロップ対応) -->
+        <!-- AI Image Dropzone -->
         <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-950 group">
-          <!-- 抽象概念AI画像 (DALL-E 3 生成想定) -->
+          <!-- Concept Imagery -->
           <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" 
                alt="Autonomous Data Hub Concept Art" 
                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
           <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-slate-300">
             <span class="font-mono text-accent-400">Concept Art: Autonomous Integration</span>
-            <span class="bg-slate-900/80 px-2 py-0.5 rounded border border-slate-700 no-print text-[10px]">D&Dで画像変更</span>
+            <span class="bg-slate-900/80 px-2 py-0.5 rounded border border-slate-700 no-print text-[10px]">Drag & Drop Image</span>
           </div>
         </div>
 
-        <!-- 右側テキスト解説 -->
+        <!-- Right Column Commentary -->
         <div class="flex flex-col justify-center space-y-4">
           <p class="text-sm text-slate-300 leading-relaxed font-light">
-            データは単なる「蓄積物」から、現場とAIエージェントがリアルタイムに対話し、自律的な意思決定を導く「活動体」へと進化します。
+            Enterprise data evolves from passive cold storage into an active semantic synapse, enabling continuous collaboration between business experts and autonomous AI agents.
           </p>
           <div class="space-y-3">
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-              <div class="text-xs font-bold text-accent-400 mb-0.5">01. リアルタイム・シナプス</div>
-              <div class="text-xs text-slate-300">全社DBと各SaaSが双方向ストリーミングで常に同期</div>
+              <div class="text-xs font-bold text-accent-400 mb-0.5">01. Real-Time Data Synapse</div>
+              <div class="text-xs text-slate-300">Bi-directional event streaming synchronizes production databases with core enterprise SaaS.</div>
             </div>
             <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-              <div class="text-xs font-bold text-brand-400 mb-0.5">02. 自然言語オーケストレーション</div>
-              <div class="text-xs text-slate-300">非エンジニアでも社内AIを通じて即座に深層インサイトを抽出</div>
+              <div class="text-xs font-bold text-brand-400 mb-0.5">02. Natural Language Orchestration</div>
+              <div class="text-xs text-slate-300">Non-technical business stakeholders query complex semantic graphs instantly using conversational GenAI.</div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- フッター -->
+      <!-- Footer -->
       <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs text-slate-500">
         <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">03 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 3 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 3 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -577,51 +577,51 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 3 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">この図はデータ基盤の全体構想です。AWSおよびSaaSからFivetranで吸い上げ、Snowflakeに集約、dbtでモデリングしてBIと生成AIに提供します。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">This architectural blueprint highlights our end-to-end paradigm: ingesting streaming events into Lakehouse storage, transforming models with dbt, and powering BI dashboards alongside GenAI agents.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
 
     <!-- ============================================== -->
-    <!-- SLIDE 4: 新アーキテクチャ (3層構成) -->
+    <!-- SLIDE 4: Three-Tier Architecture -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-white border border-slate-200" contenteditable="true">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="flex items-start justify-between border-b border-slate-200 pb-4">
         <div>
-          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">02. システム構成案</div>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Modern Data Stack による3層アーキテクチャ</h2>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">03. Technical Blueprint</div>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Three-Tier Modern Data Stack Architecture</h2>
         </div>
         <div class="text-xs font-medium text-slate-400 bg-slate-50 px-3 py-1 rounded-md border border-slate-200">
-          構成概要
+          Architecture Overview
         </div>
       </div>
 
-      <!-- コンテンツエリア：3カラムカード -->
+      <!-- Three-Column Architecture Cards -->
       <div class="grid grid-cols-3 gap-6 my-auto">
         <!-- Layer 1: Ingestion -->
         <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 hover:border-brand-300 transition-colors flex flex-col justify-between">
           <div>
             <div class="text-xs font-mono font-bold text-accent-600 uppercase tracking-wider mb-1">Layer 01</div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">データ収集・抽出</h3>
-            <p class="text-xs text-slate-500 mb-4">各種SaaS・基幹DBからのノーコード自動連携</p>
+            <h3 class="text-base font-bold text-slate-900 mb-2">Ingestion & ELT</h3>
+            <p class="text-xs text-slate-500 mb-4">Automated zero-maintenance ingestion across production databases and SaaS APIs.</p>
             <div class="space-y-2 text-xs text-slate-700">
               <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">Connector: Fivetran / Airbyte</div>
               <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">Event Streaming: Kafka / PubSub</div>
-              <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">対象: Salesforce, GA4, RDB</div>
+              <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">Sources: Salesforce, Stripe, GA4, PostgreSQL</div>
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-500 font-medium">
-            全コネクタの保守を自動化・運用負荷90%減
+            Automated schema evolution and retry handlers cut connector maintenance by 90%.
           </div>
         </div>
 
@@ -630,8 +630,8 @@
           <div class="absolute -top-3 right-4 bg-brand-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">CORE</div>
           <div>
             <div class="text-xs font-mono font-bold text-brand-600 uppercase tracking-wider mb-1">Layer 02</div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">統合蓄積・モデリング</h3>
-            <p class="text-xs text-slate-500 mb-4">クラウドDWH上での高速集計と変換パイプライン</p>
+            <h3 class="text-base font-bold text-slate-900 mb-2">Lakehouse & Transformation</h3>
+            <p class="text-xs text-slate-500 mb-4">Elastic cloud compute driving modular, version-controlled SQL transformation pipelines.</p>
             <div class="space-y-2 text-xs text-slate-700">
               <div class="p-2.5 bg-white rounded-lg border border-brand-200 font-medium">DWH: Snowflake / BigQuery</div>
               <div class="p-2.5 bg-white rounded-lg border border-brand-200 font-medium">Transform: dbt (Data Build Tool)</div>
@@ -639,7 +639,7 @@
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-brand-200 text-xs text-brand-800 font-medium">
-            SQLコードベースでのデータ品質テスト・リネージ担保
+            Version-controlled data quality tests and end-to-end lineage tracking on every CI commit.
           </div>
         </div>
 
@@ -647,8 +647,8 @@
         <div class="bg-slate-50 rounded-xl p-5 border border-slate-200 hover:border-brand-300 transition-colors flex flex-col justify-between">
           <div>
             <div class="text-xs font-mono font-bold text-emerald-600 uppercase tracking-wider mb-1">Layer 03</div>
-            <h3 class="text-base font-bold text-slate-900 mb-2">可視化・AI活用</h3>
-            <p class="text-xs text-slate-500 mb-4">現場のセルフサービス分析とAIエージェント統合</p>
+            <h3 class="text-base font-bold text-slate-900 mb-2">Consumption & AI Activation</h3>
+            <p class="text-xs text-slate-500 mb-4">Democratized analytics interfaces, reverse ETL activations, and context-aware LLM APIs.</p>
             <div class="space-y-2 text-xs text-slate-700">
               <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">BI: Lightdash / Looker / Tableau</div>
               <div class="p-2.5 bg-white rounded-lg border border-slate-200 font-medium">Reverse ETL: Census / Hightouch</div>
@@ -656,19 +656,19 @@
             </div>
           </div>
           <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-500 font-medium">
-            全社員が自然言語でデータをクエリ可能な環境
+            Empowers all enterprise employees to query certified metrics via conversational interfaces.
           </div>
         </div>
       </div>
 
-      <!-- フッター -->
+      <!-- Footer -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
         <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">04 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 4 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 4 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -684,36 +684,36 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 4 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">アーキテクチャの5本柱です。ELT、モデリング、カタログ、オブザーバビリティ、セマンティックレイヤーを連携させ、ガバナンスと開発速度を両立させます。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">Our decoupled three-tier architecture separates ingestion, compute, and consumption. Standardizing on dbt and cloud warehouses ensures strict governance while unlocking developer agility.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
 
     <!-- ============================================== -->
-    <!-- SLIDE 4: 導入ロードマップ (Timeline) -->
+    <!-- SLIDE 5: Phased Roadmap -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
-      <!-- ヘッダー -->
+      <!-- Header -->
       <div class="flex items-start justify-between border-b border-slate-200 pb-4">
         <div>
-          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">03. 導入スケジュール</div>
-          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">段階的導入ロードマップ（4フェーズ）</h2>
+          <div class="text-xs font-bold tracking-wider text-brand-600 uppercase">04. Implementation Plan</div>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Execution Roadmap: 4 Strategic Phases</h2>
         </div>
         <div class="text-xs font-medium text-slate-400 bg-white px-3 py-1 rounded-md border border-slate-200">
-          全6ヶ月計画
+          6-Month Plan
         </div>
       </div>
 
-      <!-- タイムライン 4フェーズ -->
+      <!-- Four-Phase Timeline Cards -->
       <div class="grid grid-cols-4 gap-4 my-auto">
         <!-- Phase 1 -->
         <div class="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -722,18 +722,18 @@
               M1
             </div>
             <div class="text-xs font-bold text-brand-600 mb-1">Phase 01</div>
-            <h4 class="text-sm font-bold text-slate-900 mb-2">PoC & 基礎設計</h4>
+            <h4 class="text-sm font-bold text-slate-900 mb-2">PoC & Infrastructure</h4>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-              主要SaaS（Salesforce等）の疎通確認とDWH選定
+              Provision core Lakehouse and benchmark priority SaaS connectors (Salesforce/Stripe).
             </p>
             <ul class="text-[11px] text-slate-600 space-y-1.5 list-disc pl-4">
-              <li>セキュリティ審査完了</li>
-              <li>最小パイプライン構築</li>
-              <li>データモデリング規約策定</li>
+              <li>Security audit & compliance approval</li>
+              <li>Baseline end-to-end pipeline validation</li>
+              <li>Define dbt coding & naming standards</li>
             </ul>
           </div>
           <div class="mt-4 text-[10px] font-semibold text-slate-400 bg-slate-50 p-2 rounded">
-            マイルストーン: PoC検証完了
+            Milestone: Successful PoC Signoff
           </div>
         </div>
 
@@ -744,18 +744,18 @@
               M2-3
             </div>
             <div class="text-xs font-bold text-brand-600 mb-1">Phase 02</div>
-            <h4 class="text-sm font-bold text-slate-900 mb-2">基幹データ統合</h4>
+            <h4 class="text-sm font-bold text-slate-900 mb-2">Core Data Ingestion</h4>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-              主要事業部データの本番DWH取り込みとdbt構築
+              Production integration of high-priority business unit databases with dbt CI/CD.
             </p>
             <ul class="text-[11px] text-slate-600 space-y-1.5 list-disc pl-4">
-              <li>基幹DB連携パイロット稼働</li>
-              <li>dbtモデル定義・テスト整備</li>
-              <li>BIツール初期ダッシュボード構築</li>
+              <li>Production transactional DB replication</li>
+              <li>Core dimensional models & automated tests</li>
+              <li>Executive KPI dashboard deployment</li>
             </ul>
           </div>
           <div class="mt-4 text-[10px] font-semibold text-brand-600 bg-brand-50 p-2 rounded">
-            マイルストーン: α版社内リリース
+            Milestone: Alpha Internal Release
           </div>
         </div>
 
@@ -766,18 +766,18 @@
               M4-5
             </div>
             <div class="text-xs font-bold text-brand-600 mb-1">Phase 03</div>
-            <h4 class="text-sm font-bold text-slate-900 mb-2">全社展開 & 研修</h4>
+            <h4 class="text-sm font-bold text-slate-900 mb-2">Enterprise Enablement</h4>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-              全社利用開始とセルフサービス分析のハンズオン実施
+              Company-wide analytics rollout, training workshops, and metadata catalog launch.
             </p>
             <ul class="text-[11px] text-slate-600 space-y-1.5 list-disc pl-4">
-              <li>各部署キーマン向け講習会</li>
-              <li>データカタログ（メタデータ）公開</li>
-              <li>アクセス権限ガバナンス適用</li>
+              <li>Hands-on workshops for 150+ analysts</li>
+              <li>Unified data dictionary & catalog launch</li>
+              <li>Role-based access control (RBAC) enforced</li>
             </ul>
           </div>
           <div class="mt-4 text-[10px] font-semibold text-slate-400 bg-slate-50 p-2 rounded">
-            マイルストーン: 全社本番カットオーバー
+            Milestone: Enterprise Production Cutover
           </div>
         </div>
 
@@ -788,30 +788,30 @@
               M6+
             </div>
             <div class="text-xs font-bold text-accent-600 mb-1">Phase 04</div>
-            <h4 class="text-sm font-bold text-slate-900 mb-2">生成AI・高度活用</h4>
+            <h4 class="text-sm font-bold text-slate-900 mb-2">GenAI & Reverse ETL</h4>
             <p class="text-xs text-slate-500 mb-3 leading-relaxed">
-              社内LLM連携とデータ活用の自動化サイクル推進
+              Autonomous GenAI agent integrations, reverse ETL triggers, and continuous tuning.
             </p>
             <ul class="text-[11px] text-slate-600 space-y-1.5 list-disc pl-4">
-              <li>自然言語クエリAIエージェント導入</li>
-              <li>リバースETLによるSaaS還元</li>
-              <li>ROI効果測定と継続改善</li>
+              <li>Conversational text-to-SQL AI copilot</li>
+              <li>Reverse ETL syncing metrics back to CRMs</li>
+              <li>Quarterly ROI review & query optimization</li>
             </ul>
           </div>
           <div class="mt-4 text-[10px] font-semibold text-accent-600 bg-accent-50 p-2 rounded">
-            マイルストーン: 自律型AI活用基盤確立
+            Milestone: Autonomous GenAI Maturity
           </div>
         </div>
       </div>
 
-      <!-- フッター -->
+      <!-- Footer -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
         <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">05 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 5 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 5 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -827,22 +827,22 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 5 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">導入ロードマップです。フェーズ1で基盤構築、フェーズ2でパイロット移行、フェーズ3で全社展開を計画しています。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">Our 6-month execution plan spans 4 phased milestones. By validating governance and security in month 1, we ensure seamless cutover with zero downtime for business operations.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
 
 
     <!-- ============================================== -->
-    <!-- SLIDE 5: 期待される効果とROI (KPI & Metrics) -->
+    <!-- SLIDE 6: Business Impact & Strategic KPIs -->
     <!-- ============================================== -->
     <section class="slide p-12 justify-between bg-white border border-slate-200" contenteditable="true">
       <!-- Header -->
@@ -910,14 +910,14 @@
         </div>
       </div>
 
-      <!-- フッター -->
+      <!-- Footer -->
       <div class="pt-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-400">
         <div>Enterprise Next-Gen Data Platform Strategy</div>
         <div class="font-mono">06 / 06</div>
       </div>
     </section>
 
-    <!-- スライド 6 メタ情報欄（修正指示 & 発表メモ、印刷時は非表示） -->
+    <!-- Slide 6 Meta Container -->
     <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
       <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
         <div class="flex items-center gap-2">
@@ -933,15 +933,15 @@
         <span class="text-[11px] font-mono text-slate-500">Slide 6 / 6</span>
       </div>
       
-      <!-- 修正指示ペイン -->
+      <!-- Feedback Pane -->
       <div class="meta-pane meta-pane-comment flex items-start gap-2.5">
-        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter revision instructions or feedback for this slide (e.g., summarize bullets, tweak KPI target, adjust layout)..."></div>
         <button onclick="clearMetaField(this, '.slide-comment-input')" title="Clear feedback" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
 
-      <!-- 発表メモペイン（初期非表示） -->
+      <!-- Speaker Notes Pane -->
       <div class="meta-pane meta-pane-note hidden flex items-start gap-2.5">
-        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="発表時のトーク原稿・補足メモを入力（スライドショー投影時に [N] キーで画面下部に表示されます）">投資対効果として、データ集計工数を月間320時間削減し、意思決定速度を約5倍に高める見込みです。ご清聴ありがとうございました。</div>
+        <div class="slide-note-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="Enter talking points, presenter script, or speaker notes (press [N] in presentation mode)...">In summary, modernizing our lakehouse architecture saves 320+ engineering hours monthly and accelerates decision turnaround by 5x. Thank you for your time.</div>
         <button onclick="clearMetaField(this, '.slide-note-input')" title="Clear notes" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
       </div>
     </div>
