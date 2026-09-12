@@ -1465,13 +1465,19 @@
       try {
         const titleEl = document.getElementById('deckTitleText');
         const rawTitle = titleEl ? titleEl.innerText.trim() : 'slide';
-        // 半角・全角スペースや特殊記号を確実にアンダースコアに置換し、スペース起因の拡張子脱落を防止
+        // 半角・全角スペースや特殊記号をアンダースコアに完全置換
         let cleanTitle = rawTitle.replace(/[\s\t\n\r\u3000\\/:*?"<>|]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 40);
         if (!cleanTitle) cleanTitle = 'slide';
         const filename = `${cleanTitle}_edited.html`;
 
         const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        // 重要: MIME type に ';charset=utf-8' を含めるとブラウザの拡張子マッピングが壊れる環境があるため純粋な 'text/html' を指定
+
+        // 【ローカル file:// 対策】ローカル閲覧時はブラウザのセキュリティ制限(Origin null)で
+        // a.download の拡張子が落とされるため、クリップボードにもHTMLを自動コピーして二重保護
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(fullHtml).catch(() => {});
+        }
+
         const blob = new Blob(['\uFEFF' + fullHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1482,11 +1488,20 @@
         document.body.appendChild(a);
         a.click();
 
-        // revokeObjectURL の即時実行によるブラウザのファイル名・拡張子破綻を防止するため60秒遅延解放
         setTimeout(() => {
           if (a.parentNode) document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }, 60000);
+
+        // ローカルファイル閲覧時は仕様について通知
+        if (window.location.protocol === 'file:') {
+          setTimeout(() => {
+            alert(isJapanese
+              ? '【お知らせ】\nローカルファイル(file://)から開いている場合、ブラウザのセキュリティ制限によりダウンロードファイルから拡張子(.html)が自動的に除外される仕様となっています。\n\nそのため、クリップボードにも最新HTMLコードを自動コピーしました！そのまま既存ファイルへ貼り付けて保存いただけます。'
+              : '[Notice]\nWhen opened from local disk (file://), browser security restrictions automatically strip file extensions from downloads.\n\nThe latest HTML code has also been copied to your clipboard so you can paste and save it directly.'
+            );
+          }, 300);
+        }
       } catch (e) {
         console.error('HTML download failed:', e);
       }

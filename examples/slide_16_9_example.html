@@ -1471,7 +1471,13 @@
         const filename = `${cleanTitle}_edited.html`;
 
         const fullHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
-        // 重要: MIME type に ';charset=utf-8' を含めるとブラウザの拡張子マッピングが壊れる環境があるため純粋な 'text/html' を指定
+
+        // 【ローカル file:// 対策】ローカル閲覧時はブラウザのセキュリティ制限(Origin null)で
+        // a.download の拡張子が落とされるため、クリップボードにもHTMLを自動コピーして二重保護
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(fullHtml).catch(() => {});
+        }
+
         const blob = new Blob(['\uFEFF' + fullHtml], { type: 'text/html' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -1486,6 +1492,16 @@
           if (a.parentNode) document.body.removeChild(a);
           URL.revokeObjectURL(url);
         }, 60000);
+
+        // ローカルファイル閲覧時は仕様について通知
+        if (window.location.protocol === 'file:') {
+          setTimeout(() => {
+            alert(isJapanese
+              ? '【お知らせ】\nローカルファイル(file://)から開いている場合、ブラウザのセキュリティ制限によりダウンロードファイルから拡張子(.html)が自動的に除外される仕様となっています。\n\nそのため、クリップボードにも最新HTMLコードを自動コピーしました！そのまま既存ファイルへ貼り付けて保存いただけます。'
+              : '[Notice]\nWhen opened from local disk (file://), browser security restrictions automatically strip file extensions from downloads.\n\nThe latest HTML code has also been copied to your clipboard so you can paste and save it directly.'
+            );
+          }, 300);
+        }
       } catch (e) {
         console.error('HTML download failed:', e);
       }
