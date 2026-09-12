@@ -111,7 +111,7 @@
 ### 9. 企業公式デザインテンプレート（CI/VI統一・自社PPTX連携）
 社員ごとの色ブレやデザイン崩れを防ぐため、安易なテーマカラー変更機能はあえて撤廃し、会社規定のブランドデザインを厳格に固定化。
 - **デザイン骨格の分離**: [`resources/design_templates/corporate_default.html`](./resources/design_templates/corporate_default.html) に企業ロゴ、CIカラー、機密区分バッジ、定位置フッターを定義。
-- **自社PPTXテンプレートからの移行**: 会社公式のPPTXやスライド画像をお持ちの場合、初期セットアップ専用スキル `nativeslide-template-builder` を利用して一度変換・登録するだけで、全社共通の公式デザインでスライドが量産されます。
+- **自社PPTXテンプレートからの移行**: 会社公式のPPTXやスライド画像をお持ちの場合、初期セットアップ専用スキル [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder) を利用して一度変換・登録するだけで、全社共通の公式デザインでスライドが量産されます。
 
 ### 10. インラインSVGビジネスチャート & 比較マトリクステーブル
 - **外部ライブラリゼロのPure Inline SVG**:
@@ -179,7 +179,7 @@ NativeSlide/
     └── slide-patterns.md    # スライド構図パターン集（表・SVGチャート含む）
 ```
 
-※自社公式のPPTXやスライド画像からデザインテンプレートを生成して `resources/design_templates/` に登録する作業は、初期セットアップ専用スキル `nativeslide-template-builder` で実行できます。
+※自社公式のPPTXやスライド画像からデザインテンプレートを生成して `resources/design_templates/` に登録する作業は、初期セットアップ専用スキル [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder) で実行できます。
 
 ---
 

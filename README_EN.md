@@ -101,7 +101,7 @@ Click the **"☰ Menu"** button on the top-left to slide out a smooth drawer nav
 ### 9. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
 To enforce enterprise branding and prevent arbitrary styling divergences, casual color palette pickers have been eliminated.
 - **Separation of Structure & Brand**: Grounded in [`resources/design_templates/corporate_default.html`](./resources/design_templates/corporate_default.html) with standardized CI colors, company logo, confidentiality pill, and footer positioning.
-- **Migrating Existing PPTX Decks**: Organizations with official PowerPoint templates can convert and register their design once using the setup skill `nativeslide-template-builder`. Once registered, the AI produces decks with the official company look and feel automatically.
+- **Migrating Existing PPTX Decks**: Organizations with official PowerPoint templates can convert and register their design once using the setup skill [nativeslide-template-builder](https://github.com/XitakSE/NativeSlide-Template-Builder). Once registered, the AI produces decks with the official company look and feel automatically.
 
 ### 10. Inline SVG Business Charts & Comparison Matrix Tables
 - **Zero-Dependency Pure Inline SVG**: Render high-contrast bar and line combo charts directly within the single-file HTML without external libraries like Chart.js.
