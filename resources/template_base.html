@@ -403,7 +403,7 @@
     let isEditable = true;
     function toggleEditMode() {
       isEditable = !isEditable;
-      const slides = document.querySelectorAll('.slide');
+      const slides = document.querySelectorAll('main .slide');
       slides.forEach(slide => {
         slide.setAttribute('contenteditable', isEditable ? 'true' : 'false');
       });
@@ -767,13 +767,18 @@
     function toggleTocDrawer() {}
 
     // ----------------------------------------------------
+    // ----------------------------------------------------
     // 9. 全画面プレゼンテーション（スライドショーモード）
     // ----------------------------------------------------
     let isPresentationMode = false;
     let currentPresentationIndex = 0;
 
+    function getMainSlides() {
+      return document.querySelectorAll('main .slide');
+    }
+
     function getMostVisibleSlideIndex() {
-      const slides = document.querySelectorAll('.slide');
+      const slides = getMainSlides();
       if (!slides.length) return 0;
       let minDiff = Infinity;
       let bestIdx = 0;
@@ -793,7 +798,7 @@
 
     function startPresentation(startIndex) {
       if (typeof switchHeaderTab === 'function') switchHeaderTab('present');
-      const slides = document.querySelectorAll('.slide');
+      const slides = getMainSlides();
       if (!slides.length) return;
 
       currentPresentationIndex = (typeof startIndex === 'number') 
@@ -819,6 +824,9 @@
       if (modal) modal.classList.add('hidden');
       isPresentationMode = false;
 
+      const stage = document.getElementById('presentationStage');
+      if (stage) stage.innerHTML = '';
+
       if (document.fullscreenElement && document.exitFullscreen) {
         document.exitFullscreen().catch(() => {});
       }
@@ -843,7 +851,7 @@
     }
 
     function renderPresentationSlide() {
-      const slides = document.querySelectorAll('.slide');
+      const slides = getMainSlides();
       if (!slides.length) return;
       if (currentPresentationIndex < 0) currentPresentationIndex = 0;
       if (currentPresentationIndex >= slides.length) currentPresentationIndex = slides.length - 1;
@@ -868,7 +876,7 @@
     }
 
     function nextSlide() {
-      const slides = document.querySelectorAll('.slide');
+      const slides = getMainSlides();
       if (currentPresentationIndex < slides.length - 1) {
         currentPresentationIndex++;
         renderPresentationSlide();
@@ -941,7 +949,7 @@
     // ----------------------------------------------------
     function applyAutoLocalization() {
       // スライド数の自動集計・同期 (日英共通)
-      const slideCount = document.querySelectorAll('.slide').length;
+      const slideCount = document.querySelectorAll('main .slide').length;
       const countEl = document.getElementById('deckSlideCountText');
       if (countEl) {
         countEl.innerText = isJapanese 
@@ -1076,7 +1084,7 @@
 
     function performAutoSave() {
       try {
-        const slides = document.querySelectorAll('.slide');
+        const slides = document.querySelectorAll('main .slide');
         const slideData = [];
         slides.forEach(s => slideData.push(s.innerHTML));
 
@@ -1118,7 +1126,7 @@
         if (!data) return;
 
         if (Array.isArray(data.slides)) {
-          const slides = document.querySelectorAll('.slide');
+          const slides = document.querySelectorAll('main .slide');
           data.slides.forEach((html, idx) => {
             if (slides[idx] && html) {
               slides[idx].innerHTML = html;
