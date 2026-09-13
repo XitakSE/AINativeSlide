@@ -35,8 +35,7 @@ AINativeSlide/
 │   └── design_templates/           # Corporate / custom HTML templates
 ├── scripts/
 │   ├── verify_slide.py             # Automated quality & layout regression checker
-│   ├── gemini_pr_review.py         # Automated Gemini PR review script
-│   └── export_pdf.js               # Headless Puppeteer PDF export script
+│   └── gemini_pr_review.py         # Automated Gemini PR review script
 └── .agents/skills/ainativeslide/   # Workspace agent skill mirror (MUST be synced)
 ```
 
@@ -63,12 +62,6 @@ python3 scripts/verify_slide.py index.html
 If `SKILL.md`, `resources/`, or any core documentation changes, keep `.agents/skills/ainativeslide/` in exact sync:
 ```bash
 rsync -av --delete --exclude '.git' --exclude 'node_modules' --exclude '.DS_Store' /Users/takumi/dev/AINativeSlide/ /Users/takumi/dev/.agents/skills/ainativeslide/
-```
-
-### 3. Verification of PDF Export (Optional/Headless)
-If Node.js and Puppeteer are available:
-```bash
-node scripts/export_pdf.js index.html output.pdf
 ```
 
 ---

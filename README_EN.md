@@ -25,15 +25,14 @@
 2. [Implemented Features](#implemented-features)
    - [1. Autonomous AI Quality Testing (Zero-Dependency Python CLI)](#1-autonomous-ai-quality-testing-zero-dependency-python-cli)
    - [2. Robust CSS Box Model & Forced Overflow Prevention (Line-Clamping)](#2-robust-css-box-model--forced-overflow-prevention-line-clamping)
-   - [3. Headless Zero-Margin PDF Export CLI](#3-headless-zero-margin-pdf-export-cli)
-   - [4. LocalStorage Background Auto-Save & Recovery](#4-localstorage-background-auto-save--recovery)
-   - [5. Fullscreen Presentation Mode (Slideshow)](#5-fullscreen-presentation-mode-slideshow)
-   - [6. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)](#6-in-browser-direct-editing--edit-mode-toggle-selection-disabled-when-off)
-   - [7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#7-corporate-design-templates-civi-compliance--pptx-migration)
-   - [8. Inline SVG Business Charts & Comparison Matrix Tables](#8-inline-svg-business-charts--comparison-matrix-tables)
-   - [9. Per-Slide Feedback Comments & AI Iteration Loop](#9-per-slide-feedback-comments--ai-iteration-loop)
-   - [10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)](#10-presentation-speech-script-markdown-speech_scriptmd-generation-grill-option)
-   - [11. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print](#11-strict-aspect-ratio--paper-size-control-169--43--a4-landscape--a4-portrait--zero-margin-pdf-print)
+   - [3. LocalStorage Background Auto-Save & Recovery](#3-localstorage-background-auto-save--recovery)
+   - [4. Fullscreen Presentation Mode (Slideshow)](#4-fullscreen-presentation-mode-slideshow)
+   - [5. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)](#5-in-browser-direct-editing--edit-mode-toggle-selection-disabled-when-off)
+   - [6. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#6-corporate-design-templates-civi-compliance--pptx-migration)
+   - [7. Inline SVG Business Charts & Comparison Matrix Tables](#7-inline-svg-business-charts--comparison-matrix-tables)
+   - [8. Per-Slide Feedback Comments & AI Iteration Loop](#8-per-slide-feedback-comments--ai-iteration-loop)
+   - [9. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)](#9-presentation-speech-script-markdown-speech_scriptmd-generation-grill-option)
+   - [10. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print](#10-strict-aspect-ratio--paper-size-control-169--43--a4-landscape--a4-portrait--zero-margin-pdf-print)
 3. [Keyboard Shortcuts](#keyboard-shortcuts)
 4. [Directory & File Structure](#directory--file-structure)
 5. [Installation Methods](#installation-methods)
@@ -71,17 +70,11 @@ To guarantee that AI-generated text never breaks visual layouts regardless of in
 - **`ai-content` Container**: Standardized content area inside slides accepting semantic tags (`h2`, `h3`, `p`, `ul`, `li`).
 - **CSS Line Clamping**: Strict `-webkit-line-clamp` rules (e.g., 2 lines for headings, 6 lines for body paragraphs, 3 lines for list items) with `overflow: hidden`. Text exceeding boundaries is cleanly truncated rather than spilling over slide frames.
 
-### 3. Headless Zero-Margin PDF Export CLI
-- **Automated Puppeteer CLI** ([`scripts/export_pdf.js`](scripts/export_pdf.js)): Enables AI agents or CI/CD pipelines to directly compile single-file HTML slides into pixel-perfect, margin-free PDF decks without manual browser interaction.
-```bash
-node scripts/export_pdf.js <input.html> [output.pdf]
-```
-
-### 4. LocalStorage Background Auto-Save & Recovery
+### 3. LocalStorage Background Auto-Save & Recovery
 All text edits made directly on the slide, as well as feedback comments, are automatically persisted to your browser's `localStorage` in the background.
 - **Zero Data Loss**: Accidentally reloading (F5) or closing the tab preserves your work immediately.
 
-### 5. Fullscreen Presentation Mode (Slideshow)
+### 4. Fullscreen Presentation Mode (Slideshow)
 Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard to launch presentation mode.
 - **Smart Aspect-Ratio Auto-Fit**: Uses CSS `transform: scale()` to dynamically center and maximize slides to fill any display resolution while strictly preserving the aspect ratio (16:9 or 4:3).
 - **Smooth Navigation**:
@@ -89,28 +82,28 @@ Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard
   - `←` / `↑` / `PageUp` / Click left side: Previous slide
 - **Instant Exit (`Esc` key)**: Quickly return to the standard editing mode at any time.
 
-### 6. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)
+### 5. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)
 - **Direct Editing & Floating Mini Toolbar**: In edit mode (ON), click any text on the slide to edit directly. Selecting text reveals a floating format bar for bold, font sizing (per selection), highlighting, and clearing format.
 - **Edit Mode OFF (Read-Only)**: Toggle via header button or **`E`** key. When OFF, `user-select: none; pointer-events: none;` disables text selection and clicks on slide content entirely, preventing accidental text modification during review.
 
-### 7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
+### 6. Corporate Design Templates (CI/VI Compliance & PPTX Migration)
 To enforce enterprise branding and prevent arbitrary styling divergences, casual color palette pickers have been eliminated.
 - **Separation of Structure & Brand**: Grounded in [`resources/design_templates/corporate_default.html`](./resources/design_templates/corporate_default.html) with standardized CI colors, company logo, confidentiality pill, and footer positioning.
 - **Migrating Existing PPTX Decks**: Convert and register enterprise PowerPoint templates once using the setup skill [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder).
 
-### 8. Inline SVG Business Charts & Comparison Matrix Tables
+### 7. Inline SVG Business Charts & Comparison Matrix Tables
 - **Zero-Dependency Pure Inline SVG**: Render high-contrast bar and line combo charts directly within the single-file HTML without external libraries.
 - **Sophisticated Matrix Tables**: Option A vs Option B vs Option C evaluation grids with clear badges and border highlights.
 
-### 9. Per-Slide Feedback Comments & AI Iteration Loop
+### 8. Per-Slide Feedback Comments & AI Iteration Loop
 - **"📋 Copy Instructions"**: Automatically formats all feedback comments across slides into an organized prompt and copies it to your clipboard for instant pasting into the AI chat.
 
-### 10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)
+### 9. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)
 - Decouples verbal speaker notes from HTML slides to produce a clean, reusable Markdown document (`speech_script.md`).
 - Offered as an optional selection during the initial Grill interview: generates slide-by-slide estimated time, key takeaways, and conversational speaker scripts alongside the slide HTML.
 - Example: [`resources/speech_script_example.md`](./resources/speech_script_example.md)
 
-### 11. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print
+### 10. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print
 Supports 4 purpose-built aspect ratios and paper formats:
 - **16:9 Widescreen (`1280×720`)**: Standard for modern displays and web conference presentations.
 - **4:3 Standard (`1024×768`)**: Legacy presentations, academic conferences.
@@ -149,8 +142,7 @@ AINativeSlide/
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── scripts/
 │   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
-│   ├── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
-│   └── export_pdf.js        # Puppeteer-based headless PDF export CLI
+│   └── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
 ├── resources/
 │   ├── template_base.html   # Lightweight base HTML template optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script example document
