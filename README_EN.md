@@ -32,13 +32,13 @@
    - [7. Corporate Design Templates (CI/VI Compliance & PPTX Migration)](#7-corporate-design-templates-civi-compliance--pptx-migration)
    - [8. Inline SVG Business Charts & Comparison Matrix Tables](#8-inline-svg-business-charts--comparison-matrix-tables)
    - [9. Per-Slide Feedback Comments & AI Iteration Loop](#9-per-slide-feedback-comments--ai-iteration-loop)
-   - [10. Strict Aspect Ratio Control (16:9 / 4:3) & Zero-Margin PDF Print](#10-strict-aspect-ratio-control-169--43--zero-margin-pdf-print)
-3. [Removed Features & Legacy Re-Implementation](#removed-features--legacy-re-implementation)
-4. [Keyboard Shortcuts](#keyboard-shortcuts)
-5. [Directory & File Structure](#directory--file-structure)
-6. [Installation Methods](#installation-methods)
-7. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
-8. [License](#license)
+   - [10. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)](#10-presentation-speech-script-markdown-speech_scriptmd-generation-grill-option)
+   - [11. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print](#11-strict-aspect-ratio--paper-size-control-169--43--a4-landscape--a4-portrait--zero-margin-pdf-print)
+3. [Keyboard Shortcuts](#keyboard-shortcuts)
+4. [Directory & File Structure](#directory--file-structure)
+5. [Installation Methods](#installation-methods)
+6. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
+7. [License](#license)
 
 
 ---
@@ -121,17 +121,6 @@ Designed with `@page { size: ...; margin: 0; }` and `.slide { page-break-inside:
 
 ---
 
-### Removed Features & Legacy Re-Implementation
-
-The following presentation gimmicks were intentionally removed to reduce token size and prioritize AI output stability:
-- **Dedicated Presenter View (Speaker View & Timer)**: Removed complex dual-window `BroadcastChannel` communication.
-- **Laser Pointer**: Omitted as an unnecessary gimmick for PDF-first presentations.
-- **Dynamic TOC Drawer**: Removed heavyweight DOM traversal logic.
-
-*Note: The complete feature set has been safely preserved in [`legacy/template_base_full_features.html`](legacy/template_base_full_features.html). Users who require these features can easily restore them.*
-
----
-
 ## Keyboard Shortcuts
 
 | Key | Mode | Description |
@@ -162,8 +151,6 @@ AINativeSlide/
 │   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
 │   ├── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
 │   └── export_pdf.js        # Puppeteer-based headless PDF export CLI
-├── legacy/
-│   └── template_base_full_features.html # Full-feature base template archive
 ├── resources/
 │   ├── template_base.html   # Lightweight base HTML template optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script example document

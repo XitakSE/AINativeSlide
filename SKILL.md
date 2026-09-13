@@ -1,80 +1,95 @@
 ---
 name: ainativeslide
 description: >-
-  Use this skill whenever the user asks to create, design, generate, edit, or format
-  presentation slides, pitch decks, corporate proposals (企画書/提案書), executive approval memos (稟議資料),
-  Amazon-style 1-Pagers (1枚ペーパー), or zero-margin PDF-printable HTML slides across all supported aspect
-  ratios (16:9 widescreen, 4:3 standard, A4 landscape, A4 portrait). Enforces Single-File HTML/Tailwind CSS,
-  pure inline SVG charts, automated Python verification, and autonomous self-repair.
+  ユーザーがプレゼンテーションスライド、ピッチデック、企画書、提案書、稟議資料、1枚ペーパー（ワンページャー）、
+  またはPDF印刷用HTMLスライドの作成・デザイン・修正・推敲を求めた際に必ず本スキル（AINativeSlide）を起動する。
+  16:9ワイド、4:3標準、A4横（印刷・稟議用）、A4縦（企画書用）の全比率に対応し、単一HTML（Single-File HTML）、
+  完全インラインSVGチャート、Python自動品質検証スクリプト（verify_slide.py）による自律修正ループを実行する。
+  (Triggers: presentation slides, pitch deck, proposal, HTML slides, A4 landscape, 1-Pager)
 ---
 
-# AINativeSlide Agent Execution Contract
+# AINativeSlide エージェント実行仕様書（Agent Execution Contract）
 
-Execute slide generation strictly following this deterministic sequence. Do NOT deviate.
+本スキルが呼び出された場合、AIエージェントは以下の決定論的シーケンスを順序厳守で実行すること。逸脱は一切認められない。
 
 ---
 
-## 1. MANDATORY EXECUTION SEQUENCE
+## 1. 必須実行シーケンス（MANDATORY SEQUENCE）
 
 ```
-[Step 1: Dynamic Grill] ➔ [Step 2: Read Base Skeleton] ➔ [Step 3: Generate HTML] ➔ [Step 4: Verify & Self-Repair] ➔ [Step 5: Deliver]
+[手順1: 必須Grill＆構成案承認] ➔ (ユーザー承認) ➔ [手順2: ベース骨格読込] ➔ [手順3: 単一HTML生成] ➔ [手順4: 自律検証・自動修復] ➔ [手順5: 納品・反復対応]
 ```
 
-### Step 1: Dynamic Smart Grill (Cognitive Alignment)
-Before generating code, check if the prompt specifies these core parameters:
-1. **Purpose & Audience**: Executive decision / Team internal / Customer pitch / Printed proposal
-2. **Aspect Ratio**:
-   - `16:9 Widescreen` (`w-[1280px] h-[720px]` / `@page { size: 16in 9in; }`) [Default for screen presentation]
-   - `4:3 Standard` (`w-[1024px] h-[768px]` / `@page { size: 4in 3in; }`)
-   - `A4 Landscape` (`w-[1188px] h-[840px]` / `@page { size: A4 landscape; }`) [Recommended for printed proposals/稟議]
-   - `A4 Portrait` (`w-[840px] h-[1188px]` / `@page { size: A4 portrait; }`) [Recommended for 1-Pagers/企画書]
-3. **Slide Count & Outline**: 3-slide summary / 5-slide standard / Custom
-4. **Speaker Script**: Whether to generate a companion Markdown speech script (`speech_script.md`)
+### 手順1: 必須スマートGrill ＆ 構成案の事前承認（スキップ厳禁・必ず1往復実施）
+**※いかに依頼文が詳細であっても、いきなりHTMLコード生成を開始してはならない。必ずユーザーと1往復の壁打ちを行い、構成案の承認を得てから生成を開始すること。**
 
-> **Decision Rule**:
-> - If all parameters are already clear or inferable from context, **SKIP questions entirely**, state your inferred plan in 1 line, and immediately proceed to Step 2.
-> - Only ask multiple-choice questions for truly ambiguous points.
+初回応答では、以下の項目を整理した「スライド構成提案書」を提示し、ユーザーに確認・承認を求める：
+1. **スライドタイトル ＆ 概要**: 目的・ターゲット読者層の明確化
+2. **アスペクト比・用紙サイズ**:
+   - `16:9 ワイド` (`w-[1280px] h-[720px]` / `@page { size: 16in 9in; }`)【画面投影・Web会議の標準】
+   - `4:3 標準` (`w-[1024px] h-[768px]` / `@page { size: 4in 3in; }`)【従来型プロジェクター】
+   - `A4 横（Landscape）` (`w-[1188px] h-[840px]` / `@page { size: A4 landscape; }`)【印刷配布・役員稟議資料に推奨】
+   - `A4 縦（Portrait）` (`w-[840px] h-[1188px]` / `@page { size: A4 portrait; }`)【1枚企画書・要約ペーパーに推奨】
+3. **全スライドの構成案**:
+   - スライドごとの見出し、要点、採用するレイアウトパターン（対比 / マトリクス / SVGチャート / カード等）
+4. **AI生成画像の使用要否 ＆ テイスト選択（リアル系 / 漫画系 / 3Dアイコン系 / フラット系）**:
+   - [A] 不要（CSSカード・アイコン図解で論理表現）
+   - [B] リアル・実写・シネマティック系（重厚な役員ピッチ・企業ビジョン向け）
+   - [C] 漫画・コミック・アニメ系（親しみやすい現場研修・ストーリー仕立て向け）
+   - [D] 3D立体アイコン・アイソメトリック系（システム構成・データ連携向け）
+   - [E] フラットベクターイラスト系（洗練された2Dミニマル・サービス紹介向け）
+   - ※画像を採用する場合、選択されたテイストに沿った**各スライド専用の具体的なプロンプト**を明示する。
+   - ※画像生成の鉄則: 1枚の画像をトリミングして使い回すことは禁止。必ずスライドごとに1枚ずつ個別生成する。
+5. **発表用台本文書（Markdown: `speech_script.md`）の同時生成要否**
 
-### Step 2: Read Base Skeleton
-- **MANDATORY**: You MUST inspect [resources/template_base.html](./resources/template_base.html) using `view_file` to obtain the verified header toolbar, modal, and script engine.
-- If corporate branding is requested, check [resources/design_templates/corporate_default.html](./resources/design_templates/corporate_default.html).
+> **絶対遵守ゲート**:
+> ユーザーから構成案に対する「承認」「OK」「これで進めて」等の合意を得るまで、手順2（HTMLコード生成）を開始してはならない。
 
-### Step 3: Generate Single-File HTML
-Assemble the complete, self-contained HTML (`<!DOCTYPE html>...</html>`) adhering to these rules:
-1. **Header Toolbar**: Keep intact with `[📝 編集: ON]`, `[📋 指示をコピー]`, `[▶ 全画面発表]`, `[🖨 PDF保存]`.
-2. **Slide Box Model**: Every slide MUST have class `slide` with fixed dimensions and `overflow-hidden`.
-3. **Meta Box**: Every `<section class="slide ...">` MUST be directly followed by `<div class="slide-meta-box no-print ...">` with identical slide numbering.
-4. **Content Area**: Wrap slide body in `<div class="ai-content">` using semantic elements (`h2`, `h3`, `p`, `ul`, `li`). Use Tailwind `line-clamp` to eliminate text overflow risk.
-5. **Inline SVG**: Render charts and graphics using pure inline `<svg>`. Do NOT load external chart libraries.
-6. **Localization**: Set `<html lang="ja">` or `<html lang="en">` based on user prompt language. The template script auto-localizes toolbar labels and placeholders.
+### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
+- **必須手順**: ユーザーの承認を得た後、必ず `view_file` ツールを用いて [resources/template_base.html](./resources/template_base.html) を読み込み、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして取得すること。
+- 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[resources/design_templates/corporate_default.html](./resources/design_templates/corporate_default.html) を参照すること。
 
-### Step 4: Autonomous Verification & Self-Repair Loop
-Before presenting the HTML to the user, run the automated quality checker:
+### 手順3: 単一HTML（Single-File HTML）の生成規則
+自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：
+1. **固定ヘッダーツールバー**: `[📝 編集: ON]`, `[📋 指示をコピー]`, `[▶ 全画面発表]`, `[🖨 PDF保存]` の4ボタン構造をそのまま維持する。
+2. **堅牢スライドボックス**: 全スライド要素は `<section class="slide ...">` とし、固定幅・固定高・`overflow-hidden` を付与する。
+3. **メタ情報枠の 1:1 配置**: すべての `<section class="slide ...">` の直下に、同番の `<div class="slide-meta-box no-print ...">` を必ず1つ対で配置する。
+4. **文字溢れの物理的抑止**: 本文コンテンツは `<div class="ai-content">` で囲み、見出し（`h2`, `h3`）、段落（`p`）、箇条書き（`ul`, `li`）を使用する。Tailwindの `line-clamp` により枠外突き抜けを完全に遮断する。
+5. **画像生成・配置の厳格ルール**:
+   - 画像を配置する場合、**必ず1スライドにつき1枚ずつ個別に画像を生成し、トリミングせずにそのスライド専用の画像として使用すること**（1枚の画像をトリミングして複数スライドに使い回す妥協は厳禁）。
+   - ※ただし、ユーザーから参考画像や素材画像が直接提供された場合は、その画像を優先して配置・活用する。
+6. **完全インラインSVG**: グラフやチャートは外部JSライブラリ（Chart.js等）をロードせず、純粋なインライン `<svg>` で描画する。
+7. **言語の自動同期**: 依頼文が日本語の場合は `<html lang="ja">`、英語の場合は `<html lang="en">` を設定する。テンプレート内のJSがヘッダー文言やプレースホルダーを自動的に完全同期する。
+
+### 手順4: 自律品質検証 ＆ 自動修復ループ（Self-Repair Loop）
+HTMLコードをユーザーに提示する前に、必ず検証スクリプトを実行して静的テストを実施すること：
 ```bash
-python3 scripts/verify_slide.py <path_to_slide.html>
+python3 scripts/verify_slide.py <スライドHTMLのパス>
 ```
-- **If Exit Code is 0**: Verification passed. Proceed to Step 5.
-- **If Exit Code is 1**:
-  1. Parse the output `[ERROR]` messages (e.g., slide/meta-box count mismatch, missing IDs, character overflow > 700 chars).
-  2. Autonomously fix the HTML file without asking the user.
-  3. Re-run `python3 scripts/verify_slide.py` until Exit Code 0 is achieved.
-  4. Never show raw test failures or debugging churn to the user.
+- **終了コード 0 の場合**: テスト合格。手順5へ進む。
+- **終了コード 1 の場合**:
+  1. 出力された `[ERROR]` メッセージ（スライド数とメタボックス数の不一致、IDの欠落、700文字超過のテキスト溢れ等）を解析する。
+  2. ユーザーにエラーを報告せず、AIが自律的にHTMLファイルを修正する。
+  3. 終了コードが 0 になるまで再テストを繰り返す。
+  4. テストエラーやデバッグ過程のログをユーザーに見せてはならない。
 
-### Step 5: Deliver Output & Handle Iterations
-- Output the clean Single-File HTML inside a single markdown code block (`html`).
-- If requested in Step 1, output the companion speaker script (`speech_script.md`) referencing [resources/speech_script_example.md](./resources/speech_script_example.md).
-- **On User Feedback (Refinement)**:
-  - If the user provides comments via the "📋 指示をコピー" clipboard button, preserve unmentioned slides 100% and edit only targeted slides.
+### 手順5: 成果物の提示 ＆ 反復推敲の処理
+- 完成した完全なHTMLを、単一のコードブロック（```html ... ```）で出力する。
+- 手順1で台本生成を希望された場合は、[resources/speech_script_example.md](./resources/speech_script_example.md) に準拠した台本文書（`speech_script.md`）を併せて出力する。
+- **ユーザーからの反復フィードバック対応**:
+  - ユーザーが「📋 指示をコピー」から修正要望テキストを貼り付けて指示してきた場合、指示のないスライドはユーザーによる推敲内容を100%維持し、指示のあったスライドのみを的確に改修すること。
 
 ---
 
-## 2. NEGATIVE CONSTRAINTS (STRICTLY FORBIDDEN)
+## 2. 絶対禁止事項（STRICTLY FORBIDDEN）
 
-1. **NEVER** write arbitrary HTML scaffolding from scratch; ALWAYS base it on [resources/template_base.html](./resources/template_base.html).
-2. **NEVER** introduce external JS libraries (Chart.js, D3, Reveal.js, Mermaid CDN, Vue, React).
-3. **NEVER** include an in-slide HTML download button or blob download script (`downloadHtmlWithComments` is deleted).
-4. **NEVER** violate the 1:1 match between `<section class="slide">` and `.slide-meta-box`.
-5. **NEVER** remove or alter the zero-margin print CSS:
+1. **未承認でのコード生成開始の禁止**: 手順1のGrillで構成案・画像プロンプトを提示し、ユーザーの承認を得る前にHTMLコードを出力してはならない。
+2. **画像のトリミング使い回し禁止**: 1枚の生成画像をCSSトリミングして複数スライドに使い回してはならない。画像枠のあるスライドには、必ず1スライドにつき1枚ずつ個別に画像を生成し、トリミングなしで使用すること（ユーザー提供画像を除く）。
+3. **ゼロからのHTML独自記述の禁止**: 必ず [resources/template_base.html](./resources/template_base.html) を複製・ベースとすること。
+4. **外部重量級JSライブラリの読み込み禁止**: Chart.js, D3, Reveal.js, Mermaid CDN, React, Vue 等を勝手に読み込んではならない。
+5. **スライド内HTMLダウンロードボタンの再導入禁止**: `downloadHtmlWithComments` などのブラウザ内Blob保存ボタンを設置してはならない（AI環境自体の保存機能および「指示をコピー」に集約済み）。
+6. **スライド枠とメタボックスの 1:1 不一致の禁止**: `.slide` の数と `.slide-meta-box` の数は常に完全一致させること。
+7. **余白ゼロ印刷CSSの破壊禁止**: 以下の印刷用CSSブロックを改変・削除してはならない：
    ```css
    @media print {
      @page { margin: 0; }
@@ -83,15 +98,28 @@ python3 scripts/verify_slide.py <path_to_slide.html>
      .no-print { display: none !important; }
    }
    ```
-6. **NEVER** exceed 600–700 Japanese characters per horizontal slide (or 1000 characters for A4 portrait).
+8. **テキスト許容量超過の禁止**: 横長スライドではスライド1枚あたり600〜700文字（A4縦の場合は約1,000文字）を超えてはならない。
 
 ---
 
-## 3. DIMENSIONS & PRINT FORMULAS REFERENCE
+## 3. 用紙サイズ・アスペクト比 寸法仕様一覧
 
-| Format | Target Use Case | Screen Class | Print CSS `@page` |
+| 形式・サイズ | 主な用途・利用シーン | 画面表示クラス | 印刷用CSS `@page` |
 | :--- | :--- | :--- | :--- |
-| **16:9 Widescreen** | Web presentations, modern monitors | `w-[1280px] h-[720px]` | `@page { size: 16in 9in; margin: 0; }` |
-| **4:3 Standard** | Legacy projectors, academic talks | `w-[1024px] h-[768px]` | `@page { size: 4in 3in; margin: 0; }` |
-| **A4 Landscape** | Office printed proposals, executive memos (稟議) | `w-[1188px] h-[840px]` | `@page { size: A4 landscape; margin: 0; }` |
-| **A4 Portrait** | Amazon-style 1-Pagers, executive summaries | `w-[840px] h-[1188px]` | `@page { size: A4 portrait; margin: 0; }` |
+| **16:9 ワイド** | Web会議プレゼン、PCディスプレイ投影 | `w-[1280px] h-[720px]` | `@page { size: 16in 9in; margin: 0; }` |
+| **4:3 標準** | 従来型プロジェクター、学術発表 | `w-[1024px] h-[768px]` | `@page { size: 4in 3in; margin: 0; }` |
+| **A4 横（Landscape）** | オフィス複合機での印刷配布資料、役員稟議・企画提案書 | `w-[1188px] h-[840px]` | `@page { size: A4 landscape; margin: 0; }` |
+| **A4 縦（Portrait）** | Amazon流 1枚ペーパー（1-Pager）、エグゼクティブサマリー | `w-[840px] h-[1188px]` | `@page { size: A4 portrait; margin: 0; }` |
+
+---
+
+## 4. 詳細リファレンス（段階的開示: Progressive Disclosure）
+
+必要に応じて以下のリファレンスを `view_file` で参照し、詳細な設計仕様を取得すること：
+
+- [references/grill-workflow.md](./references/grill-workflow.md): Grill詳細フロー、構成提案書テンプレート、台本文書仕様
+- [references/ratio-and-print-specs.md](./references/ratio-and-print-specs.md): 各比率の寸法計算、余白ゼロ印刷CSS、解像度換算
+- [references/ai-concept-imagery.md](./references/ai-concept-imagery.md): 4大テイスト別プロンプト構文、D&D差し替えJS仕様
+- [references/design-system.md](./references/design-system.md): タイポグラフィ階層、堅牢ボックスモデル、カラーパレット
+- [references/slide-patterns.md](./references/slide-patterns.md): 構図パターン集（対比表、マトリクス、純粋インラインSVGチャート）
+

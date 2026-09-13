@@ -8,19 +8,42 @@
 
 ビジネススライドに馴染む洗練された画像を生成するために、以下の要素を英語プロンプトに必ず含めます。
 
-### ① スタイルの指定（過剰なフォトリアルや稚拙なイラストを避ける）
-- **3D Isometric Minimalist**: 等角投影の立体モデル。アーキテクチャやデータの流れに最適。
-- **Abstract Glassmorphism & Neon Glow**: 暗めの背景に半透明ガラスと光のライン。テック・AI・サイバーセキュリティに最適。
-- **Clean Vector / Corporate Flat Art**: ミニマルで知的。課題対比やビジネスシーンに最適。
-- **Cinematic Conceptual 3D**: 重厚感と未来感。表紙やビジョン提示に最適。
+### ① 4大スタイル（テイスト）の選択肢とプロンプト設計規約
+
+プレゼンの目的やターゲット読者層に合わせて、以下の4つの主要テイストから選択します。
+
+1. **リアル・実写・シネマティック系 (Photorealistic / Cinematic 3D)**
+   - **特徴**: 高精細な実写写真風、スタジオライティング、重厚なビジネス空間・人物・未来都市。
+   - **最適な用途**: 役員・経営会議決裁、投資家ピッチ、重厚なビジョン提示。
+   - **プロンプト構文**: `Photorealistic cinematic shot of [主題], dramatic studio lighting, shallow depth of field, high-end corporate aesthetic, 8k resolution, clean composition, no typography, no letters, no text`
+   - **例**: `Photorealistic cinematic shot of a modern enterprise executive board reviewing holographic real-time business telemetry, soft ambient lighting, ultra-sharp detail, clean composition, no text`
+
+2. **漫画・コミック・アニメ系 (Manga / Anime / Comic Art)**
+   - **特徴**: 親しみやすい線画・ストーリー調、表情豊かなキャラクター、感情や課題の共感を誘う表現。
+   - **最適な用途**: 社内研修、現場向け業務改善、採用説明会、ストーリー仕立ての課題・解決策提示。
+   - **プロンプト構文**: `Modern Japanese manga comic art style, clean expressive line art, vibrant cel-shaded color palette, relatable business storytelling scene of [主題], modern corporate anime aesthetic, no typography, no letters, no text`
+   - **例**: `Modern Japanese manga comic art style, clean expressive line art, vibrant cel-shaded color palette, office team collaborating happily around a simplified smart workflow board, no text`
+
+3. **3D立体アイコン・アイソメトリック系 (3D Isometric / Minimalist 3D Icons)**
+   - **特徴**: 粘土・ガラス・プラスチック質感の等角投影3Dモデル、抽象的で洗練された形状。
+   - **最適な用途**: システム構成、データパイプライン、クラウド連携、機能一覧の視覚化。
+   - **プロンプト構文**: `Minimalist 3D isometric illustration of [主題], smooth clay and frosted glass textures, glowing tech blue and cyan neon accents, dark navy background, clean isometric perspective, 8k render, no typography, no letters, no text`
+   - **例**: `Minimalist 3D isometric illustration of fragmented glowing data cubes flowing through crystalline pipelines and unifying into a central radiant prism, deep navy background, sleek glassmorphism, no text`
+
+4. **フラットベクター・ビジネスイラスト系 (Flat Vector / Corporate Art)**
+   - **特徴**: シンプルな2D線画・面構成、Notion風やSaaSウェブサイト風の洗練されたミニマルアート。
+   - **最適な用途**: サービス紹介、対比図、マーケティング資料、クイック企画書。
+   - **プロンプト構文**: `Clean modern flat vector illustration of [主題], minimalist corporate editorial art, bold geometry, elegant subtle color palette, generous negative space, no typography, no letters, no text`
+   - **例**: `Clean modern flat vector illustration of interconnected modular gears and analytical graphs, elegant indigo and slate palette, minimalist corporate style, no text`
 
 ### ② 文字入れ禁止指示 (No Text Rule)
 - AI画像生成モデル（DALL-E 3, Midjourney, Imagen 等）に文字を描かせると崩れたり誤字になりがちです。
 - **必ず `clean composition, no typography, no letters, no text watermark` を付加** し、文字はHTML側のTailwindで重ねるか隣接配置します。
 
-### ③ プロンプトのテンプレート例
-> **テーマ: サイロ化されたデータが1つのコアへ統合される抽象概念**  
-> `Abstract 3D isometric visualization of fragmented glowing data cubes flowing through crystalline pipelines and unifying into a central radiant prism. Dark navy background, glowing violet and cyan neon accents, sleek glassmorphism textures, clean composition, minimalist tech aesthetic, 8k render, no text, no letters.`
+### ③ 1スライド1枚の個別生成原則（トリミング使い回しの厳禁）
+- 1枚の大きな概念画像を生成し、CSSのトリミング（`object-fit: cover` 等）で複数のスライドに分割・使い回す手抜きは禁止します。
+- 画像を配置するスライドには、**必ず1スライドにつき1枚ずつ個別に専用プロンプトで画像を生成し、トリミングなしで配置**します。
+- ※ただし、ユーザーからすでに参考画像や製品スクリーンショット等の素材が直接提供された場合は、その画像を優先して配置します。
 
 ---
 
