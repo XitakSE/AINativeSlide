@@ -40,36 +40,44 @@
 - AI画像生成モデル（DALL-E 3, Midjourney, Imagen 等）に文字を描かせると崩れたり誤字になりがちです。
 - **必ず `clean composition, no typography, no letters, no text watermark` を付加** し、文字はHTML側のTailwindで重ねるか隣接配置します。
 
-### ③ 1スライド1枚の個別生成原則（トリミング使い回しの厳禁）
-- 1枚の大きな概念画像を生成し、CSSのトリミング（`object-fit: cover` 等）で複数のスライドに分割・使い回す手抜きは禁止します。
-- 画像を配置するスライドには、**必ず1スライドにつき1枚ずつ個別に専用プロンプトで画像を生成し、トリミングなしで配置**します。
-- ※ただし、ユーザーからすでに参考画像や製品スクリーンショット等の素材が直接提供された場合は、その画像を優先して配置します。
+### ④ アスペクト比の事前同期による完全ノーカット原則（Zero-Cropping Rule）
+- 画像生成プロンプトには、スライドコンテナの表示比率に合わせたアスペクト比を必ず明記します：
+  - **16:9 ワイド（左右スプリット / 全画面）**: `widescreen 16:9 composition, landscape aspect ratio`
+  - **4:3 標準**: `standard 4:3 composition, landscape aspect ratio`
+  - **A4 横 / A4 縦**: `balanced composition matching container ratio`
+- コンテナ枠と生成画像のアスペクト比を事前に完全一致させることで、CSSトリミング（`object-cover` による上下左右の切り落とし）を一切発生させず、生成された構図を100%そのまま美しく表示します。
+
+### ⑤ デッキ全体の一貫性を保つ「シードスタイル記述子（Seed Style）」
+複数スライドで画像を生成する際、画風のブレを防ぐため、全スライドの画像プロンプトに共通のシードスタイル（基調色・照明・質感）を一貫して注入します：
+- 例（3Dアイソメトリックの場合）:
+  `[各スライド固有の主題], consistent sleek 3D isometric style, deep slate navy background (#0f172a), indigo (#6366f1) and sky blue glowing accents, frosted glass textures, clean composition, no text, no letters`
 
 ---
 
-## 2. HTMLスライド内での画像コンテナ仕様
+## 2. HTMLスライド内での画像コンテナ仕様（CSP完全適合・外部CDN排除）
 
-画像のアスペクト比を固定し、文字との重なりや印刷時の崩れを防ぐためのCSS/Tailwind設計です。
+最新のAIサンドボックスや企業環境の厳格なCSP（Content Security Policy）に適合するため、外部画像URL（Unsplash等）への依存を排除し、AIが生成したセッションアセット（またはData URI）を直接 `<img src="...">` に配置します。
 
-### パターン A: 左右スプリット（左: AI画像 / 右: 概念解説）
+### パターン A: 左右スプリット（左: AI生成画像 / 右: 概念解説）
 ```html
 <div class="grid grid-cols-2 gap-8 items-center my-auto">
-  <!-- AI画像コンテナ (ドラッグ＆ドロップ対応) -->
-  <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700/50 shadow-xl bg-slate-900 group">
-    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" 
-         alt="AI Concept Art" 
-         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent"></div>
+  <!-- AIネイティブ生成画像コンテナ (アスペクト比同期 16:9 / ドラッグ＆ドロップ再差し替え対応) -->
+  <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700/60 shadow-xl bg-slate-900 group">
+    <!-- AIが生成した画像アセットを直接埋め込み（Zero-Cropping: アスペクト比完全一致） -->
+    <img src="./images/slide_3_concept.png" 
+         alt="自律型データハブの概念図" 
+         class="w-full h-full object-cover transition-transform duration-500">
+    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>
     <span class="absolute bottom-3 left-3 text-[10px] font-mono text-slate-300 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-700 no-print">
-      画像をドラッグ＆ドロップで差し替え
+      画像をドラッグ＆ドロップで再差し替え可能
     </span>
   </div>
 
   <!-- 右側テキスト解説 -->
   <div class="flex flex-col justify-center">
-    <span class="text-xs font-bold text-brand-600 uppercase tracking-wider mb-2">Concept Vision</span>
-    <h3 class="text-2xl font-extrabold text-slate-900 mb-4">自律型データハブ構想</h3>
-    <p class="text-sm text-slate-600 leading-relaxed mb-4">...</p>
+    <span class="text-xs font-bold text-brand-400 uppercase tracking-wider mb-2">Concept Vision</span>
+    <h3 class="text-2xl font-extrabold text-slate-100 mb-4">自律型データハブ構想</h3>
+    <p class="text-sm text-slate-400 leading-relaxed mb-4">...</p>
   </div>
 </div>
 ```
@@ -78,10 +86,10 @@
 
 ## 3. ブラウザ直接画像差し替え機能（Drag & Drop JS）
 
-職場のプレーンなブラウザ環境でも、デスクトップから画像をスライド上の枠にドラッグ＆ドロップするだけで、その場で画像が差し替わる軽量スクリプトを `template_base.html` に標準搭載します。
+納品後にユーザー自身が別の画像へ手動で差し替えたい場合のために、ブラウザ上でローカル画像を枠にドラッグ＆ドロップするだけで即時反映される軽量スクリプトを `template_base.html` に標準搭載しています。
 
 ```javascript
-// 画像ドラッグ＆ドロップ差し替えスクリプト
+// 画像ドラッグ＆ドロップ再差し替えスクリプト
 document.addEventListener('DOMContentLoaded', () => {
   const dropzones = document.querySelectorAll('.image-dropzone');
   
@@ -114,5 +122,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 ```
-- **特徴**: サーバー通信なし。ローカルの `FileReader` で即座に DataURL に変換して `<img src="...">` を更新。
-- 印刷（`window.print()`）時にもそのまま高解像度でPDFに埋め込まれます。
+- **特徴**: 外部通信ゼロ。ブラウザのローカル `FileReader` で即座に DataURL に変換して差し替え。
+- 印刷（`window.print()`）時にも高解像度のままPDFへ埋め込まれます。
