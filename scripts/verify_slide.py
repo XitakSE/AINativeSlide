@@ -186,7 +186,8 @@ def main():
         'deckSlideCountText',
         'toggleEditBtn',
         'copyCommentsBtn',
-        'presentationModal'
+        'presentationModal',
+        'selectionToolbar'
     ]
 
     for rid in required_ids:
@@ -212,7 +213,8 @@ def main():
         'toggleEditMode',
         'startPresentation',
         'stopPresentation',
-        'copySlideComments'
+        'copySlideComments',
+        'formatSelection'
     ]
 
     for fn in required_js_functions:

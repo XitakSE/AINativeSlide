@@ -94,7 +94,17 @@ AIが長文を出力してもレイアウトが崩れないための物理的な
 - **終了 (`Esc` キー)**: いつでもワンキーで通常の編集モードへ安全に復帰します。
 
 ### 5. ブラウザ直接推敲 & 編集モードトグル（OFF時選択禁止）
-- **直接編集 & 選択時ミニ書式バー**: 編集モードON時はスライド上のテキストをクリックして直接推敲可能。範囲選択時に太字・フォントサイズ（個別調整）・マーカー・書式解除が出現します。
+- **直接編集 & 選択時ミニ書式バー**: 編集モードON時はスライド上のテキストをクリックして直接推敲可能。範囲選択時に太字・フォントサイズ（個別調整）・カラー選択・マーカー・書式解除が出現します。
+- **選択時ミニ書式バーのカラー設定変更（カスタマイズ）**:
+  ミニ書式バーで選べる文字色（デフォルト: Black `#0f172a`, Blue, Green, Amber, Red の5色）や長方形マーカー（デフォルト: 黄色 `#fef08a`）は、HTML内の `<div id="selectionToolbar" ...>` にある `<button>` の引数（HEX値）を書き換えるだけで、自社CIカラーや任意の配色に簡単に変更・追加できます：
+  ```html
+  <!-- 文字カラーの変更: formatSelection('color', 'HEX値') と bg-[HEX値] を指定 -->
+  <button onclick="formatSelection('color', '#1e3a8a')" title="Navy" class="w-3.5 h-3.5 rounded-full bg-[#1e3a8a] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+
+  <!-- マーカーの追加・変更: formatSelection('highlight', 'HEX値') と bg-[HEX値] を指定（文字なし長方形） -->
+  <button onclick="formatSelection('highlight', '#fed7aa')" title="マーカー (橙)" class="w-5 h-3.5 rounded-sm bg-[#fed7aa] border border-orange-300 hover:scale-110 transition-transform shadow-sm"></button>
+  ```
+  ※全社共通で恒久適用したい場合は、テンプレート骨格（`resources/template_base.html`）の該当箇所を変更してください。
 - **編集モードOFF（閲覧専用）**: ヘッダーのボタンまたはキーボードの **`E`** キーで切り替え。OFF時は `user-select: none; pointer-events: none;` により、スライド上の各要素がそもそも選択・クリックできなくなり、誤操作を防ぎます。
 
 ### 6. 企業公式デザインテンプレート（CI/VI統一・自社PPTX連携）

@@ -87,7 +87,17 @@ Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard
 - **Instant Exit (`Esc` key)**: Quickly return to the standard editing mode at any time.
 
 ### 5. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)
-- **Direct Editing & Floating Mini Toolbar**: In edit mode (ON), click any text on the slide to edit directly. Selecting text reveals a floating format bar for bold, font sizing (per selection), highlighting, and clearing format.
+- **Direct Editing & Floating Mini Toolbar**: In edit mode (ON), click any text on the slide to edit directly. Selecting text reveals a floating format bar for bold, font sizing (per selection), color picker, highlighting, and clearing format.
+- **Customizing Toolbar Color Choices**:
+  The text colors (default: Black `#0f172a`, Blue, Green, Amber, Red) and highlighter (default: Yellow `#fef08a` rectangle) can be easily adjusted to match your company's corporate branding (CI/VI) by modifying the `<button>` arguments (HEX values) inside `<div id="selectionToolbar" ...>`:
+  ```html
+  <!-- Change text color: specify formatSelection('color', 'HEX') and bg-[HEX] -->
+  <button onclick="formatSelection('color', '#1e3a8a')" title="Navy" class="w-3.5 h-3.5 rounded-full bg-[#1e3a8a] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+
+  <!-- Add or change highlighter: specify formatSelection('highlight', 'HEX') and bg-[HEX] (textless rectangle) -->
+  <button onclick="formatSelection('highlight', '#fed7aa')" title="Orange Marker" class="w-5 h-3.5 rounded-sm bg-[#fed7aa] border border-orange-300 hover:scale-110 transition-transform shadow-sm"></button>
+  ```
+  *Tip: To apply these colors permanently across all future decks, modify the `#selectionToolbar` inside `resources/template_base.html`.*
 - **Edit Mode OFF (Read-Only)**: Toggle via header button or **`E`** key. When OFF, `user-select: none; pointer-events: none;` disables text selection and clicks on slide content entirely, preventing accidental text modification during review.
 
 ### 6. Corporate Design Templates (CI/VI Compliance & PPTX Migration)

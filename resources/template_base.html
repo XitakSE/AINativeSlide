@@ -289,16 +289,15 @@
     <div class="w-px h-3.5 bg-slate-700"></div>
     <!-- 選択文字カラー -->
     <div class="flex items-center gap-1">
-      <button onclick="formatSelection('color', '#6366f1')" title="Indigo" class="w-3.5 h-3.5 rounded-full bg-[#6366f1] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+      <button onclick="formatSelection('color', '#0f172a')" title="Black" class="w-3.5 h-3.5 rounded-full bg-[#0f172a] ring-1 ring-white/30 hover:scale-125 transition-transform"></button>
       <button onclick="formatSelection('color', '#2563eb')" title="Blue" class="w-3.5 h-3.5 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
       <button onclick="formatSelection('color', '#10b981')" title="Green" class="w-3.5 h-3.5 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
       <button onclick="formatSelection('color', '#f59e0b')" title="Amber" class="w-3.5 h-3.5 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
       <button onclick="formatSelection('color', '#ef4444')" title="Red" class="w-3.5 h-3.5 rounded-full bg-[#ef4444] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
     </div>
     <div class="w-px h-3.5 bg-slate-700"></div>
-    <!-- 蛍光ペンハイライト -->
-    <button onclick="formatSelection('highlight', '#fef08a')" title="黄色マーカー" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-amber-300 text-slate-900 hover:bg-amber-200 transition-colors">蛍光黄</button>
-    <button onclick="formatSelection('highlight', '#a7f3d0')" title="緑色マーカー" class="px-1.5 py-0.5 rounded text-[11px] font-bold bg-emerald-300 text-slate-900 hover:bg-emerald-200 transition-colors">蛍光緑</button>
+    <!-- 蛍光ペンハイライト (長方形アイコン・文字なし) -->
+    <button onclick="formatSelection('highlight', '#fef08a')" title="マーカー (黄)" class="w-5 h-3.5 rounded-sm bg-[#fef08a] border border-amber-400/80 hover:scale-110 transition-transform shadow-sm"></button>
     <!-- リセット -->
     <button onclick="clearSelectionFormat()" title="書式解除" class="w-5 h-5 flex items-center justify-center text-xs hover:bg-slate-800 rounded text-slate-400 hover:text-white ml-0.5">✕</button>
   </div>
@@ -517,10 +516,6 @@
         span.style.color = value;
       } else if (action === 'highlight') {
         span.style.backgroundColor = value;
-        span.style.color = '#0f172a';
-        span.style.padding = '0.1em 0.35em';
-        span.style.borderRadius = '0.25em';
-        span.style.fontWeight = '600';
       }
 
       try {

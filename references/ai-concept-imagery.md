@@ -6,7 +6,11 @@
 
 ## 1. 抽象概念を伝えるAI画像プロンプト設計の原則
 
-ビジネススライドに馴染む洗練された画像を生成するために、以下の要素を英語プロンプトに必ず含めます。
+ビジネススライドに馴染む洗練された画像を生成するために、以下の要素をプロンプトに含めます。
+
+### ⓪ 依頼言語へのプロンプト適応規約（Language Adaptation Rule）
+- **日本語での依頼時**: ユーザーのレビュー負荷を下げ、意図通りの構図を直感的に合意できるよう、ビジュアル方針の画像生成プロンプトは必ず**日本語**で記述・提示します（Midjourney, DALL-E 3, Imagen 等の日本語入力に対応）。
+- **英語での依頼時（または明示的な英語指定時）**: 英語構文を使用します。
 
 ### ① 4大スタイル（テイスト）の選択肢とプロンプト設計規約
 
@@ -15,30 +19,34 @@
 1. **リアル・実写・シネマティック系 (Photorealistic / Cinematic 3D)**
    - **特徴**: 高精細な実写写真風、スタジオライティング、重厚なビジネス空間・人物・未来都市。
    - **最適な用途**: 役員・経営会議決裁、投資家ピッチ、重厚なビジョン提示。
-   - **プロンプト構文**: `Photorealistic cinematic shot of [主題], dramatic studio lighting, shallow depth of field, high-end corporate aesthetic, 8k resolution, clean composition, no typography, no letters, no text`
-   - **例**: `Photorealistic cinematic shot of a modern enterprise executive board reviewing holographic real-time business telemetry, soft ambient lighting, ultra-sharp detail, clean composition, no text`
+   - **日本語プロンプト構文**: `[主題]の実写映画風シネマティックショット、ドラマチックなスタジオ照明、浅い被写界深度、洗練された企業美学、超高解像度、すっきりした構図、文字入れなし、テキストなし、タイポグラフィなし`
+   - **英語プロンプト構文**: `Photorealistic cinematic shot of [主題], dramatic studio lighting, shallow depth of field, high-end corporate aesthetic, 8k resolution, clean composition, no typography, no letters, no text`
+   - **例（日本語）**: `最新の企業役員会がホログラムでリアルタイムの経営数値を視覚化して審議している実写映画風シネマティックショット、柔らかい環境光、超高精細、すっきりした構図、文字入れなし、テキストなし`
 
 2. **漫画・コミック・アニメ系 (Manga / Anime / Comic Art)**
    - **特徴**: 親しみやすい線画・ストーリー調、表情豊かなキャラクター、感情や課題の共感を誘う表現。
    - **最適な用途**: 社内研修、現場向け業務改善、採用説明会、ストーリー仕立ての課題・解決策提示。
-   - **プロンプト構文**: `Modern Japanese manga comic art style, clean expressive line art, vibrant cel-shaded color palette, relatable business storytelling scene of [主題], modern corporate anime aesthetic, no typography, no letters, no text`
-   - **例**: `Modern Japanese manga comic art style, clean expressive line art, vibrant cel-shaded color palette, office team collaborating happily around a simplified smart workflow board, no text`
+   - **日本語プロンプト構文**: `現代の日本のビジネス漫画・コミック調アートスタイル、明瞭で表情豊かな線画、鮮やかなセル画風カラーパレット、[主題]の共感を呼ぶビジネスシーン、文字入れなし、吹き出し文字なし、テキストなし`
+   - **英語プロンプト構文**: `Modern Japanese manga comic art style, clean expressive line art, vibrant cel-shaded color palette, relatable business storytelling scene of [主題], modern corporate anime aesthetic, no typography, no letters, no text`
+   - **例（日本語）**: `現代の日本のビジネス漫画スタイル、明瞭で表情豊かな線画、スマートな業務改善ボードの前でチームメンバーが笑顔でハイタッチしている親しみやすいオフィスシーン、文字入れなし、テキストなし`
 
 3. **3D立体アイコン・アイソメトリック系 (3D Isometric / Minimalist 3D Icons)**
    - **特徴**: 粘土・ガラス・プラスチック質感の等角投影3Dモデル、抽象的で洗練された形状。
    - **最適な用途**: システム構成、データパイプライン、クラウド連携、機能一覧の視覚化。
-   - **プロンプト構文**: `Minimalist 3D isometric illustration of [主題], smooth clay and frosted glass textures, glowing tech blue and cyan neon accents, dark navy background, clean isometric perspective, 8k render, no typography, no letters, no text`
-   - **例**: `Minimalist 3D isometric illustration of fragmented glowing data cubes flowing through crystalline pipelines and unifying into a central radiant prism, deep navy background, sleek glassmorphism, no text`
+   - **日本語プロンプト構文**: `[主題]のミニマルな3Dアイソメトリックイラスト、滑らかなフロストガラスとクレイの質感、光るテックブルーとシアンのアクセント、すっきりした等角投影構図、超高解像度レンダリング、文字入れなし、テキストなし`
+   - **英語プロンプト構文**: `Minimalist 3D isometric illustration of [主題], smooth clay and frosted glass textures, glowing tech blue and cyan neon accents, clean isometric perspective, 8k render, no typography, no letters, no text`
+   - **例（日本語）**: `散在するデータブロックが透明なガラスパイプラインを通り中央の光り輝く統合ハブへと集約されるミニマルな3Dアイソメトリックイラスト、クリーンな白スタジオ背景、滑らかな質感、文字入れなし、テキストなし`
 
 4. **フラットベクター・ビジネスイラスト系 (Flat Vector / Corporate Art)**
    - **特徴**: シンプルな2D線画・面構成、Notion風やSaaSウェブサイト風の洗練されたミニマルアート。
    - **最適な用途**: サービス紹介、対比図、マーケティング資料、クイック企画書。
-   - **プロンプト構文**: `Clean modern flat vector illustration of [主題], minimalist corporate editorial art, bold geometry, elegant subtle color palette, generous negative space, no typography, no letters, no text`
-   - **例**: `Clean modern flat vector illustration of interconnected modular gears and analytical graphs, elegant indigo and slate palette, minimalist corporate style, no text`
+   - **日本語プロンプト構文**: `[主題]の洗練されたモダンフラットベクターイラスト、ミニマルな企業エディトリアルアート、明確な幾何学形状、上品で落ち着いたカラーパレット、贅沢な余白、文字入れなし、テキストなし`
+   - **英語プロンプト構文**: `Clean modern flat vector illustration of [主題], minimalist corporate editorial art, bold geometry, elegant subtle color palette, generous negative space, no typography, no letters, no text`
+   - **例（日本語）**: `相互に連携するモジュール型歯車と分析ダッシュボードを描いた洗練されたモダンフラットベクターイラスト、上品なインディゴとスレート基調、ミニマルなコーポレート調、文字入れなし、テキストなし`
 
 ### ② 文字入れ禁止指示 (No Text Rule)
 - AI画像生成モデル（DALL-E 3, Midjourney, Imagen 等）に文字を描かせると崩れたり誤字になりがちです。
-- **必ず `clean composition, no typography, no letters, no text watermark` を付加** し、文字はHTML側のTailwindで重ねるか隣接配置します。
+- **日本語では `文字入れなし、テキストなし、タイポグラフィなし、ウォーターマークなし`**、**英語では `clean composition, no typography, no letters, no text watermark`** を必ず付加し、文字情報はHTML側のTailwindで重ねるか隣接配置します。
 
 ### ③ アスペクト比の事前同期による完全ノーカット原則（Zero-Cropping Rule）
 - 画像生成プロンプトには、スライドコンテナの表示比率に合わせたアスペクト比を必ず明記します：
