@@ -36,6 +36,9 @@
 3. [Keyboard Shortcuts](#keyboard-shortcuts)
 4. [Directory & File Structure](#directory--file-structure)
 5. [Installation Methods](#installation-methods)
+   - [Quick Decision Guide](#quick-decision-guide)
+   - [Option 1: Personal / Individual Use (Agent Skills Compatible Environments)](#option-1-personal--individual-use-agent-skills-compatible-environments)
+   - [Option 2: Organization & Team Workspaces (ChatGPT Business / Enterprise & Managed AI)](#option-2-organization--team-workspaces-chatgpt-business--enterprise--managed-ai)
 6. [User Guide: Working with AI (ChatGPT, Claude, Gemini, Antigravity, Cursor)](#user-guide-working-with-ai-chatgpt-claude-gemini-antigravity-cursor)
 7. [License](#license)
 
@@ -118,7 +121,7 @@ Designed with `@page { size: ...; margin: 0; }` and `.slide { page-break-inside:
 
 | Key | Mode | Description |
 | :--- | :--- | :--- |
-| **`F`** | Edit / Present | Toggle fullscreen slideshow mode |
+| **`F`** / **`F5`** | Edit / Present | Toggle fullscreen slideshow mode |
 | **`E`** | Edit / Present | Toggle edit mode ON / OFF |
 | **`Esc`** | Present | Exit presentation mode back to editing view |
 | **`→` / `↓` / `Space` / `PageDown`** | Present | Advance to the next slide |
@@ -160,22 +163,63 @@ AINativeSlide/
 
 ## Installation Methods
 
-In AI agent environments such as Antigravity, Claude Code, or Cursor, AINativeSlide is automatically recognized as an agent skill when placed inside the `.agents/skills/` directory.
+AINativeSlide conforms to the open **Agent Skills** specification (`SKILL.md`). In any compatible AI agent or LLM platform, installing or loading this skill allows the model to autonomously inspect layout rules, reference corporate design templates, and execute self-repairing validation scripts.
 
-### Method 1: Git Clone (Recommended)
+Choose the onboarding method that best fits your environment:
+
+### Quick Decision Guide
+
+| Environment / Use Case | Supported Tools & Platforms | Recommended Method |
+| :--- | :--- | :--- |
+| **Personal / Developer Use**<br>*(Local agent & coding environments)* | **Codex**, **Claude Code**, **Cursor**, **Antigravity**, and other Agent Skills-compatible tools | **[Option 1](#option-1-personal--individual-use-agent-skills-compatible-environments)**: Clone or place into your project's `.agents/skills/` directory |
+| **Organization & Team Workspaces**<br>*(Enterprise & managed AI platforms)* | **ChatGPT** (eligible Business / Enterprise), **Claude for Work**, enterprise AI portals | **[Option 2](#option-2-organization--team-workspaces-chatgpt-business--enterprise--managed-ai)**: Enable via the workspace's Skills / Extensions settings (where supported) |
+| **Personal Consumer Chat Accounts**<br>*(Standard web chat plans)* | Personal ChatGPT (Free / Plus), Claude (Free / Pro), etc. | Custom skills tabs may not be available in personal chat plans. **Use Codex, Claude Code, or Cursor instead**, or supply system instructions directly. |
+
+---
+
+### Option 1: Personal / Individual Use (Agent Skills Compatible Environments)
+
+For individual developers and power users working in coding assistants or autonomous agent environments that support the Agent Skills specification—including **Codex**, **Claude Code**, **Cursor**, and **Antigravity**.
+
+> [!NOTE]
+> Standard personal chat subscriptions (such as ChatGPT Free or Plus) typically do not offer an in-app "Skills" management tab. If your personal account does not have access to custom skills, we recommend using **Codex**, **Claude Code**, **Cursor**, or another compatible CLI/IDE agent environment where you have direct control over skill directories.
+
+#### Method A: Git Clone (Recommended)
+
+Run the following command in your workspace or repository root:
 
 ```bash
 git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativeslide
 ```
 
-### Method 2: Direct ZIP Download (Enterprise Firewalls & No Git CLI)
+Compatible agents will automatically detect `SKILL.md` in the `.agents/skills/ainativeslide` path and activate AINativeSlide capabilities whenever you request presentations or slides.
 
-If your enterprise network restricts external `git clone` or you do not have Git installed:
+#### Method B: Direct ZIP Download (Restricted Networks & No Git CLI)
 
-1. Click **"<> Code" ➔ "Download ZIP"** on the [AINativeSlide GitHub page](https://github.com/XitakSE/AINativeSlide).
-2. Extract the downloaded ZIP file.
-3. Rename the extracted folder (`AINativeSlide-main`) to `ainativeslide` and place it directly into your workspace's `.agents/skills/ainativeslide` directory.
-   *(Make sure `SKILL.md` is located directly inside the folder).*
+If your enterprise or network restricts external `git clone` commands, or if Git is not installed:
+
+1. Go to the [AINativeSlide GitHub repository](https://github.com/XitakSE/AINativeSlide) and click **"<> Code" ➔ "Download ZIP"**.
+2. Extract the downloaded ZIP archive.
+3. Rename the extracted folder (e.g., `AINativeSlide-main`) to `ainativeslide`.
+4. Place the folder into your project's skill directory: `.agents/skills/ainativeslide`
+   *(Ensure `SKILL.md` is located directly inside the `ainativeslide` folder).*
+
+---
+
+### Option 2: Organization & Team Workspaces (ChatGPT Business / Enterprise & Managed AI)
+
+For organizations using centralized AI platforms—such as **ChatGPT Business / Enterprise** workspaces, **Claude for Work**, or custom enterprise AI portals—AINativeSlide can be integrated workspace-wide as an organizational skill or extension.
+
+#### Typical Setup Flow (e.g., ChatGPT Workspaces)
+1. **Access Extension Settings**: In your ChatGPT team or enterprise workspace, navigate to the integrations or plugins page (e.g., look for the **Skills** tab, where displayed).
+2. **Add AINativeSlide**: Select the option to add or import a skill, and supply the repository URL (`https://github.com/XitakSE/AINativeSlide.git`) or the packaged skill files.
+3. **Workspace-Wide Use**: Once approved and enabled, team members can simply ask the model to create slides, and the agent will call AINativeSlide automatically without requiring manual template uploads.
+
+> [!IMPORTANT]
+> **Availability & Platform Nuances:**
+> - **Subscription & Admin Governance**: The ability to add or use third-party skills in organizational chat environments depends on your organization's subscription tier, workspace administrator policies, security review status, and platform feature rollout schedules. Having a Business or Enterprise account does not automatically guarantee access if your administrator has restricted custom skills or if the feature is not yet enabled for your tenant.
+> - **UI Terminology**: Menu labels and navigation paths (e.g., "Plugins page", "Skills tab", "Workspace Integrations") vary across providers and may change as platforms update their user interfaces.
+> - **Alternative Access**: If custom skills are not enabled in your workspace's web interface, employees can still utilize AINativeSlide via **Option 1** (local agent environments like Codex or Cursor), or administrators can deploy the centralized system instructions documented in [Section 6.4](#4-enterprise-ai-system-instructions-gpts--claude-projects--gems).
 
 ---
 

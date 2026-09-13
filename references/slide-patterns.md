@@ -139,8 +139,8 @@ AI（LLM）がスライド内容に応じて選択すべき、代表的なスラ
   <div class="grid grid-cols-2 gap-8 items-center my-auto">
     <!-- AI画像枠 (ドラッグ＆ドロップ対応) -->
     <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-950 group">
-      <!-- 抽象概念AI画像 (DALL-E 3 等で生成) -->
-      <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" 
+      <!-- 抽象概念AI画像 (AIが生成したセッションアセットまたはData URIを直接埋め込み) -->
+      <img src="./images/slide_3_concept.png" 
            alt="Autonomous Data Hub Concept" 
            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>

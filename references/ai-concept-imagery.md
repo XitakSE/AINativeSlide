@@ -40,14 +40,14 @@
 - AI画像生成モデル（DALL-E 3, Midjourney, Imagen 等）に文字を描かせると崩れたり誤字になりがちです。
 - **必ず `clean composition, no typography, no letters, no text watermark` を付加** し、文字はHTML側のTailwindで重ねるか隣接配置します。
 
-### ④ アスペクト比の事前同期による完全ノーカット原則（Zero-Cropping Rule）
+### ③ アスペクト比の事前同期による完全ノーカット原則（Zero-Cropping Rule）
 - 画像生成プロンプトには、スライドコンテナの表示比率に合わせたアスペクト比を必ず明記します：
   - **16:9 ワイド（左右スプリット / 全画面）**: `widescreen 16:9 composition, landscape aspect ratio`
   - **4:3 標準**: `standard 4:3 composition, landscape aspect ratio`
   - **A4 横 / A4 縦**: `balanced composition matching container ratio`
-- コンテナ枠と生成画像のアスペクト比を事前に完全一致させることで、CSSトリミング（`object-cover` による上下左右の切り落とし）を一切発生させず、生成された構図を100%そのまま美しく表示します。
+- コンテナ枠と生成画像のアスペクト比を事前に完全一致させることで、CSSトリミングによる意図しない構図の切り落としを一切発生させず、生成された構図を100%そのまま美しく表示します（※ブラウザレンダリング時の微小な端数丸め誤差による白隙間を防ぐため、コンテナCSSには保険として `object-cover` を指定しますが、比率が完全一致しているため実質的な切り落としは生じません）。
 
-### ⑤ デッキ全体の一貫性を保つ「シードスタイル記述子（Seed Style）」
+### ④ デッキ全体の一貫性を保つ「シードスタイル記述子（Seed Style）」
 複数スライドで画像を生成する際、画風のブレを防ぐため、全スライドの画像プロンプトに共通のシードスタイル（基調色・照明・質感）を一貫して注入します：
 - 例（3Dアイソメトリックの場合）:
   `[各スライド固有の主題], consistent sleek 3D isometric style, deep slate navy background (#0f172a), indigo (#6366f1) and sky blue glowing accents, frosted glass textures, clean composition, no text, no letters`

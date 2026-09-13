@@ -1594,6 +1594,22 @@
       }
     }
 
+    function firstSlide() {
+      const slides = getMainSlides();
+      if (slides.length > 0 && currentPresentationIndex !== 0) {
+        currentPresentationIndex = 0;
+        renderPresentationSlide();
+      }
+    }
+
+    function lastSlide() {
+      const slides = getMainSlides();
+      if (slides.length > 0 && currentPresentationIndex !== slides.length - 1) {
+        currentPresentationIndex = slides.length - 1;
+        renderPresentationSlide();
+      }
+    }
+
     function handleStageClick(event) {
       if (!isPresentationMode) return;
       if (event.target.closest('#speakerNotesOverlay') || event.target.closest('button')) return;
@@ -1620,6 +1636,16 @@
         return;
       }
 
+      if (e.key === 'F5') {
+        e.preventDefault();
+        if (!isPresentationMode) {
+          startPresentation();
+        } else {
+          stopPresentation();
+        }
+        return;
+      }
+
       if (isEditing) return;
 
       if (e.key === 'f' || e.key === 'F') {
@@ -1639,6 +1665,12 @@
         } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
           e.preventDefault();
           prevSlide();
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          firstSlide();
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          lastSlide();
         }
       }
     });
@@ -1650,7 +1682,7 @@
     });
 
     // ----------------------------------------------------
-    // 12. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
+    // 13. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
     // ----------------------------------------------------
     function applyAutoLocalization() {
       // スライド数の自動集計・同期 (日英共通)

@@ -54,7 +54,12 @@ Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改�
   }
 
   /* 各スライド要素の完全フィット & 強制改ページ */
+  /* ※アスペクト比・用紙サイズに合わせて width / height を同期 (16in 9in / 4in 3in / 297mm 210mm / 210mm 297mm) */
   .slide {
+    width: 16in !important;
+    height: 9in !important;
+    max-width: none !important;
+    max-height: none !important;
     page-break-after: always !important;
     break-after: page !important;
     page-break-inside: avoid !important;
@@ -62,6 +67,7 @@ Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改�
     margin: 0 auto !important;
     border-radius: 0 !important;
     box-shadow: none !important;
+    border: none !important;
   }
 }
 ```

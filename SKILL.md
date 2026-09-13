@@ -93,16 +93,25 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 5. **外部重量級JSライブラリの読み込み禁止**: Chart.js, D3, Reveal.js, Mermaid CDN, React, Vue 等を勝手に読み込んではならない。
 6. **スライド内HTMLダウンロードボタンの再導入禁止**: `downloadHtmlWithComments` などのブラウザ内Blob保存ボタンを設置してはならない（AI環境自体の保存機能および「指示をコピー」に集約済み）。
 7. **スライド枠とメタボックスの 1:1 不一致の禁止**: `.slide` の数と `.slide-meta-box` の数は常に完全一致させること。
-8. **余白ゼロ印刷CSSの破壊禁止**: 以下の印刷用CSSブロックを改変・削除してはならない：
+8. **余白ゼロ印刷CSSの破壊禁止**: 以下の印刷用CSSブロック（トップレベル `@page` および `@media print`）を改変・削除してはならない：
    ```css
+   @page {
+     size: 16in 9in; /* 比率に応じて 4in 3in / A4 landscape / A4 portrait */
+     margin: 0;
+   }
    @media print {
-     @page { margin: 0; }
-     body { background: transparent !important; margin: 0 !important; padding: 0 !important; }
-     .slide { page-break-after: always !important; page-break-inside: avoid !important; margin: 0 auto !important; }
+     body { background: transparent !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
      .no-print { display: none !important; }
+     .slide-viewport { padding: 0 !important; gap: 0 !important; display: block !important; }
+     .slide {
+       width: 16in !important; height: 9in !important; max-width: none !important; max-height: none !important;
+       page-break-after: always !important; break-after: page !important;
+       page-break-inside: avoid !important; break-inside: avoid !important;
+       margin: 0 auto !important; border-radius: 0 !important; box-shadow: none !important; border: none !important;
+     }
    }
    ```
-9. **テキスト許容量超過の禁止**: 横長スライドではスライド1枚あたり600〜700文字（A4縦の場合は約1,000文字）を超えてはならない。
+9. **テキスト許容量超過の禁止**: 横長スライドでは推奨目安500〜600文字・絶対上限700文字（A4縦の場合は推奨目安約850文字・絶対上限1,100文字）を超えてはならない（`scripts/verify_slide.py` の警告・エラー判定基準と完全連動）。
 
 ---
 

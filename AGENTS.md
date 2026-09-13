@@ -33,10 +33,15 @@ AINativeSlide/
 │   ├── template_base.html          # Clean base template skeleton for new decks
 │   ├── speech_script_example.md    # Speaker script document example
 │   └── design_templates/           # Corporate / custom HTML templates
-├── scripts/
-│   ├── verify_slide.py             # Automated quality & layout regression checker
-│   └── gemini_pr_review.py         # Automated Gemini PR review script
-└── .agents/skills/ainativeslide/   # Workspace agent skill mirror (MUST be synced)
+├── references/                     # Detailed technical specifications
+│   ├── grill-workflow.md           # Cognitive-drift prevention grill protocol
+│   ├── ratio-and-print-specs.md    # Aspect ratios & zero-margin print CSS specs
+│   ├── ai-concept-imagery.md       # AI concept imagery prompt engineering
+│   ├── design-system.md            # Typography & robust box-model guidelines
+│   └── slide-patterns.md           # Layout patterns & inline SVG business charts
+└── scripts/
+    ├── verify_slide.py             # Automated quality & layout regression checker
+    └── gemini_pr_review.py         # Automated Gemini PR review script
 ```
 
 ### Related Companion Projects
@@ -79,29 +84,44 @@ When editing or generating slide decks in this repository, strictly adhere to th
 - **4:3 スタンダード**: Dimensions MUST be `w-[1024px] h-[768px] max-w-[1024px] max-h-[768px]` with `overflow-hidden`.
 - **A4 横 (Landscape)**: Dimensions MUST be `w-[1188px] h-[840px] max-w-[1188px] max-h-[840px]` with `overflow-hidden`.
 - **A4 縦 (Portrait)**: Dimensions MUST be `w-[840px] h-[1188px] max-w-[840px] max-h-[1188px]` with `overflow-hidden`.
-- Never exceed 500–600 Japanese characters per slide (or ~900 characters for A4 portrait) to prevent vertical text overflow.
+- Recommended text length is 500–600 Japanese characters per slide (or ~850 characters for A4 portrait). Never exceed the hard limit of 700 characters (or 1,100 characters for A4 portrait) enforced by `scripts/verify_slide.py` to prevent vertical text overflow.
 
 ### Rule 3: Zero-Margin Print CSS Preservation
-The following print block must never be broken:
+The following print block (top-level `@page` and `@media print`) must never be broken:
 ```css
+@page {
+  size: 16in 9in; /* or 4in 3in / A4 landscape / A4 portrait */
+  margin: 0;
+}
 @media print {
-  @page {
-    size: 16in 9in; /* or 4in 3in / A4 landscape / A4 portrait */
-    margin: 0;
-  }
   body {
     background: transparent !important;
+    margin: 0 !important;
     padding: 0 !important;
-  }
-  .slide {
-    page-break-after: always;
-    page-break-inside: avoid;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    margin: 0 auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
   .no-print {
     display: none !important;
+  }
+  .slide-viewport {
+    padding: 0 !important;
+    gap: 0 !important;
+    display: block !important;
+  }
+  .slide {
+    width: 16in !important;
+    height: 9in !important;
+    max-width: none !important;
+    max-height: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    margin: 0 auto !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
   }
 }
 ```
