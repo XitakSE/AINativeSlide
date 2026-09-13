@@ -208,7 +208,7 @@
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
           <span id="deckRatioText">16:9 ワイド (1280 × 720)</span>
           <span class="text-slate-600">|</span>
-          <span id="deckSlideCountText">全0スライド</span>
+          <span id="deckSlideCountText">全1スライド</span>
         </div>
       </div>
 
@@ -302,28 +302,53 @@
   <!-- スライド一覧コンテナ -->
   <main class="slide-viewport flex flex-col items-center gap-10 p-8 pt-10">
 
-    <!-- 
-      各スライドの構成例:
-      <section class="slide w-[1280px] h-[720px] bg-slate-900 text-white rounded-2xl p-16 shadow-2xl relative flex flex-col justify-between overflow-hidden" contenteditable="true">
-        ...スライドコンテンツ...
-      </section>
-
-      <!-- スライド 1 メタ情報欄（AIへの修正指示、印刷時は非表示） -->
-      <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
-        <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
-          <div class="flex items-center gap-1.5 text-xs font-semibold text-brand-300">
-            <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
-            <span class="slide-meta-title">💬 修正指示</span>
+    <!-- Slide 1 (Starter Slide) -->
+    <section class="slide w-[1280px] h-[720px] bg-slate-900 text-white rounded-2xl p-16 shadow-2xl relative flex flex-col justify-between overflow-hidden" contenteditable="true">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-accent-500 flex items-center justify-center font-bold text-sm shadow">
+            ANS
           </div>
-          <span class="text-[11px] font-mono text-slate-500">Slide 1 / 1</span>
+          <span class="text-sm font-semibold text-slate-300">AINativeSlide Deck</span>
         </div>
-        
-        <div class="flex items-start gap-2.5">
-          <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
-          <button onclick="clearSlideComment(this)" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+        <div class="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-mono text-slate-300">
+          CONFIDENTIAL
         </div>
       </div>
-    -->
+
+      <div class="my-auto py-8">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-500/20 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-4">
+          プレゼンテーション タイトル
+        </div>
+        <h1 class="text-5xl font-extrabold tracking-tight leading-tight mb-4 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+          スライドメインタイトル
+        </h1>
+        <p class="text-lg text-slate-400 font-light max-w-2xl leading-relaxed">
+          サブタイトルまたは企画の要約文をここに記載します。
+        </p>
+      </div>
+
+      <div class="flex justify-between items-end pt-6 border-t border-slate-800 text-xs text-slate-500 slide-footer">
+        <div>プレゼンテーション資料</div>
+        <div class="font-mono">01 / 01</div>
+      </div>
+    </section>
+
+    <!-- Slide 1 メタ情報欄（AIへの修正指示、印刷時は非表示） -->
+    <div class="slide-meta-box no-print w-[1280px] mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
+      <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
+        <div class="flex items-center gap-1.5 text-xs font-semibold text-brand-300">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+          <span class="slide-meta-title">💬 修正指示</span>
+        </div>
+        <span class="text-[11px] font-mono text-slate-500">Slide 1 / 1</span>
+      </div>
+      
+      <div class="flex items-start gap-2.5">
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <button onclick="clearSlideComment(this)" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+      </div>
+    </div>
 
   </main>
 
@@ -723,9 +748,27 @@
       const slide = stage.querySelector('.slide');
       if (!slide) return;
 
-      const is43 = slide.classList.contains('w-[1024px]');
-      const slideW = is43 ? 1024 : 1280;
-      const slideH = is43 ? 768 : 720;
+      let slideW = 1280;
+      let slideH = 720;
+
+      // 各比率・用紙サイズの正確な判定 (16:9, 4:3, A4横, A4縦)
+      if (slide.classList.contains('w-[840px]') || slide.classList.contains('h-[1188px]') || slide.classList.contains('h-[1123px]')) {
+        // A4 縦 (Portrait)
+        slideW = 840;
+        slideH = 1188;
+      } else if (slide.classList.contains('w-[1188px]') || slide.classList.contains('h-[840px]')) {
+        // A4 横 (Landscape)
+        slideW = 1188;
+        slideH = 840;
+      } else if (slide.classList.contains('w-[1024px]') || slide.classList.contains('h-[768px]')) {
+        // 4:3 標準
+        slideW = 1024;
+        slideH = 768;
+      } else {
+        // 16:9 ワイド (デフォルト) または要素実寸
+        slideW = slide.offsetWidth || 1280;
+        slideH = slide.offsetHeight || 720;
+      }
       
       const availW = window.innerWidth;
       const availH = window.innerHeight;
@@ -905,41 +948,35 @@
         el.setAttribute('data-placeholder', 'Enter revision instructions or feedback for this slide...');
       });
 
-      // ヘッダーモード切替タブ
-      const tabEdit = document.getElementById('tabBtnEdit');
-      if (tabEdit) {
-        const span = tabEdit.querySelector('span');
-        if (span) span.innerText = '✏️ Edit';
-      }
-      const tabPresent = document.getElementById('tabBtnPresent');
-      if (tabPresent) {
-        const span = tabPresent.querySelector('span');
-        if (span) span.innerText = '🎬 Present & Export';
-      }
-      const fullPresentBtn = document.querySelector('header button[onclick="startPresentation()"] span:nth-child(2)');
-      if (fullPresentBtn) fullPresentBtn.innerText = 'Present';
-
-      // 自動保存ステータス
-      const saveStatus = document.getElementById('saveStatusText');
-      if (saveStatus) saveStatus.innerText = 'Auto-Save: Active';
-      const resetBtn = document.getElementById('resetSavedBtn');
-      if (resetBtn) {
-        resetBtn.innerText = 'Reset';
-        resetBtn.title = 'Discard saved edits and restore initial slide state';
-      }
-
       // プレゼンテーションバー
       const exitBtn = document.querySelector('#presentationModal button[onclick="stopPresentation()"]');
       if (exitBtn) exitBtn.title = 'Exit Presentation (Esc)';
     }
 
     // ----------------------------------------------------
-    // 13. LocalStorage 自動保存 & 復元
+    // 13. LocalStorage 自動保存 & 復元（サンドボックス安全ガード付き）
     // ----------------------------------------------------
     const STORAGE_PREFIX = 'ainativeslide_autosave_';
+
+    // iframe sandbox等での SecurityError を防ぐ判定ヘルパー
+    function isStorageAvailable() {
+      try {
+        const testKey = '__storage_test__';
+        localStorage.setItem(testKey, testKey);
+        localStorage.removeItem(testKey);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
     function getStorageKey() {
-      const path = window.location.pathname || 'deck';
-      return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');
+      try {
+        const path = window.location.pathname || 'deck';
+        return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } catch (e) {
+        return STORAGE_PREFIX + 'deck';
+      }
     }
 
     let saveDebounceTimer = null;
@@ -951,6 +988,7 @@
     }
 
     function performAutoSave() {
+      if (!isStorageAvailable()) return;
       try {
         const slides = document.querySelectorAll('main .slide');
         const slideData = [];
@@ -976,6 +1014,7 @@
     }
 
     function restoreFromStorage() {
+      if (!isStorageAvailable()) return;
       try {
         const raw = localStorage.getItem(getStorageKey());
         if (!raw) return;
@@ -997,9 +1036,7 @@
           if (c && data.comments && typeof data.comments[idx] === 'string') c.innerText = data.comments[idx];
         });
 
-        if (data.themeKey && themePresets[data.themeKey]) {
-          applyColorPreset(data.themeKey);
-        } else if (data.customHex) {
+        if (data.customHex && typeof applyCustomColor === 'function') {
           applyCustomColor(data.customHex);
         }
       } catch (e) {
@@ -1012,7 +1049,11 @@
         ? '保存された推敲テキストをすべて破棄し、初期HTMLの状態に戻しますか？'
         : 'Discard all saved edits and reset to original HTML?';
       if (confirm(msg)) {
-        localStorage.removeItem(getStorageKey());
+        if (isStorageAvailable()) {
+          try {
+            localStorage.removeItem(getStorageKey());
+          } catch (e) {}
+        }
         location.reload();
       }
     }

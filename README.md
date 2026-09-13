@@ -290,13 +290,14 @@ AIが出力したHTMLコードを `slide.html` として保存し、ChromeやEdg
 スライド作成の依頼を受けた際は、PowerPointではなく「WebネイティブHTMLスライド（AINativeSlide規格）」を作成します。
 
 【行動指針】
-1. 本スキル（AINativeSlide）の仕様（Tailwind CSS CDN, Google Fonts, LocalStorage自動保存, 強制文字溢れ防止line-clamp）に完全準拠した単一HTML（Single-File HTML）を出力します。
-2. 機能基盤として `resources/template_base.html` を、企業ブランド骨格として `resources/design_templates/corporate_default.html` を参照して自社CI規定カラー・レイアウトでスライドを構築します。
-3. 初回リクエストで前提が曖昧な場合のみ、「目的」「比率（16:9推奨）」「枚数」をスマートGrillで簡潔に確認します。
-4. 各スライドは contenteditable="true" とし、スライド本文は `<div class="ai-content">` で囲んで文字溢れ防止規約（h2: 2行, p: 6行, li: 3行制限）を徹底します。
+1. 本スキル（AINativeSlide）の仕様（Tailwind CSS CDN, Google Fonts, LocalStorage安全自動保存, 強制文字溢れ防止line-clamp）に完全準拠した単一HTML（Single-File HTML）を出力します。
+2. 【必須Grill＆構成案承認】: いきなりコード生成を開始せず、必ずユーザーと1往復の確認を行い、スライド構成案およびAI画像生成の要否・テイスト（リアル/漫画/3Dアイコン/フラット）の承認を得てから生成を開始します。
+3. 機能基盤として `resources/template_base.html` を、企業ブランド骨格として `resources/design_templates/corporate_default.html` を参照して自社CI規定カラー・レイアウトでスライドを構築します。
+4. 各スライドは contenteditable="true" とし、スライド本文は `<div class="ai-content">` で囲んで文字溢れ防止規約（h2: 2行, p: 6行, li: 3行制限）を徹底します。画像を使用する場合は1スライド1枚個別生成を厳守します。
 5. デザインはTailwind CSSを活用し、調和のとれた配色（Slate + 固定CIカラー）と堅牢ボックスモデル（flex-shrink-0, min-h-0）を徹底します。
-6. 【自動品質検証 (Auto-Verification)】:
-   HTMLを出力する前に、環境内のPythonを使って `scripts/verify_slide.py` を実行して自律テストを行い、文字数超過（700文字超過による縦溢れ）やスライド番号のズレがないことを確認してください。エラーがある場合は自律修正し、全合格（Exit Code 0）を確認してからユーザーに納品すること。
+6. 【自動品質検証 ＆ 幻覚予防】:
+   - Python/CLI実行環境がある場合（Antigravity, Cursor, Code Interpreter等）: `scripts/verify_slide.py` を実行して自律テストを行い、文字数超過やスライド番号のズレがないことを確認して全合格（Exit Code 0）にしてから納品します。
+   - Python/CLI実行環境がない場合（プレーンチャット等）: スクリプト実行は行わず、自律的なコード内セルフチェックを実施します。実行できない環境において「スクリプトを実行し全合格しました」などの架空の実行報告や偽ログを捏造することは厳禁です。
 ```
 
 ---
