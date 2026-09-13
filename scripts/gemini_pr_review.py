@@ -110,13 +110,28 @@ def main():
 (LGTM / 要修正 / 確認推奨 のいずれかを理由とともに提示)
 """
 
-    # 5. Gemini API 呼び出し (v1beta API: gemini-2.5-flash または gemini-1.5-flash)
-    # 複数モデルにフォールバックできるように設定
-    models_to_try = [
-        "gemini-2.5-flash",
-        "gemini-1.5-flash",
-        "gemini-1.5-pro"
-    ]
+    # 5. Gemini API 呼び出し (利用可能モデルの動的検出 & フォールバック)
+    models_to_try = ["gemini-3.6-flash", "gemini-2.0-flash", "gemini-2.0-flash-exp"]
+    try:
+        list_url = f"https://generativelanguage.googleapis.com/v1beta/models?key={api_key}"
+        req = urllib.request.Request(list_url)
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+            available = [
+                m["name"].replace("models/", "")
+                for m in data.get("models", [])
+                if "generateContent" in m.get("supportedGenerationMethods", [])
+            ]
+            print(f"[INFO] Discovered {len(available)} available models on API key.")
+            flash_models = [m for m in available if "flash" in m.lower()]
+            if flash_models:
+                models_to_try = flash_models + [m for m in available if m not in flash_models]
+            elif available:
+                models_to_try = available
+    except Exception as e:
+        print(f"[WARN] Model auto-discovery note: {e}")
+
+    print(f"[INFO] Models prioritized for review: {models_to_try[:5]}")
 
     review_text = None
     for model_name in models_to_try:
