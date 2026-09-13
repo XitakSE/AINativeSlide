@@ -14,16 +14,17 @@ Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練�
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 ```
 
-### フォントサイズ & ウェイト規定
+### フォントサイズ & ウェイト規定（Base Anatomy 連動）
 
 | 役割 | クラス指定例 | サイズ/ウェイト | 用途 |
 | :--- | :--- | :--- | :--- |
-| **Eyebrow / Category** | `text-xs font-bold tracking-wider uppercase text-brand-600` | 12px / Bold / 字間広め | セクション番号、カテゴリラベル |
-| **Slide Title** | `text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight` | 24〜30px / ExtraBold | 各スライドの主張・主題 |
+| **Kicker / Category** | `text-xs font-bold tracking-wider uppercase text-brand-600` | 12px / Bold / 字間広め | セクション番号、章名ラベル |
+| **Lead Message (Action Title)** | `text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug` | 20〜24px / ExtraBold | 各スライドの主張・結論（40〜60字の完全文） |
+| **Slide Title (標準見出し)** | `text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight` | 24〜30px / ExtraBold | スライド主見出し |
 | **Hero Title (Cover)** | `text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight` | 36〜48px / ExtraBold | 表紙のメインタイトル |
 | **Card Heading** | `text-sm sm:text-base font-bold text-slate-900` | 14〜16px / Bold | カード内ブロックの小見出し |
 | **Body Text** | `text-xs sm:text-sm text-slate-600 leading-relaxed` | 12〜14px / Regular | 箇条書き、説明文、詳細 |
-| **Meta / Footer** | `text-[11px] sm:text-xs text-slate-400 font-mono` | 11〜12px / Medium | 日付、ページ番号、機密区分 |
+| **Meta / Footer / Note** | `text-[11px] sm:text-xs text-slate-400 font-mono` | 11〜12px / Medium | 前提注記、データソース、日付、ページ番号 |
 
 ---
 

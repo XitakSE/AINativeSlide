@@ -102,6 +102,60 @@ def main():
         elif len(text_content) > warn_chars:
             warnings.append(f'Slide {slide_num}: テキスト量が多めです ({len(text_content)}文字)。要素がスライド枠に収まっているか確認してください。')
 
+        # 危険な負のオフセット・見切れ（Clipping）CSSパターンの静的検査
+        dangerous_offset_pattern = re.compile(
+            r'\b(?:absolute|fixed)\b[^"\']*\b-(?:top|bottom|left|right)-\d+\b|\b-(?:mt|mb|my|top|bottom)-\d+\b',
+            re.IGNORECASE
+        )
+        dangerous_matches = dangerous_offset_pattern.findall(inner_html)
+        if dangerous_matches:
+            errors.append(
+                f'Slide {slide_num}: 枠外見切れ（Clipping）リスクのある危険な負の配置CSSが検出されました '
+                f'({", ".join(set(dangerous_matches))})。'
+                f'overflow-hiddenによる文字・バッジ欠損を防ぐため、コンテナ内部のインライン配置またはpaddingで設計してください。'
+            )
+
+        # ── 2.5 Anti-AI-Smell ガードレール静的検査 ──
+        # (1) 抽象バズワード・空虚表現の柔軟ヒューリスティック検知（完璧を求めずサジェストに留める）
+        buzzword_patterns = [
+            r'シナジー(?:の最大化|最大化|効果)?',
+            r'シームレス(?:な連携|連携|な統合)?',
+            r'DX推進(?:の加速|を加速|の実現|を目指す|を図る)',
+            r'エコシステムの共創',
+            r'柔軟な対応',
+            r'(?:最適化|最大化|効率化|高度化|活性化|抜本的)(?:を図る|を加速|を推進|の実現|を目指す)',
+        ]
+        found_buzzwords = set()
+        for pat in buzzword_patterns:
+            for m in re.findall(pat, inner_html):
+                found_buzzwords.add(m)
+        for bw in sorted(found_buzzwords):
+            warnings.append(
+                f'Slide {slide_num}: 抽象的な表現 "{bw}" が検出されました (Anti-AI-Smell)。'
+                f'完璧を期す必要はありませんが、現場で想起しやすい具体的アクション（「自動化」「廃止」「削減」等）や定量数値への言い換えを検討してください。'
+            )
+
+        # (2) トピック名のみ（名詞止め見出し）検知
+        if slide_num > 1:
+            headings = re.findall(r'<h[23][^>]*>([\s\S]*?)</h[23]>', inner_html, re.IGNORECASE)
+            for h in headings:
+                clean_h = re.sub(r'<[^>]+>', '', h).strip()
+                if clean_h and (clean_h.endswith('について') or clean_h in ['今後の展望', '概要', 'はじめに', 'アジェンダ', 'まとめ']):
+                    warnings.append(
+                        f'Slide {slide_num}: 見出しがトピック名のみ（名詞止め: "{clean_h}"）になっています (Anti-AI-Smell)。'
+                        f'ファクトと示唆・結論を含む完全な1文（Action Title: 40〜60文字）にしてください。'
+                    )
+
+        # (3) 3均等グリッド (grid-cols-3) における視覚的アンカーの検査
+        if re.search(r'<div[^>]*class=["\'][^"\']*\bgrid-cols-3\b[^"\']*["\'][^>]*>', inner_html, re.IGNORECASE):
+            anchor_keywords = ['CORE', '推奨', '本提案', '最重要', '必須', 'ゲート', 'Gate', '★', 'bg-brand-', 'border-brand-', 'border-2', 'scale-', 'ring-']
+            has_anchor = any(k in inner_html for k in anchor_keywords)
+            if not has_anchor:
+                warnings.append(
+                    f'Slide {slide_num}: 3均等グリッド (grid-cols-3) 内に視覚的アンカー（推奨案・CORE・最重要課題の強調）が見当たりません (Anti-AI-Smell)。'
+                    f'無意味な均等カード化を避け、推奨案や重要要素に色枠やバッジ等のアンカーを設定してください。'
+                )
+
     # メタボックス内のバッジ番号チェック
     for idx, box in enumerate(meta_boxes):
         slide_num = idx + 1

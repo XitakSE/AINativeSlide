@@ -38,11 +38,21 @@
 - [C] **A4 横（Landscape）**: オフィス複合機での印刷配布資料、役員稟議資料
 - [D] **A4 縦（Portrait）**: 1枚企画書、エグゼクティブサマリー
 
-### 3. 全スライド構成案
-- **Slide 1 (Cover)**: タイトル・起案者・機密区分
-- **Slide 2 (Comparison)**: 現状課題 (AS-IS) vs 導入後の姿 (TO-BE)
-- **Slide 3 (Architecture / Table)**: システム構成と選定マトリクス
-- **Slide 4 (ROI & Roadmap)**: 投資対効果とフェーズ別展開計画
+### 3. 全スライド構成案（情報構造パターン ＆ Action Title）
+※各スライドには、[スライドパターン集 (slide-patterns.md)](slide-patterns.md) の識別子（`pattern_id`）と、名詞止めではない完全文の見出し（Action Title: 40〜60文字）を定義します：
+- **Slide 1 (Cover)**: タイトル・起案部門・日付・機密区分
+- **Slide 2 (`problem_solution`)**:
+  - 【Lead Message】月間40時間の重複入力を解消するため、マスタ同期スクリプトを導入する
+  - 要点: 現場の発生事象（手動転記・工数ロス）と自動化によるゼロ化効果の対比
+- **Slide 3 (`tradeoff_matrix`)**:
+  - 【Lead Message】運用保守の内製化を最優先とし、初期コスト増を許容して「案B」を採用する
+  - 要点: 評価軸（初期費用・月額ランコス・拡張性・保守体制）による3案比較と推奨案の論拠
+- **Slide 4 (`scope_boundary`)**:
+  - 【Lead Message】今回リリースは基本機能に絞り、外部連携・一括処理はPhase 2へ送る
+  - 要点: In Scope（CRUD・権限）と Out of Scope（CSV一括・Slack通知）の明確な切り分け
+- **Slide 5 (`step_process` / `architecture_mapping`)**:
+  - 【Lead Message】Step 2のレビュー承認を完了するまで本番マージ・デプロイは不可
+  - 要点: 実装から本番適用までの4段階フローと品質Gateの厳格化
 
 ### 4. AI生成画像の要否 & スタイル（テイスト）選択
 - [A] **画像不要**: すべてCSSグリッド・カード・アイコン・図解ボックスで論理的に表現

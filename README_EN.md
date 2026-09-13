@@ -33,6 +33,7 @@
    - [8. Per-Slide Feedback Comments & AI Iteration Loop](#8-per-slide-feedback-comments--ai-iteration-loop)
    - [9. Presentation Speech Script (Markdown: `speech_script.md`) Generation (Grill Option)](#9-presentation-speech-script-markdown-speech_scriptmd-generation-grill-option)
    - [10. Strict Aspect Ratio & Paper Size Control (16:9 / 4:3 / A4 Landscape / A4 Portrait) & Zero-Margin PDF Print](#10-strict-aspect-ratio--paper-size-control-169--43--a4-landscape--a4-portrait--zero-margin-pdf-print)
+   - [11. Enterprise Information Structuring Patterns & Anti-AI-Smell Guardrails](#11-enterprise-information-structuring-patterns--anti-ai-smell-guardrails)
 3. [Keyboard Shortcuts](#keyboard-shortcuts)
 4. [Directory & File Structure](#directory--file-structure)
 5. [Installation Methods](#installation-methods)
@@ -115,6 +116,22 @@ Supports 4 purpose-built aspect ratios and paper formats:
 
 Designed with `@page { size: ...; margin: 0; }` and `.slide { page-break-inside: avoid; }` to produce pixel-perfect, margin-free PDF exports with exact edge-to-edge alignment on standard office/home A4 printers.
 
+### 11. Enterprise Information Structuring Patterns & Anti-AI-Smell Guardrails
+To drive corporate decision-making and eliminate generic, shallow "AI-smelling" slides, AINativeSlide enforces strict behavioral guardrails and structured wireframes:
+- **Anti-AI-Smell Guardrails**:
+  - **No Meaningless Equal 3-Card Grids**: Always provide visual anchors (highlight borders, badges, width expansion) on recommended options or primary bottlenecks.
+  - **Ban on Abstract Buzzwords**: Prohibits empty jargon like "maximize synergy", "seamless integration", or "accelerate DX". Requires concrete verbs and metrics.
+  - **No Decorative Icons**: Eliminates unrelated generic icons (rockets, lightbulbs, handshakes). Restricts icons to status indicators (`✓`/`✕`) or logos.
+  - **Action Titles (Lead Messages) Required**: Replaces vague topic titles ("About Project X") with complete 40–60 character sentences stating fact + conclusion.
+- **6 Core Enterprise Wireframe Patterns**:
+  1. **Problem & Solution (`problem_solution`)**: Facts & Root Cause vs Actions & Measurable Outcomes
+  2. **Comparison Matrix (`tradeoff_matrix`)**: Multi-criteria evaluation with clear recommended option rationale
+  3. **Scope & Boundary (`scope_boundary`)**: Explicit In-Scope vs Out-of-Scope boundaries
+  4. **Architecture / Layering (`architecture_mapping`)**: Component dependencies and cross-layer interaction flow
+  5. **Sequential Workflow (`step_process`)**: Phased steps, deliverables, and critical gates (★Gate)
+  6. **Pitfalls & FAQ (`pitfalls_faq`)**: Common anti-patterns vs corporate best practices
+- Specification Reference: [`references/slide-patterns.md`](references/slide-patterns.md)
+
 ---
 
 ## Keyboard Shortcuts
@@ -152,11 +169,11 @@ AINativeSlide/
 │   └── design_templates/   # Corporate brand design templates (CI/VI compliance)
 │       └── corporate_default.html # Default corporate brand template (CI colors, logo, badges)
 └── references/              # Detailed specifications & guidelines
+    ├── slide-patterns.md    # Information structuring, layout patterns, and SVG charts
     ├── grill-workflow.md    # Cognitive alignment interview specification
     ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 aspect ratio & print CSS specs
     ├── ai-concept-imagery.md # Concept image generation prompt guidelines
-    ├── design-system.md     # Typography & robust card box model specs
-    └── slide-patterns.md    # Reusable slide layout patterns (Tables & SVG Charts)
+    └── design-system.md     # Typography & robust card box model specs
 ```
 
 ---
