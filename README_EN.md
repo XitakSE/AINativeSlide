@@ -89,7 +89,7 @@ Press the **"▶ Present"** button in the header or hit **`F`** on your keyboard
 ### 5. In-Browser Direct Editing & Edit Mode Toggle (Selection Disabled when OFF)
 - **Direct Editing & Floating Mini Toolbar**: In edit mode (ON), click any text on the slide to edit directly. Selecting text reveals a floating format bar for bold, font sizing (per selection), color picker, highlighting, and clearing format.
 - **Customizing Toolbar Color Choices**:
-  The text colors (default: Black `#0f172a`, Blue, Green, Amber, Red) and highlighter (default: Yellow `#fef08a` rectangle) can be easily adjusted to match your company's corporate branding (CI/VI) by modifying the `<button>` arguments (HEX values) inside `<div id="selectionToolbar" ...>`:
+  The text colors (default: Black, Blue, Green, Amber, Red) and highlighter (default: Yellow rectangle) can be easily adjusted to match your company's corporate branding (CI/VI) by modifying the `<button>` arguments (HEX values) inside `<div id="selectionToolbar" ...>`:
   ```html
   <!-- Change text color: specify formatSelection('color', 'HEX') and bg-[HEX] -->
   <button onclick="formatSelection('color', '#1e3a8a')" title="Navy" class="w-3.5 h-3.5 rounded-full bg-[#1e3a8a] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>

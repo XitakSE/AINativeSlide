@@ -96,7 +96,7 @@ AIが長文を出力してもレイアウトが崩れないための物理的な
 ### 5. ブラウザ直接推敲 & 編集モードトグル（OFF時選択禁止）
 - **直接編集 & 選択時ミニ書式バー**: 編集モードON時はスライド上のテキストをクリックして直接推敲可能。範囲選択時に太字・フォントサイズ（個別調整）・カラー選択・マーカー・書式解除が出現します。
 - **選択時ミニ書式バーのカラー設定変更（カスタマイズ）**:
-  ミニ書式バーで選べる文字色（デフォルト: Black `#0f172a`, Blue, Green, Amber, Red の5色）や長方形マーカー（デフォルト: 黄色 `#fef08a`）は、HTML内の `<div id="selectionToolbar" ...>` にある `<button>` の引数（HEX値）を書き換えるだけで、自社CIカラーや任意の配色に簡単に変更・追加できます：
+  ミニ書式バーで選べる文字色（デフォルト: Black, Blue, Green, Amber, Red の5色）や長方形マーカー（デフォルト: 黄色）は、HTML内の `<div id="selectionToolbar" ...>` にある `<button>` の引数（HEX値）を書き換えるだけで、自社CIカラーや任意の配色に簡単に変更・追加できます：
   ```html
   <!-- 文字カラーの変更: formatSelection('color', 'HEX値') と bg-[HEX値] を指定 -->
   <button onclick="formatSelection('color', '#1e3a8a')" title="Navy" class="w-3.5 h-3.5 rounded-full bg-[#1e3a8a] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
