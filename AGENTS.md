@@ -170,6 +170,11 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
 - **Action Titles (Lead Messages) Required**: Slide titles must be complete sentences (40–60 characters) stating fact + insight/conclusion with active verbs, not passive noun labels (like "〇〇について").
 - **Structured Wireframe Catalog**: Prefer the 6 enterprise wireframe patterns documented in [`references/slide-patterns.md`](references/slide-patterns.md) (`problem_solution`, `tradeoff_matrix`, `scope_boundary`, `architecture_mapping`, `step_process`, `pitfalls_faq`).
 
+### Rule 8: Semantic Line Breaking & Header Spacing Protection
+- **No Awkward Mid-Word Wraps**: Never let Japanese text break awkwardly mid-word or leave trailing particles (1–2 characters) on a new line due to arbitrary container boundary collisions. Always insert explicit `<br>` breaks at natural grammatical phrase boundaries (particles `〜し、`, `〜により、`, `〜から、` or punctuation), or adjust font size/container width.
+- **Top-Right Badge Protection**: Top-right slide meta/category badges must NEVER wrap into multiple lines when titles span 2 lines. Always use `shrink-0 whitespace-nowrap` on badge containers and structure headers with `items-start gap-6` (title taking `flex-1 min-w-0 pr-4`).
+- **Header-Content Vertical Rhythm**: Never let multi-line Action Titles collapse vertical margins with the main slide content below. Always enforce explicit separation (e.g. `pb-3 border-b border-slate-800 mb-5` or `mb-6`) to guarantee comfortable breathing room and visual hierarchy.
+
 ---
 
 ## 5. Definition of Done for PRs / Changes

@@ -130,6 +130,8 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 11. **抽象バズワード連呼の禁止 (Anti-AI-Smell)**: 「シナジー」「推進」等、具体的動作が想起できない空虚な語彙を出力してはならない（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 12. **飾りアイコン要求の禁止 (Anti-AI-Smell)**: 文脈と無関係な汎用装飾アイコン（ロケット、電球等）を配置してはならない（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 13. **トピックタイトル（名詞止め見出し）のみの出力禁止 (Anti-AI-Smell)**: 「〇〇について」等の名詞ラベルのみをスライド見出しにしてはならない。必ず完全文（Action Title）を出力すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
+14. **中途半端な単語分断改行の禁止 (Anti-AI-Smell / Semantic Line Breaking)**: コンテナ端に到達した成り行きで単語の途中や助詞で1〜2文字だけ次行に落ちる改行を厳禁とする。見出しや本文では文節・意味の切れ目で明示的に `<br>` を挿入するか幅・文字サイズを調整して自然なリズムで改行すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
+15. **右肩バッジの折り返し ＆ ヘッダー下部余白ゼロの禁止 (Header Spacing & Badge Protection)**: 見出しが2行化した際、右肩バッジが押しつぶされて複数行に分断されてはならない（必ず `shrink-0 whitespace-nowrap` を付与し、ヘッダーは `items-start gap-6` 構造とすること）。また、見出しとメインコンテンツが密着して余白がゼロにならないよう、必ずヘッダー下部に十分な余白（`mb-5`〜`mb-6`）および視覚的境界線（`pb-3 border-b border-slate-800` 等）を設けること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 
 ---
 
