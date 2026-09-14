@@ -53,13 +53,6 @@ class SlideFixer:
         self.target_file = target_file
         self.fix_logs = []
 
-        self.is_corporate_template = (
-            'corporate' in target_file.name.lower()
-            or 'design_templates' in str(target_file)
-            or '企業CI' in html
-            or 'ブランドカラー定義' in html
-        )
-
     def fix_all(self) -> tuple[str, list[str]]:
         new_html = self.html
 
@@ -78,7 +71,7 @@ class SlideFixer:
             new_html = self._fix_header_counter(new_html, total_slides)
 
         # 5. メタボックスの1:1整合性修復
-        if not self.is_corporate_template and total_slides > 0:
+        if total_slides > 0:
             new_html = self._fix_meta_boxes(new_html, total_slides, ratio_key)
 
         return new_html, self.fix_logs
@@ -246,27 +239,79 @@ class SlideVerifier:
         self.errors = []
         self.warnings = []
 
-        self.is_corporate_template = (
-            'corporate' in target_file.name.lower()
-            or 'design_templates' in str(target_file)
-            or '企業CI' in html
-            or 'ブランドカラー定義' in html
-        )
-
         self.slides = []
         self.meta_boxes = []
         self._extract_elements()
 
     def _extract_elements(self):
         """スライド要素とメタボックスを抽出する"""
-        slide_pattern = re.compile(r'<section[^>]*class=["\'][^"\']*\bslide\b[^"\']*["\'][^>]*>([\s\S]*?)</section>', re.IGNORECASE)
-        self.slides = list(slide_pattern.finditer(self.html))
+        from html.parser import HTMLParser
 
-        metabox_pattern = re.compile(
-            r'<div[^>]*class=["\'][^"\']*\bslide-meta-box\b[^"\']*["\'][^>]*>([\s\S]*?)</div>(?=(?:\s*<!--[\s\S]*?-->)*\s*(?:<section\b|</main>|<div[^>]*class=["\'][^"\']*\bslide-meta-box\b|$))',
-            re.IGNORECASE
-        )
-        self.meta_boxes = list(metabox_pattern.finditer(self.html))
+        class ElementExtractor(HTMLParser):
+            def __init__(self, html):
+                super().__init__()
+                self.html_lines = html.splitlines()
+                self.slides = []
+                self.meta_boxes = []
+                self.in_slide = False
+                self.slide_start_line = 0
+                self.slide_depth = 0
+                self.in_meta = False
+                self.meta_start_line = 0
+                self.meta_depth = 0
+
+            def handle_starttag(self, tag, attrs):
+                attr_dict = dict(attrs)
+                line, _ = self.getpos()
+                if tag == 'section' and 'slide' in attr_dict.get('class', '').split():
+                    if not self.in_slide:
+                        self.in_slide = True
+                        self.slide_start_line = line
+                        self.slide_depth = 1
+                    else:
+                        self.slide_depth += 1
+                elif self.in_slide and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.slide_depth += 1
+                    
+                if tag == 'div' and 'slide-meta-box' in attr_dict.get('class', '').split():
+                    if not self.in_meta:
+                        self.in_meta = True
+                        self.meta_start_line = line
+                        self.meta_depth = 1
+                    else:
+                        self.meta_depth += 1
+                elif self.in_meta and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.meta_depth += 1
+
+            def handle_endtag(self, tag):
+                line, _ = self.getpos()
+                nl = chr(10)
+                if self.in_slide and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.slide_depth -= 1
+                    if self.slide_depth == 0 and tag == 'section':
+                        self.in_slide = False
+                        html_fragment = nl.join(self.html_lines[self.slide_start_line-1:line])
+                        self.slides.append({"html": html_fragment, "line": self.slide_start_line})
+                        
+                if self.in_meta and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.meta_depth -= 1
+                    if self.meta_depth == 0 and tag == 'div':
+                        self.in_meta = False
+                        html_fragment = nl.join(self.html_lines[self.meta_start_line-1:line])
+                        self.meta_boxes.append({"html": html_fragment, "line": self.meta_start_line})
+
+        extractor = ElementExtractor(self.html)
+        extractor.feed(self.html)
+        
+        class MatchMock:
+            def __init__(self, html, line):
+                self.html = html
+                self.line = line
+            def group(self, index):
+                return self.html
+                
+        self.slides = [MatchMock(s["html"], s["line"]) for s in extractor.slides]
+        self.meta_boxes = [MatchMock(m["html"], m["line"]) for m in extractor.meta_boxes]
 
     def run_all_checks(self):
         """すべての検証メソッドを実行する"""
@@ -286,12 +331,8 @@ class SlideVerifier:
         if slide_count == 0:
             self.errors.append('スライド要素 (<section class="slide ...">) が1枚も見つかりません。')
 
-        if not self.is_corporate_template:
-            if slide_count > 0 and slide_count != metabox_count:
-                self.errors.append(f'スライド枚数 ({slide_count}枚) とメタ情報ボックス数 ({metabox_count}個) が一致していません。各スライドの直下に必ず1つの .slide-meta-box を配置してください。')
-        else:
-            if metabox_count > 0 and slide_count != metabox_count:
-                self.errors.append(f'デザインテンプレート内のメタ情報ボックス数 ({metabox_count}個) がスライド枚数 ({slide_count}枚) と一致していません。')
+        if slide_count > 0 and slide_count != metabox_count:
+            self.errors.append(f'スライド枚数 ({slide_count}枚) とメタ情報ボックス数 ({metabox_count}個) が一致していません。各スライドの直下に必ず1つの .slide-meta-box を配置してください。')
 
     def check_slides_content(self):
         """各スライドの内容（番号、文字数、CSSリスク、画像、Anti-AI-Smell等）を検証する"""
@@ -301,25 +342,26 @@ class SlideVerifier:
             slide_num = idx + 1
             inner_html = slide.group(1)
 
-            self._check_slide_number(slide_num, slide_count, inner_html)
+            self._check_slide_number(slide, slide_num, slide_count, inner_html)
             self._check_text_length(slide_num, slide.group(0), inner_html)
             self._check_css_risks(slide_num, slide.group(0), inner_html)
             self._check_images(slide_num, inner_html)
             self._check_anti_ai_smell(slide_num, inner_html)
 
-    def _check_slide_number(self, slide_num, total_slides, inner_html):
+    def _check_slide_number(self, slide, slide_num, total_slides, inner_html):
         """フッターのスライド番号表記を検証する"""
         slide_num_str = f"{slide_num:02d}"
         expected_total_str = f"{total_slides:02d}"
+        line_prefix = f"[Line {slide.line}] " if hasattr(slide, "line") else ""
 
         footer_exact_pattern = re.compile(rf'(?:>|\s|\b)0?{slide_num}\s*/\s*0?{total_slides}(?:<|\s|\b)', re.IGNORECASE)
         if not footer_exact_pattern.search(inner_html):
             any_number_match = re.search(r'(?:>|\s|\b)0?(\d{1,2})\s*/\s*0?(\d{1,2})(?:<|\s|\b)', inner_html)
             if any_number_match:
                 detected = any_number_match.group(0).strip('<> ')
-                self.errors.append(f'Slide {slide_num}: フッター番号が誤っています (検出: "{detected}" -> 正しくは "{slide_num_str} / {expected_total_str}")')
+                self.errors.append(f'{line_prefix}Slide {slide_num}: フッター番号が誤っています (検出: "{detected}" -> 正しくは "{slide_num_str} / {expected_total_str}")')
             else:
-                self.errors.append(f'Slide {slide_num}: フッターのスライド番号表記 ("{slide_num_str} / {expected_total_str}") が見つかりません。')
+                self.errors.append(f'{line_prefix}Slide {slide_num}: フッターのスライド番号表記 ("{slide_num_str} / {expected_total_str}") が見つかりません。')
 
     def _extract_plain_text(self, html_content):
         """HTMLからプレーンテキストを抽出する（文字数カウント用）"""
@@ -357,14 +399,13 @@ class SlideVerifier:
                 f'({", ".join(set(dangerous_matches))})。'
             )
 
-        if not self.is_corporate_template:
-            slide_tag = slide_html.split('>')[0]
-            if not re.search(r'\bcontenteditable=["\']true["\']|\bcontenteditable\b(?!=["\']false["\'])', slide_tag, re.IGNORECASE):
-                self.errors.append(
-                    f'Slide {slide_num}: スライド要素 (<section class="slide ...">) に contenteditable="true" が静的に付与されていません。'
-                    f'JavaScriptランタイム未ロード時でもブラウザ標準で即座にテキスト編集できるフェイルセーフを死守するため、'
-                    f'必ず contenteditable="true" を付与してください。'
-                )
+        slide_tag = slide_html.split('>')[0]
+        if not re.search(r'\bcontenteditable=["\']true["\']|\bcontenteditable\b(?!=["\']false["\'])', slide_tag, re.IGNORECASE):
+            self.errors.append(
+                f'Slide {slide_num}: スライド要素 (<section class="slide ...">) に contenteditable="true" が静的に付与されていません。'
+                f'JavaScriptランタイム未ロード時でもブラウザ標準で即座にテキスト編集できるフェイルセーフを死守するため、'
+                f'必ず contenteditable="true" を付与してください。'
+            )
 
         if 'overflow-hidden' in inner_html:
             clipped_badges = re.findall(r'<[a-z0-9]+[^>]*class=["\'][^"\']*(?:absolute\s+[^"\']*-top-|-mt-)[^"\']*["\'][^>]*>', inner_html, re.IGNORECASE)
@@ -447,9 +488,9 @@ class SlideVerifier:
             if not expected_badge.search(inner_html):
                 any_badge_match = re.search(r'Slide\s*0?\d+\s*/\s*0?\d+', inner_html, re.IGNORECASE)
                 if any_badge_match:
-                    self.errors.append(f'メタボックス {slide_num}: バッジ番号が誤っています (検出: "{any_badge_match.group(0)}" -> 正しくは "Slide {slide_num} / {slide_count}")')
+                    self.errors.append(f'[Line {box.line}] メタボックス {slide_num}: バッジ番号が誤っています (検出: "{any_badge_match.group(0)}" -> 正しくは "Slide {slide_num} / {slide_count}")')
                 else:
-                    self.warnings.append(f'メタボックス {slide_num}: バッジ表記 ("Slide {slide_num} / {slide_count}") が見つかりません。')
+                    self.warnings.append(f'[Line {box.line}] メタボックス {slide_num}: バッジ表記 ("Slide {slide_num} / {slide_count}") が見つかりません。')
 
     def check_ui_components(self):
         """ヘッダー表記と必須コンポーネント（JSランタイム含む）の検証"""
@@ -464,18 +505,14 @@ class SlideVerifier:
         else:
             self.errors.append('ヘッダーに id="deckSlideCountText" の要素が見つかりません。')
 
-        if self.is_corporate_template:
-            required_ids = ['deckTitleText', 'deckRatioText', 'deckSlideCountText']
-            required_js_functions = []
-        else:
-            required_ids = [
-                'deckTitleText', 'deckRatioText', 'deckSlideCountText',
-                'toggleEditBtn', 'copyCommentsBtn', 'presentationModal', 'selectionToolbar'
-            ]
-            required_js_functions = [
-                'toggleEditMode', 'startPresentation', 'stopPresentation',
-                'copySlideComments', 'formatSelection'
-            ]
+        required_ids = [
+            'deckTitleText', 'deckRatioText', 'deckSlideCountText',
+            'toggleEditBtn', 'copyCommentsBtn', 'presentationModal', 'selectionToolbar'
+        ]
+        required_js_functions = [
+            'toggleEditMode', 'startPresentation', 'stopPresentation',
+            'copySlideComments', 'formatSelection'
+        ]
 
         for rid in required_ids:
             if not re.search(rf'id=["\']{rid}["\']', self.html, re.IGNORECASE):
@@ -489,18 +526,17 @@ class SlideVerifier:
 
     def _check_editability_failsafe(self):
         """編集機能フェイルセーフ検査 (is-editable, pointer-events)"""
-        if not self.is_corporate_template:
-            if not re.search(r'<body[^>]*class=["\'][^"\']*\bis-editable\b', self.html, re.IGNORECASE):
-                self.errors.append(
-                    'body タグに "is-editable" クラスが付与されていません (<body class="... is-editable">)。'
-                    '初期ロード時の即時編集可能状態を保証するため必ず付与してください。'
-                )
+        if not re.search(r'<body[^>]*class=["\'][^"\']*\bis-editable\b', self.html, re.IGNORECASE):
+            self.errors.append(
+                'body タグに "is-editable" クラスが付与されていません (<body class="... is-editable">)。'
+                '初期ロード時の即時編集可能状態を保証するため必ず付与してください。'
+            )
 
-            if re.search(r'body:not\(\.is-editable\)[^{]*\{[^}]*pointer-events\s*:\s*none', self.html, re.IGNORECASE):
-                self.errors.append(
-                    'CSS内にスライドへのマウス操作を完全遮断する危険な "pointer-events: none" が検出されました。'
-                    'JavaScript未ロード時やGPTのトークン省略時に編集機能が完全に死亡するため削除してください。'
-                )
+        if re.search(r'body:not\(\.is-editable\)[^{]*\{[^}]*pointer-events\s*:\s*none', self.html, re.IGNORECASE):
+            self.errors.append(
+                'CSS内にスライドへのマウス操作を完全遮断する危険な "pointer-events: none" が検出されました。'
+                'JavaScript未ロード時やGPTのトークン省略時に編集機能が完全に死亡するため削除してください。'
+            )
 
     def check_print_css(self):
         """印刷・PDF余白ゼロ設定の検証"""

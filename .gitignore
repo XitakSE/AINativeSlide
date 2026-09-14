@@ -25,5 +25,7 @@ legacy/
 
 # Demo files and assets
 demo_assets/
+demo_output/
 demo_*.html
 speech_script_*.md
+

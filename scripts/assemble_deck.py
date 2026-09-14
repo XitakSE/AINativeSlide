@@ -149,8 +149,43 @@ class DeckAssembler:
 
     def _extract_slides(self, html_text: str) -> list[str]:
         """HTMLテキストからスライド要素 (<section ... class="slide ...">) をすべて抽出する"""
-        pattern = re.compile(r'(<section[^>]*class=["\'][^"\']*\bslide\b[^"\']*["\'][^>]*>[\s\S]*?</section>)', re.IGNORECASE)
-        return pattern.findall(html_text)
+        from html.parser import HTMLParser
+
+        class SlideExtractor(HTMLParser):
+            def __init__(self, html):
+                super().__init__()
+                self.html_lines = html.splitlines()
+                self.slides = []
+                self.in_slide = False
+                self.slide_start_line = 0
+                self.slide_depth = 0
+
+            def handle_starttag(self, tag, attrs):
+                attr_dict = dict(attrs)
+                line, _ = self.getpos()
+                if tag == 'section' and 'slide' in attr_dict.get('class', '').split():
+                    if not self.in_slide:
+                        self.in_slide = True
+                        self.slide_start_line = line
+                        self.slide_depth = 1
+                    else:
+                        self.slide_depth += 1
+                elif self.in_slide and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.slide_depth += 1
+
+            def handle_endtag(self, tag):
+                line, _ = self.getpos()
+                nl = chr(10)
+                if self.in_slide and tag not in ['img', 'br', 'hr', 'input', 'meta', 'link']:
+                    self.slide_depth -= 1
+                    if self.slide_depth == 0 and tag == 'section':
+                        self.in_slide = False
+                        html_fragment = nl.join(self.html_lines[self.slide_start_line-1:line])
+                        self.slides.append(html_fragment)
+
+        extractor = SlideExtractor(html_text)
+        extractor.feed(html_text)
+        return extractor.slides
 
     def _infer_title(self, first_slide_html: str) -> str:
         """最初のスライドからタイトルを推論する"""

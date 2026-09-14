@@ -16,17 +16,24 @@ Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練�
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 ```
 
-### フォントサイズ & ウェイト規定（Base Anatomy 連動）
+### フォントサイズ & ウェイト規定（A4横 / 16:9 ワイド共通・視認性基準）
 
-| 役割 | クラス指定例 | サイズ/ウェイト | 用途 |
+スライドはWebサイトではなく「遠くから投影・印刷で読まれるプレゼンテーション資料」です。
+`text-xs` (12px) や `text-[10px]` の乱用（豆粒フォント）は厳禁とし、以下の階層基準を死守してください。
+
+| 役割 | 必須クラス指定 | サイズ/ウェイト | 意図・ガイドライン |
 | :--- | :--- | :--- | :--- |
-| **Kicker / Category** | `text-xs font-bold tracking-wider uppercase text-brand-600` | 12px / Bold / 字間広め | セクション番号、章名ラベル |
-| **Lead Message (Action Title)** | `text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug` | 20〜24px / ExtraBold | 各スライドの主張・結論（40〜60字の完全文） |
-| **Slide Title (標準見出し)** | `text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight` | 24〜30px / ExtraBold | スライド主見出し |
-| **Hero Title (Cover)** | `text-4xl sm:text-5xl font-extrabold tracking-tight leading-tight` | 36〜48px / ExtraBold | 表紙のメインタイトル |
-| **Card Heading** | `text-sm sm:text-base font-bold text-slate-900` | 14〜16px / Bold | カード内ブロックの小見出し |
-| **Body Text** | `text-xs sm:text-sm text-slate-600 leading-relaxed` | 12〜14px / Regular | 箇条書き、説明文、詳細 |
-| **Meta / Footer / Note** | `text-[11px] sm:text-xs text-slate-400 font-mono` | 11〜12px / Medium | 前提注記、データソース、日付、ページ番号 |
+| **Hero Title (Cover)** | `text-5xl font-black tracking-tight leading-tight` | 48px / Black | 表紙の主タイトル（圧倒的な重厚感） |
+| **Lead Message (Action Title)** | `text-2xl sm:text-3xl font-bold tracking-tight leading-snug` | 24〜28px / Bold | スライドの結論・主張（一瞬で目に飛び込む大きさ） |
+| **サマリの結論・主要指標** | `text-lg sm:text-xl font-black leading-snug` | 18〜20px / Black | エグゼクティブサマリの右側結論、コアKPI |
+| **巨大数値（Big Numbers）** | `text-3xl sm:text-4xl font-black` | 30〜36px / Black | 定量ROI、削減率、主要実績値 |
+| **Card Heading / サブ見出し** | `text-base sm:text-lg font-bold text-slate-900` | 16〜18px / Bold | 各カード・ブロックのタイトル |
+| **Body Text (スライド本文)** | `text-sm leading-relaxed text-slate-600` | 14px / Regular | **本文の絶対下限**（12pxは本文で使用禁止） |
+| **Kicker / バッジ** | `text-xs font-bold tracking-wider` | 12px / Bold | 章名バッジ、ステータスラベル |
+| **Meta / Footer / Note** | `text-xs text-slate-400 font-mono` | 12px / Medium | 注記・出典・ページ番号（12px未満は使わない） |
+
+> ⚠️ **文字数とフォントサイズの関係（Anti-Font-Shrink Rule）**:
+> 「文字数が多すぎて枠に収まらないからフォントを小さくする」という縮小対応は禁止します。文字数を削って要約し（1スライド250〜350文字目安）、フォントサイズ（本文14px、見出し16〜18px）と余白を死守してください。
 </typography_hierarchy>
 
 ---
