@@ -61,10 +61,10 @@ description: >-
    - `[Footer / Note]` 補足注記、データソース、前提条件、スライド番号
 4. **メタ情報枠の 1:1 配置**: すべての `<section class="slide ...">` の直下に、同番の `<div class="slide-meta-box no-print ...">` を必ず1つ対で配置する。
 5. **文字溢れの物理的抑止**: 本文コンテンツは `<div class="ai-content">` で囲み、見出し（`h2`, `h3`）、段落（`p`）、箇条書き（`ul`, `li`）を使用する。Tailwindの `line-clamp` により枠外突き抜けを完全に遮断する。
-6. **画像生成・配置の厳格ルール（Zero-Cropping ＆ CSP完全適合）**:
+6. **画像生成・配置の厳格ルール（完全Base64インライン化 ＆ Zero-Cropping）**:
    - 画像を配置する場合、**必ず1スライドにつき1枚ずつ専用プロンプトで個別に生成し、スライド枠のアスペクト比（16:9等）と完全同期させてトリミングなし（Zero-Cropping）で配置すること**（1枚の画像をCSSトリミングして使い回す手抜きは厳禁）。
-   - 外部CDN画像（Unsplash等）への依存を排除し、AIが生成したセッションアセット（またはData URI）を直接埋め込むこと。
-   - ※ただし、ユーザーから参考画像や素材画像が直接提供された場合は、その画像を優先して配置・活用する。
+   - **完全単一ファイル完結（Single-File Complete Architecture）の死守**: 外部画像フォルダ（`./images/...` や `./demo_assets/...`）や外部CDN URLへの参照は一切禁止する。AIが生成した画像やユーザー提供画像は、**必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）に変換して `<img src="...">` に直接インライン埋め込みすること**。これにより、HTMLファイル単体のみをダウンロード・共有・オフライン閲覧しても画像リンク切れ（404）が絶対に発生しない完全なポータビリティを保証する。
+   - ※ユーザーから素材画像が提供された場合も、同様にBase64エンコードしてインライン埋め込むこと。
 7. **完全インラインSVG**: グラフやチャートは外部JSライブラリ（Chart.js等）をロードせず、純粋なインライン `<svg>` で描画する。
 8. **言語の自動同期**: 依頼文が日本語の場合は `<html lang="ja">`、英語の場合は `<html lang="en">` を設定する。テンプレート内のJSがヘッダー文言やプレースホルダーを自動的に完全同期する。
 
@@ -132,6 +132,7 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 13. **トピックタイトル（名詞止め見出し）のみの出力禁止 (Anti-AI-Smell)**: 「〇〇について」等の名詞ラベルのみをスライド見出しにしてはならない。必ず完全文（Action Title）を出力すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 14. **中途半端な単語分断改行の禁止 (Anti-AI-Smell / Semantic Line Breaking)**: コンテナ端に到達した成り行きで単語の途中や助詞で1〜2文字だけ次行に落ちる改行を厳禁とする。見出しや本文では文節・意味の切れ目で明示的に `<br>` を挿入するか幅・文字サイズを調整して自然なリズムで改行すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 15. **右肩バッジの折り返し ＆ ヘッダー下部余白ゼロの禁止 (Header Spacing & Badge Protection)**: 見出しが2行化した際、右肩バッジが押しつぶされて複数行に分断されてはならない（必ず `shrink-0 whitespace-nowrap` を付与し、ヘッダーは `items-start gap-6` 構造とすること）。また、見出しとメインコンテンツが密着して余白がゼロにならないよう、必ずヘッダー下部に十分な余白（`mb-5`〜`mb-6`）および視覚的境界線（`pb-3 border-b border-slate-800` 等）を設けること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
+16. **外部画像ファイルパス・URL参照の禁止 (Single-File純度の死守)**: `<img src="./images/..." >` や `<img src="https://..." >` などの外部パス参照を行ってはならない。画像は必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）として HTML 内に直接インライン埋め込みし、HTMLファイル単体での完全動作を死守すること。
 
 ---
 

@@ -45,6 +45,10 @@
    - 見出しが2行化した際、右肩のメタバッジが押しつぶされて複数行に分断されてはならない（必ず `shrink-0 whitespace-nowrap` を付与し、ヘッダーは `items-start gap-6` 構造とすること）。
    - 見出しが2行化したことで下のメインコンテンツとの余白がゼロ（または数px）になって密着してはならない。必ずヘッダー下部に十分な余白（`mb-5`〜`mb-6`）および視覚的区切り（`pb-3 border-b border-slate-800` 等）を設け、コンテンツとの間に適切な垂直余白（呼吸空間）を確保すること。
 
+7. **外部画像ファイルパス・URL参照の禁止（Single-File純度の死守）**
+   - `<img src="./images/..." >` や `<img src="https://..." >` などの外部パス・URL参照を行ってはならない。
+   - スライドに画像を配置する場合は、必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）として直接インライン埋め込みし、HTMLファイル単体での完全な自己完結性を死守すること。
+
 ### 1.2 必須要件（MUST）
 
 1. **リードメッセージ（Action Title）の原則**
@@ -788,7 +792,8 @@
 <div class="grid grid-cols-2 gap-8 items-center my-auto">
   <!-- AI画像枠 (ドラッグ＆ドロップ対応) -->
   <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-950 group">
-    <img src="./images/slide_concept.png" alt="Concept Imagery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+    <!-- 画像はBase64 Data URIで直接インライン埋め込み（完全単一ファイル完結） -->
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/..." alt="Concept Imagery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
     <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-slate-300">
       <span class="font-mono text-accent-400">Concept Art</span>

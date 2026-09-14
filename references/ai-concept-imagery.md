@@ -62,17 +62,17 @@
 
 ---
 
-## 2. HTMLスライド内での画像コンテナ仕様（CSP完全適合・外部CDN排除）
+## 2. HTMLスライド内での画像コンテナ仕様（完全Single-File完結・Base64 Data URI埋め込み）
 
-最新のAIサンドボックスや企業環境の厳格なCSP（Content Security Policy）に適合するため、外部画像URL（Unsplash等）への依存を排除し、AIが生成したセッションアセット（またはData URI）を直接 `<img src="...">` に配置します。
+本スキルの最重要原則である「Single-File Complete Architecture（単一ファイル完結構造）」と厳格なCSP（Content Security Policy）に適合するため、**外部画像URL（Unsplash等）や外部フォルダ（`./images/...`）への参照は一切禁止**します。AIが生成した画像や提供画像は、**必ず Base64 Data URI（`data:image/jpeg;base64,...`）に変換して直接 `<img src="...">` にインライン埋め込み**します。
 
 ### パターン A: 左右スプリット（左: AI生成画像 / 右: 概念解説）
 ```html
 <div class="grid grid-cols-2 gap-8 items-center my-auto">
   <!-- AIネイティブ生成画像コンテナ (アスペクト比同期 16:9 / ドラッグ＆ドロップ再差し替え対応) -->
   <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700/60 shadow-xl bg-slate-900 group">
-    <!-- AIが生成した画像アセットを直接埋め込み（Zero-Cropping: アスペクト比完全一致） -->
-    <img src="./images/slide_3_concept.png" 
+    <!-- AIが生成した画像をBase64 Data URIで直接インライン埋め込み（Zero-Cropping ＆ 完全単一ファイル完結） -->
+    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/..." 
          alt="自律型データハブの概念図" 
          class="w-full h-full object-cover transition-transform duration-500">
     <div class="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none"></div>

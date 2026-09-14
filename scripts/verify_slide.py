@@ -112,8 +112,19 @@ def main():
             errors.append(
                 f'Slide {slide_num}: 枠外見切れ（Clipping）リスクのある危険な負の配置CSSが検出されました '
                 f'({", ".join(set(dangerous_matches))})。'
-                f'overflow-hiddenによる文字・バッジ欠損を防ぐため、コンテナ内部のインライン配置またはpaddingで設計してください。'
             )
+
+        # 外部画像パス・URL参照の静的検査（Single-File Complete Architecture）
+        img_src_pattern = re.compile(r'<img\b[^>]*\bsrc=["\']([^"\']+)["\']', re.IGNORECASE)
+        for img_match in img_src_pattern.finditer(inner_html):
+            src_val = img_match.group(1).strip()
+            if not src_val.startswith('data:image/'):
+                truncated_src = src_val if len(src_val) <= 45 else src_val[:42] + '...'
+                errors.append(
+                    f'Slide {slide_num}: 外部画像参照が検出されました (src="{truncated_src}")。'
+                    f'Single-File Complete Architecture（単一ファイル完結構造）を死守するため、'
+                    f'画像は必ず Base64 Data URI (data:image/...;base64,...) としてインライン埋め込みしてください。'
+                )
 
         # ── 2.5 Anti-AI-Smell ガードレール静的検査 ──
         # (1) 抽象バズワード・空虚表現の柔軟ヒューリスティック検知（完璧を求めずサジェストに留める）

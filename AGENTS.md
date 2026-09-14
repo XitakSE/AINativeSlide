@@ -175,6 +175,11 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
 - **Top-Right Badge Protection**: Top-right slide meta/category badges must NEVER wrap into multiple lines when titles span 2 lines. Always use `shrink-0 whitespace-nowrap` on badge containers and structure headers with `items-start gap-6` (title taking `flex-1 min-w-0 pr-4`).
 - **Header-Content Vertical Rhythm**: Never let multi-line Action Titles collapse vertical margins with the main slide content below. Always enforce explicit separation (e.g. `pb-3 border-b border-slate-800 mb-5` or `mb-6`) to guarantee comfortable breathing room and visual hierarchy.
 
+### Rule 9: Pure Single-File Complete Architecture (Mandatory Base64 Inline Images)
+- **Zero External Image Dependencies**: Never reference external local paths (`./images/...`, `./demo_assets/...`) or remote CDN URLs in `<img src="...">`.
+- **Mandatory Base64 Data URI**: All AI-generated images or user-provided image assets must be converted to Base64 Data URIs (`data:image/jpeg;base64,...` or `data:image/png;base64,...`) and embedded directly into the HTML document.
+- **100% Portability**: The resulting HTML slide deck must remain completely self-contained, ensuring that downloading, emailing, or viewing offline will never encounter broken image links (404).
+
 ---
 
 ## 5. Definition of Done for PRs / Changes
