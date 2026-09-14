@@ -700,48 +700,68 @@
               <div class="text-[10px] text-slate-400">手作業・従来AI・本スキルの業務改善効果を視覚化したイメージモデル</div>
             </div>
             <div class="flex items-center gap-3 text-[10px]">
-              <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-brand-500"></span><span class="text-slate-300">作成工数 (分)</span></div>
-              <div class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-emerald-400"></span><span class="text-slate-300">完成品質スコア (%)</span></div>
+              <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-brand-500"></span><span class="text-slate-300">工数 (左軸・分)</span></div>
+              <div class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-emerald-400"></span><span class="text-emerald-400 font-medium">品質 (右軸・%)</span></div>
             </div>
           </div>
-          <!-- SVG描画領域 (Pure Inline SVG) -->
+          <!-- SVG描画領域 (Pure Inline SVG 複合2軸チャート) -->
           <div class="w-full h-44 flex items-center justify-center">
-            <svg viewBox="0 0 480 180" class="w-full h-full">
+            <svg viewBox="0 0 480 185" class="w-full h-full">
               <!-- 背景グリッド -->
-              <line x1="40" y1="30" x2="460" y2="30" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
-              <line x1="40" y1="70" x2="460" y2="70" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
-              <line x1="40" y1="110" x2="460" y2="110" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
-              <line x1="40" y1="150" x2="460" y2="150" stroke="#475569" stroke-width="1.2"/>
-              <!-- Y軸ラベル -->
-              <text x="32" y="34" fill="#94a3b8" font-size="9" text-anchor="end">120m / 100%</text>
-              <text x="32" y="74" fill="#94a3b8" font-size="9" text-anchor="end">80m / 66%</text>
-              <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">40m / 33%</text>
-              <text x="32" y="154" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
-              <!-- 棒グラフ: 手動作成(120m) -> 従来AI(45m) -> AINativeSlide(10m) -->
+              <line x1="45" y1="30" x2="435" y2="30" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
+              <line x1="45" y1="60" x2="435" y2="60" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
+              <line x1="45" y1="90" x2="435" y2="90" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
+              <line x1="45" y1="120" x2="435" y2="120" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
+              <line x1="45" y1="150" x2="435" y2="150" stroke="#475569" stroke-width="1.2"/>
+
+              <!-- 左Y軸ラベル (作成工数・分) -->
+              <text x="38" y="33" fill="#94a3b8" font-size="8" text-anchor="end">120m</text>
+              <text x="38" y="63" fill="#94a3b8" font-size="8" text-anchor="end">90m</text>
+              <text x="38" y="93" fill="#94a3b8" font-size="8" text-anchor="end">60m</text>
+              <text x="38" y="123" fill="#94a3b8" font-size="8" text-anchor="end">30m</text>
+              <text x="38" y="153" fill="#94a3b8" font-size="8" text-anchor="end">0m</text>
+
+              <!-- 右Y軸ラベル (品質スコア・%) -->
+              <text x="442" y="33" fill="#34d399" font-size="8" text-anchor="start">100%</text>
+              <text x="442" y="63" fill="#34d399" font-size="8" text-anchor="start">75%</text>
+              <text x="442" y="93" fill="#34d399" font-size="8" text-anchor="start">50%</text>
+              <text x="442" y="123" fill="#34d399" font-size="8" text-anchor="start">25%</text>
+              <text x="442" y="153" fill="#34d399" font-size="8" text-anchor="start">0%</text>
+
+              <!-- 棒グラフ (作成工数) -->
               <!-- Bar 1: 手動 (120分) -->
-              <rect x="75" y="30" width="45" height="120" rx="4" fill="#475569"/>
-              <text x="97.5" y="24" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">120分</text>
-              <text x="97.5" y="165" fill="#cbd5e1" font-size="9" text-anchor="middle">手動作成</text>
+              <rect x="86" y="30" width="48" height="120" rx="4" fill="#475569"/>
+              <text x="110" y="140" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">120分</text>
               <!-- Bar 2: 従来AI (45分) -->
-              <rect x="205" y="105" width="45" height="45" rx="4" fill="#64748b"/>
-              <text x="227.5" y="99" fill="#cbd5e1" font-size="9" font-weight="bold" text-anchor="middle">45分</text>
-              <text x="227.5" y="165" fill="#cbd5e1" font-size="9" text-anchor="middle">従来AI (崩れ)</text>
-              <!-- Bar 3: AINativeSlide (10分・推奨) -->
-              <rect x="335" y="140" width="45" height="10" rx="4" fill="#6366f1"/>
-              <text x="357.5" y="134" fill="#818cf8" font-size="9" font-weight="bold" text-anchor="middle">10分</text>
-              <text x="357.5" y="165" fill="#818cf8" font-size="9" font-weight="bold" text-anchor="middle">本スキル</text>
+              <rect x="216" y="105" width="48" height="45" rx="4" fill="#64748b"/>
+              <text x="240" y="138" fill="#f8fafc" font-size="9" font-weight="bold" text-anchor="middle">45分</text>
+              <!-- Bar 3: AINativeSlide (10分) -->
+              <rect x="346" y="140" width="48" height="10" rx="4" fill="#6366f1"/>
+              <text x="370" y="132" fill="#818cf8" font-size="9" font-weight="bold" text-anchor="middle">10分</text>
+
               <!-- 折れ線グラフ: 品質スコア (手動 88% -> 従来AI 45% -> 本スキル 96%) -->
-              <!-- y座標計算: y = 150 - (120 * score/100) => 88%: y=44.4, 45%: y=96, 96%: y=34.8 -->
-              <polyline fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" points="97.5,44 227.5,96 357.5,35"/>
+              <polyline fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="110,44 240,96 370,35"/>
+
+              <!-- 折れ線プロット点 & 独立バッジ（背景ピルで文字干渉を完全排除） -->
               <!-- 点1: 手動 88% -->
-              <circle cx="97.5" cy="44" r="3.5" fill="#10b981"/>
-              <text x="97.5" y="38" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">88% (高質)</text>
-              <!-- 点2: 従来AI 45% (手戻り多発) -->
-              <circle cx="227.5" cy="96" r="3.5" fill="#f43f5e"/>
-              <text x="227.5" y="88" fill="#fb7185" font-size="9" font-weight="bold" text-anchor="middle">45% (要修正)</text>
+              <circle cx="110" cy="44" r="3.5" fill="#10b981"/>
+              <rect x="75" y="14" width="70" height="17" rx="8.5" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+              <text x="110" y="26" fill="#34d399" font-size="8.5" font-weight="bold" text-anchor="middle">88% (高質)</text>
+
+              <!-- 点2: 従来AI 45% -->
+              <circle cx="240" cy="96" r="3.5" fill="#f43f5e"/>
+              <rect x="200" y="68" width="80" height="17" rx="8.5" fill="#4c0519" stroke="#f43f5e" stroke-width="1"/>
+              <text x="240" y="80" fill="#fb7185" font-size="8.5" font-weight="bold" text-anchor="middle">45% (要修正)</text>
+
               <!-- 点3: 本スキル 96% -->
-              <circle cx="357.5" cy="35" r="4.5" fill="#34d399" stroke="#064e3b" stroke-width="2"/>
-              <text x="357.5" y="24" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">96% (即戦力)</text>
+              <circle cx="370" cy="35" r="4.5" fill="#34d399" stroke="#064e3b" stroke-width="2"/>
+              <rect x="330" y="10" width="80" height="17" rx="8.5" fill="#064e3b" stroke="#34d399" stroke-width="1.5"/>
+              <text x="370" y="22" fill="#34d399" font-size="8.5" font-weight="bold" text-anchor="middle">96% (即戦力)</text>
+
+              <!-- X軸カテゴリーラベル -->
+              <text x="110" y="168" fill="#cbd5e1" font-size="9" text-anchor="middle">手作業作成</text>
+              <text x="240" y="168" fill="#cbd5e1" font-size="9" text-anchor="middle">従来AI (手戻り)</text>
+              <text x="370" y="168" fill="#a5b4fc" font-size="9" font-weight="bold" text-anchor="middle">本スキル (推奨)</text>
             </svg>
           </div>
           <div class="flex items-center justify-between text-[10px] text-slate-400 mt-1">
