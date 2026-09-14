@@ -184,6 +184,16 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
 - **Static `contenteditable="true"`**: Every slide element must statically declare `<section class="slide ... contenteditable="true">`. Even if runtime scripts fail, are omitted by token limits, or are blocked, standard in-browser direct editing must remain fully operational.
 - **No Pointer Events Blocking**: Never apply `pointer-events: none` to slides in CSS. Mouse clicks, caret positioning, and text selection must never be completely suppressed.
 
+### Rule 11: Mandatory Hypothesis-Driven Grill & Strict Proposal Format
+- **Mandatory Reference Reading**: Always read `references/grill-workflow.md` before generating the initial outline proposal.
+- **Zero-Question Principle**: Never interrogate the user with open-ended questions (e.g., asking for deck size, aspect ratio, or title from scratch). Even for short, single-sentence prompts, proactively formulate a professional hypothesis outline, populating every slot of the exact Markdown template in `references/grill-workflow.md`.
+- **Strict 3-Layer Slide Anatomy in Japanese/English**: Every slide in the outline must present:
+  1. Intuitive pattern name (`【エグゼクティブサマリ】`, `【課題・打ち手型】`, `【トレードオフ比較表】` etc. in Japanese; `[Executive Summary]`, `[Problem & Solution]`, etc. in English).
+  2. Action Title / Lead Message: Complete sentence (40–60 characters) ending with active verbs (no passive noun titles).
+  3. Structural Intent: Specific visual contrast or criteria breakdown.
+- **Standard Default Placement**: Multi-slide decks (4+ slides) must always place Executive Summary and Agenda right after the Title slide.
+- **Approval Gate**: Never output HTML code until the user provides explicit approval ("OK", "承認").
+
 ---
 
 ## 5. Definition of Done for PRs / Changes
