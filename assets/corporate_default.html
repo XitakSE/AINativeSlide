@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Corporate Presentation - AINativeSlide</title>
+  <title>Corporate Design Showcase - AINativeSlide</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Google Fonts: Plus Jakarta Sans & Noto Sans JP -->
@@ -14,8 +14,8 @@
   <script>
     /* ==========================================================================
        【企業CI / ブランドカラー定義】
-       会社公式PPTXから抽出された指定カラー（CI/VI規約）をここで一元管理します。
-       ユーザーによる色変更は不可とし、全社で厳格に統一されたブランディングを担保します。
+       会社公式PPTXからリバースエンジニアリングされた指定カラー（CI/VI規約）。
+       全社で厳格に統一されたブランディングを担保します。
        ========================================================================== */
     tailwind.config = {
       theme: {
@@ -24,7 +24,7 @@
             sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
           },
           colors: {
-            // 企業公式プライマリカラー（例: 信頼と知性を象徴するインディゴ・ネイビー）
+            // 企業公式プライマリカラー（知性と信頼を象徴するディープインディゴ）
             brand: {
               50: '#eef2ff',
               100: '#e0e7ff',
@@ -34,10 +34,11 @@
               500: '#6366f1',
               600: '#4f46e5',
               700: '#4338ca',
+              800: '#3730a3',
               900: '#312e81',
               950: '#1e1b4b',
             },
-            // 企業公式アクセントカラー（例: ハイライト用スカイブルー）
+            // 企業公式アクセントカラー（ハイライト用エレクトリックシアン）
             accent: {
               400: '#38bdf8',
               500: '#0ea5e9',
@@ -117,7 +118,7 @@
 <body class="min-h-screen text-slate-800 pb-20">
 
   <!-- ========================================================================
-       【統一ヘッダーツールバー】
+       【統一ヘッダーツールバー（プレビュー・検証用）】
        ======================================================================== -->
   <header class="no-print sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-6 py-2.5 flex items-center justify-between shadow-xl">
     <div class="flex items-center gap-4">
@@ -125,19 +126,20 @@
         <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-brand-600 to-accent-500 flex items-center justify-center font-bold text-white text-xs shadow-md shadow-brand-500/20">
           ANS
         </div>
-        <span id="deckTitleText" class="font-bold text-sm text-slate-100 tracking-tight">企業公式スライド</span>
+        <span id="deckTitleText" class="font-bold text-sm text-slate-100 tracking-tight">公式デザインShowcase（全9スライド・全パターン網羅）</span>
       </div>
       <div class="h-4 w-px bg-slate-800"></div>
       <div class="text-[11px] text-slate-400 font-mono flex items-center gap-2">
         <span id="deckRatioText">16:9 ワイド</span>
         <span>•</span>
-        <span id="deckSlideCountText">全2スライド</span>
+        <span id="deckSlideCountText">全9スライド</span>
       </div>
     </div>
 
     <div class="flex items-center gap-2">
-      <span class="text-xs text-slate-400 font-medium px-2.5 py-1 rounded-md bg-slate-800/80 border border-slate-700/60">
-        🎨 公式デザインテンプレート
+      <span class="text-xs text-brand-300 font-medium px-2.5 py-1 rounded-md bg-brand-950/80 border border-brand-800/80 flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
+        🎨 公式デザインカタログ & 戦略コンサル示唆プリミティブ
       </span>
     </div>
   </header>
@@ -148,22 +150,22 @@
   <main class="slide-viewport flex flex-col items-center gap-12 p-8 max-w-7xl mx-auto">
 
     <!-- ========================================================================
-         【スライド骨格サンプル 1: 表紙スライド】
-         企業のCIロゴ、機密区分バッジ、発表者・日付の定位置レイアウト
+         【Slide 1: 表紙スライド (Cover Slide)】
+         企業CIロゴ、機密区分バッジ、タイトル、発表者情報の定位置骨格
          ======================================================================== -->
-    <section class="slide p-16 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800">
+    <section class="slide p-16 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800" contenteditable="true">
       <div class="flex justify-between items-center">
-        <!-- 企業CIロゴ配置エリア -->
+        <!-- 企業CIロゴ配置エリア（インラインSVG） -->
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-accent-400 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-brand-500/30">
             ANS
           </div>
           <div>
-            <div class="text-sm font-bold tracking-wider text-slate-200">ACME CORPORATION</div>
-            <div class="text-[11px] text-slate-400">Enterprise Strategy & Innovation Division</div>
+            <div class="text-sm font-bold tracking-wider text-slate-200">ACME ENTERPRISE</div>
+            <div class="text-[11px] text-slate-400">Digital Transformation & AI Operations Division</div>
           </div>
         </div>
-        <!-- 機密区分バッジ（社内規定） -->
+        <!-- 機密区分バッジ -->
         <div class="shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-full bg-rose-500/10 border border-rose-500/30 text-rose-400 font-mono text-xs font-bold tracking-widest uppercase">
           STRICTLY CONFIDENTIAL
         </div>
@@ -172,60 +174,1000 @@
       <div class="my-auto py-8">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-brand-500/20 border border-brand-500/30 text-brand-300 text-xs font-semibold mb-6">
           <span class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></span>
-          社内プロジェクト戦略提案書
+          2026年度 全社戦略提案書
         </div>
         <h1 class="text-5xl font-extrabold tracking-tight leading-tight mb-6 bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
-          プレゼンテーション メインタイトル
+          業務オペレーションの自律化基盤刷新計画
         </h1>
         <p class="text-xl text-slate-300 font-light max-w-3xl leading-relaxed">
-          サブタイトルまたは目的の要約ステートメントをここに記載します
+          AIエージェントと標準構造化フレームワークの統合により、年間4,800時間の手動転記をゼロ化する
         </p>
       </div>
 
       <!-- 定位置フッター枠 -->
-      <div class="flex justify-between items-end pt-6 border-t border-slate-800 text-sm text-slate-400 slide-footer">
+      <div class="flex justify-between items-end pt-6 border-t border-slate-800 text-sm text-slate-400">
         <div class="flex items-center gap-6">
           <div>
-            <span class="text-slate-500 text-xs block">発表部署 / 発表者</span>
-            <span class="text-slate-200 font-medium">経営企画部 / 担当者名</span>
+            <span class="text-slate-500 text-xs block">発表部門 / 起案者</span>
+            <span class="text-slate-200 font-medium">経営企画部 DX推進室 / 担当者名</span>
           </div>
           <div class="w-px h-6 bg-slate-800"></div>
           <div>
             <span class="text-slate-500 text-xs block">対象オーディエンス</span>
-            <span class="text-slate-200 font-medium">役員会 / 経営会議</span>
+            <span class="text-slate-200 font-medium">役員会 / 経営会議（意思決定用）</span>
           </div>
         </div>
         <div class="font-mono text-slate-500 text-xs">
-          01 / 02
+          01 / 09
         </div>
       </div>
     </section>
 
     <!-- ========================================================================
-         【スライド骨格サンプル 2: 本文スライド標準枠】
-         ヘッダーカテゴリバッジ、タイトル、コンテンツエリア、フッター
+         【Slide 2: エグゼクティブサマリ (Executive Summary)】
+         原則標準挿入: 役員が1枚で判断できる4分割サマリ（課題・打ち手・ROI・計画）
          ======================================================================== -->
-    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200">
-      <div class="flex justify-between items-center border-b border-slate-200/80 pb-4">
-        <div class="flex items-center gap-3">
-          <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">カテゴリー名</span>
-          <h2 class="text-xl font-bold text-slate-900 keep-all break-keep">スライドの見出し・キーメッセージ</h2>
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <!-- ヘッダー部 -->
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー（戦略コンサル型 Breadcrumbs） -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            ★ Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-500">01. 目次</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">02. 比較評価</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">03. 要因分解</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">04. ロードマップ</span>
         </div>
-        <div class="shrink-0 whitespace-nowrap text-xs font-semibold text-slate-500 tracking-wider uppercase">セクション名</div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Executive Summary</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              手動業務を自律AI基盤へ統合し、初年度ROI 152%（投資回収8ヶ月）を達成する
+            </h2>
+          </div>
+          <span class="shrink-0 whitespace-nowrap text-xs font-semibold text-rose-600 bg-rose-50 px-2.5 py-1 rounded border border-rose-200">全社最優先議案</span>
+        </div>
       </div>
 
-      <div class="my-auto py-4">
-        <!-- コンテンツ領域（カード、グリッド、表、図解など） -->
-        <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-          <p class="text-sm text-slate-600 leading-relaxed">
-            ここにスライドのメインコンテンツを配置します。企業規定のTailwindクラス（flex, grid, rounded-xl）を活用して堅牢なボックスモデルで組み立てます。
-          </p>
+      <!-- メインコンテンツ: 左表題・右巨大事実/主張の横スプリット4段構造（サブ文章なし・結論特化） -->
+      <div class="my-auto py-2 flex flex-col gap-4">
+        <!-- Row 1: 現状の課題 -->
+        <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+          <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-rose-50 text-rose-700 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <span class="w-2 h-2 rounded-full bg-rose-500"></span>01. 直面する課題
+            </div>
+            <div class="text-sm font-extrabold text-slate-800">現場ボトルネックと損失</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-lg font-black text-slate-900 tracking-tight leading-relaxed">
+              手動転記に年間4,800時間。締め遅延とミスにより <span class="text-rose-600 underline decoration-rose-300 underline-offset-4">1,920万円の年間機会損失</span> が発生
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 2: 解決策（推奨アプローチ強調） -->
+        <div class="flex items-center gap-6 p-5 bg-brand-50/80 rounded-xl border-2 border-brand-500 shadow-sm relative">
+          <div class="absolute -top-2.5 right-6 px-2.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] font-extrabold tracking-wider shadow">
+            ★ 本提案の推奨アプローチ
+          </div>
+          <div class="w-56 shrink-0 border-r border-brand-200 pr-4">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-brand-100 text-brand-800 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <span class="w-2 h-2 rounded-full bg-brand-500"></span>02. 抜本的解決策
+            </div>
+            <div class="text-sm font-extrabold text-brand-950">自律AI基盤の全社導入</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-lg font-black text-brand-950 tracking-tight leading-relaxed">
+              APIと自律描画エンジンを直結し、定常業務工数を <span class="text-brand-600 bg-white px-2.5 py-0.5 rounded border border-brand-300 font-black">92% 削減</span> してゼロ化
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 3: 定量投資対効果 (ROI) -->
+        <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+          <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>03. 投資対効果 (ROI)
+            </div>
+            <div class="text-sm font-extrabold text-slate-800">初年度ROI 152%・8ヶ月回収</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-lg font-black text-slate-900 tracking-tight leading-relaxed">
+              初期投資1,200万円に対し人件費1,820万円削減。 <span class="text-emerald-600 underline decoration-emerald-300 underline-offset-4">わずか8ヶ月で原価回収</span> を完了
+            </div>
+          </div>
+        </div>
+
+        <!-- Row 4: 推進計画と実現体制 -->
+        <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+          <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[11px] font-bold uppercase tracking-wider mb-1">
+              <span class="w-2 h-2 rounded-full bg-slate-500"></span>04. スケジュール・体制
+            </div>
+            <div class="text-sm font-extrabold text-slate-800">2026年Q4 全社展開</div>
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="text-lg font-black text-slate-900 tracking-tight leading-relaxed">
+              10月PoC、11月パイロットを経て <span class="text-slate-900 bg-slate-100 px-2.5 py-0.5 rounded font-black">12月に全社本番稼働</span> を完遂
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="flex justify-between items-center pt-4 border-t border-slate-200/80 text-xs text-slate-500 slide-footer">
+      <!-- フッター -->
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
         <div>ACME Corporation | 経営戦略プレゼンテーション</div>
-        <div class="font-mono">02 / 02</div>
+        <div class="font-mono">02 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 3: 目次・アジェンダ (Table of Contents / Agenda)】
+         原則標準挿入: 全体の章立てと現在位置の俯瞰
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー（戦略コンサル型 Breadcrumbs） -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">1</span>
+            01. 目次
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">02. 比較評価</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">03. 要因分解</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">04. ロードマップ</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Agenda</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              本提案のアジェンダ：現状分析から技術選定、投資対効果、導入計画までを俯瞰する
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">全4章構成</span>
+        </div>
+      </div>
+
+      <!-- 目次カードグリッド -->
+      <div class="my-auto py-4">
+        <div class="grid grid-cols-4 gap-6">
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-brand-400 transition-colors">
+            <div>
+              <div class="font-mono text-3xl font-black text-slate-300 mb-2">01</div>
+              <h3 class="text-base font-bold text-slate-800 mb-2">現状の課題と損失分析</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">現場手動オペレーションの実態、工数ロスとヒューマンエラーの定量計測結果。</p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-400 flex justify-between">
+              <span>Section 01</span>
+              <span>P. 02</span>
+            </div>
+          </div>
+
+          <div class="bg-brand-50/70 p-6 rounded-xl border-2 border-brand-500 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="font-mono text-3xl font-black text-brand-400 mb-2">02</div>
+              <h3 class="text-base font-bold text-brand-900 mb-2">刷新方針とトレードオフ比較</h3>
+              <p class="text-xs text-brand-700 leading-relaxed">SaaS導入・内製基盤・既存改修の多軸評価と、推奨案の採択根拠。</p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-brand-200 text-[11px] font-mono text-brand-700 font-bold flex justify-between">
+              <span>★ 重点検討章</span>
+              <span>P. 04</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-brand-400 transition-colors">
+            <div>
+              <div class="font-mono text-3xl font-black text-slate-300 mb-2">03</div>
+              <h3 class="text-base font-bold text-slate-800 mb-2">要因分解とROI試算</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">戦略コンサル型ウォーターフォールによる増減要因分解、投資回収シナリオ。</p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-400 flex justify-between">
+              <span>Section 03</span>
+              <span>P. 05</span>
+            </div>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between hover:border-brand-400 transition-colors">
+            <div>
+              <div class="font-mono text-3xl font-black text-slate-300 mb-2">04</div>
+              <h3 class="text-base font-bold text-slate-800 mb-2">ロードマップと品質Gate</h3>
+              <p class="text-xs text-slate-500 leading-relaxed">段階的リリースのタイムライン、通過必須のセキュリティ関門と推進体制。</p>
+            </div>
+            <div class="mt-6 pt-3 border-t border-slate-100 text-[11px] font-mono text-slate-400 flex justify-between">
+              <span>Section 04</span>
+              <span>P. 06</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">03 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 4: 課題・打ち手型 (problem_solution)】
+         左右4:6対比（現状ペイン・損失 ➔ 施策・定量的効果）＋損失試算カード
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 目次
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">1</span>
+            01. 課題分析
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">02. 比較評価</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">03. 要因分解</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">04. 構想・工程</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-rose-100 text-rose-700 text-xs font-bold tracking-wider uppercase">Problem & Solution</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              手動転記と属人運用による年間1,920万円の業務損失を、自律AI基盤の全社導入によりゼロ化する
+            </h2>
+          </div>
+          <span class="text-xs text-rose-600 font-mono font-bold bg-rose-50 px-2.5 py-1 rounded border border-rose-200">年間機会損失: 1,920万円</span>
+        </div>
+      </div>
+
+      <!-- メインコンテンツ: 左右4:6分割対比レイアウト -->
+      <div class="grid grid-cols-12 gap-6 my-auto items-stretch">
+        <!-- 左: 現状の課題・ボトルネック (40% / cols-5) -->
+        <div class="col-span-5 bg-rose-50/40 rounded-xl p-6 border border-rose-200 flex flex-col justify-between shadow-xs">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-rose-200/80">
+              <div class="flex items-center gap-2 text-rose-800 font-extrabold text-sm">
+                <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-black">✕</span>
+                <span>現状の課題 / Bottlenecks</span>
+              </div>
+              <span class="text-[10px] font-bold text-rose-600 bg-rose-100 px-2 py-0.5 rounded">現場運用実態</span>
+            </div>
+            <div class="space-y-3 text-xs">
+              <div class="bg-white p-3.5 rounded-lg border border-rose-100 shadow-xs">
+                <div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                  <span class="text-rose-500 font-bold">●</span> 月400時間の定常手動転記
+                </div>
+                <p class="text-slate-500 text-[11px] leading-relaxed">
+                  各部門が個別SaaSとExcelを手作業転記。締め日に残業が常態化し、本業の企画稼働を圧迫。
+                </p>
+              </div>
+              <div class="bg-white p-3.5 rounded-lg border border-rose-100 shadow-xs">
+                <div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+                  <span class="text-rose-500 font-bold">●</span> 年間24件の修正・ヒューマンエラー
+                </div>
+                <p class="text-slate-500 text-[11px] leading-relaxed">
+                  転記ミスによる請求遅延・契約違約金が頻発。再鑑査工数を含め年間480万円の直接損失が発生。
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 p-3 bg-rose-100/60 rounded-lg border border-rose-200 text-rose-900 text-xs flex items-center justify-between font-medium">
+            <span>累積損失（工数損失＋ミス賠償）:</span>
+            <span class="font-mono font-black text-sm text-rose-700">1,920万円 / 年</span>
+          </div>
+        </div>
+
+        <!-- 右: 抜本的解決策・Action & Solution (60% / cols-7) -->
+        <div class="col-span-7 bg-brand-50/50 rounded-xl p-6 border-2 border-brand-500 flex flex-col justify-between shadow-sm">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-brand-200">
+              <div class="flex items-center gap-2 text-brand-900 font-extrabold text-sm">
+                <span class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-black">✓</span>
+                <span>抜本的解決策 / Action & Solution</span>
+              </div>
+              <span class="bg-brand-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-xs">★ 自律AI基盤導入</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3 text-xs mb-3">
+              <div class="bg-white p-3.5 rounded-lg border border-brand-200 shadow-xs">
+                <div class="text-[10px] font-bold text-brand-600 mb-0.5 uppercase">Action 01</div>
+                <div class="font-bold text-slate-900 mb-1">差分自動同期ハブ</div>
+                <p class="text-slate-500 text-[11px] leading-relaxed">全SaaS間のマスタ・入力をイベント駆動で自動同期し手動介入を完全排除。</p>
+              </div>
+              <div class="bg-white p-3.5 rounded-lg border border-brand-200 shadow-xs">
+                <div class="text-[10px] font-bold text-brand-600 mb-0.5 uppercase">Action 02</div>
+                <div class="font-bold text-slate-900 mb-1">AIガードレール鑑査</div>
+                <p class="text-slate-500 text-[11px] leading-relaxed">入力値をリアルタイム推論検証し、不整合データを即座に遮断・自己修復。</p>
+              </div>
+            </div>
+            <div class="bg-white p-3 rounded-lg border border-brand-200 shadow-xs">
+              <div class="text-[10px] font-bold text-emerald-600 mb-0.5 uppercase">Expected Impact</div>
+              <div class="grid grid-cols-3 gap-2 text-center">
+                <div><div class="text-base font-mono font-black text-emerald-600">0時間</div><div class="text-[10px] text-slate-400">転記工数</div></div>
+                <div><div class="text-base font-mono font-black text-emerald-600">0件</div><div class="text-[10px] text-slate-400">年間過誤</div></div>
+                <div><div class="text-base font-mono font-black text-brand-600">8ヶ月</div><div class="text-[10px] text-slate-400">投資回収</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-brand-200 text-xs text-brand-800 flex justify-between items-center">
+            <span>推進体制: 社内専任チーム3名 ＋ 外部アーキテクト支援</span>
+            <span class="font-mono font-bold">開発期間: 3ヶ月</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">04 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 5: トレードオフ比較表 (tradeoff_matrix)】
+         ハーベイボール（● ◕ ◐ ◔ ○）＋自社テーブルスタイル＋推奨列ハイライト
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 課題
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">2</span>
+            02. 比較評価
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">03. 要因分解</span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">04. 構想・工程</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Comparison Matrix</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              運用保守の内製化を最優先とし、初期コスト増を許容して「案B: 自律基盤内製」を採用する
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">多軸トレードオフ分析</span>
+        </div>
+      </div>
+
+      <!-- 比較テーブル（ハーベイボール適用） -->
+      <div class="my-auto overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead>
+            <tr class="bg-slate-900 text-white">
+              <th class="p-3.5 font-bold w-1/4">
+                <div class="text-[10px] text-slate-400 font-normal mb-1">比較軸</div>
+                <div class="text-sm font-extrabold text-white">評価基準</div>
+              </th>
+              <th class="p-3.5 font-medium text-slate-300 w-1/4">
+                <div class="text-[10px] text-slate-400 font-normal mb-1">比較候補 1</div>
+                <div class="text-sm font-bold text-slate-200">案A: 汎用SaaSツール導入</div>
+              </th>
+              <!-- 推奨案列: バッジを見出しセル内に安全配置（見切れゼロ保証） -->
+              <th class="p-3.5 font-bold text-white bg-brand-600 border-x-2 border-t-2 border-brand-500 w-1/4">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-[10px] text-brand-200 font-normal">本命選択肢</span>
+                  <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">★ 推奨</span>
+                </div>
+                <div class="text-sm font-extrabold text-white">案B: 自律基盤内製開発</div>
+              </th>
+              <th class="p-3.5 font-medium text-slate-300 w-1/4">
+                <div class="text-[10px] text-slate-400 font-normal mb-1">比較候補 2</div>
+                <div class="text-sm font-bold text-slate-200">案C: 既存システム部分改修</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700">
+            <tr class="hover:bg-slate-50/50">
+              <td class="p-3 font-bold text-slate-900 bg-slate-50/40">初期開発・導入費</td>
+              <td class="p-3"><span class="font-bold text-emerald-600 mr-1.5">●</span> 低 (150万円 / 設定費)</td>
+              <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-medium text-slate-800"><span class="font-bold text-rose-500 mr-1.5">○</span> 高 (1,200万円 / フル構築)</td>
+              <td class="p-3"><span class="font-bold text-emerald-600 mr-1.5">●</span> 極小 (80万円 / パッチ修正)</td>
+            </tr>
+            <tr class="hover:bg-slate-50/50">
+              <td class="p-3 font-bold text-slate-900 bg-slate-50/40">月額運用・ライセンス費</td>
+              <td class="p-3 text-rose-600 font-medium"><span class="font-bold text-rose-500 mr-1.5">○</span> 高 (60万円/月 / アカウント課金)</td>
+              <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-bold text-brand-900"><span class="font-bold text-emerald-600 mr-1.5">●</span> 極小 (クラウド実費 約4万円)</td>
+              <td class="p-3 text-slate-600"><span class="font-bold text-slate-400 mr-1.5">◐</span> 0円 (追加費用なし)</td>
+            </tr>
+            <tr class="hover:bg-slate-50/50">
+              <td class="p-3 font-bold text-slate-900 bg-slate-50/40">業務適合性・カスタマイズ</td>
+              <td class="p-3 text-slate-500"><span class="font-bold text-rose-400 mr-1.5">◔</span> 不可 (SaaS仕様に業務を合わせる)</td>
+              <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-bold text-emerald-700"><span class="font-bold text-emerald-600 mr-1.5">●</span> 完全自由 (社内独自要件に100%合致)</td>
+              <td class="p-3 text-slate-500"><span class="font-bold text-slate-400 mr-1.5">◐</span> 制限あり (レガシー制約残存)</td>
+            </tr>
+            <tr class="hover:bg-slate-50/50">
+              <td class="p-3 font-bold text-slate-900 bg-slate-50/40">運用保守・データ主権</td>
+              <td class="p-3 text-slate-500"><span class="font-bold text-rose-400 mr-1.5">◔</span> ベンダー依存 (障害SLA外部任せ)</td>
+              <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-semibold text-brand-900"><span class="font-bold text-emerald-600 mr-1.5">●</span> 自チーム完結 (即日修正・データ社内保持)</td>
+              <td class="p-3 text-rose-600"><span class="font-bold text-rose-500 mr-1.5">○</span> 属人化継続 (担当者退職リスク)</td>
+            </tr>
+            <tr class="bg-slate-50/80 font-semibold">
+              <td class="p-3.5 font-bold text-slate-900">判定・トレードオフ総評</td>
+              <td class="p-3 text-amber-700"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[11px] font-bold mr-1">△</span> 累積コスト増大リスク</td>
+              <td class="p-3 bg-brand-100/70 border-x-2 border-b-2 border-brand-500 text-brand-900 font-bold">
+                <span class="px-2 py-0.5 rounded bg-brand-600 text-white text-[11px] font-bold mr-1">◎</span>
+                初期費を許容し3年累積ROI最善
+              </td>
+              <td class="p-3 text-rose-700"><span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 text-[11px] font-bold mr-1">✕</span> 根本課題が未解決で再発</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">05 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 6: 要因分解・ウォーターフォール (waterfall_breakdown)】
+         戦略コンサル型要因分解ステップ＋差分矢印＋CAGRアノテーション（完全インラインSVG）
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 課題
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            02. 比較
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">3</span>
+            03. 要因分解
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="text-slate-400">04. 構想・工程</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Waterfall Breakdown</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              工数削減とミス撲滅により、初期投資1,200万円を回収して年間純益+620万円を創出する
+            </h2>
+          </div>
+          <span class="text-xs text-brand-600 font-mono font-bold bg-brand-50 px-2.5 py-1 rounded border border-brand-200">回収期間: 8ヶ月</span>
+        </div>
+      </div>
+
+      <!-- ウォーターフォール視覚コンポーネント（決定論的インラインSVG描画） -->
+      <div class="my-auto bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+        <!-- 完全インラインSVGウォーターフォールチャート（要素重なりゼロ保証） -->
+        <div class="w-full">
+          <svg viewBox="0 0 960 215" class="w-full h-52">
+            <defs>
+              <linearGradient id="wfBrandGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#4f46e5" />
+                <stop offset="100%" stop-color="#3730a3" />
+              </linearGradient>
+            </defs>
+
+            <!-- 水平ゼロ基準軸 -->
+            <line x1="30" y1="165" x2="930" y2="165" stroke="#cbd5e1" stroke-width="1.5" />
+
+            <!-- 累積ピーク創出効果 境界線（点線と上部バッジ: 1,440万 + 480万 = 1,920万円） -->
+            <line x1="392.5" y1="26" x2="392.5" y2="165" stroke="#818cf8" stroke-width="1.5" stroke-dasharray="4,4" />
+            <rect x="337.5" y="10" width="110" height="20" rx="10" fill="#e0e7ff" stroke="#818cf8" stroke-width="1" />
+            <text x="392.5" y="24" text-anchor="middle" font-size="10" font-weight="black" fill="#4338ca">創出効果計: 1,920万</text>
+
+            <!-- ステップ間コネクタ点線（幾何学的に各バー端点と完全一致） -->
+            <line x1="155" y1="75" x2="240" y2="75" stroke="#10b981" stroke-width="1.5" stroke-dasharray="3,3" />
+            <line x1="350" y1="45" x2="435" y2="45" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3,3" />
+            <line x1="545" y1="120" x2="630" y2="120" stroke="#f43f5e" stroke-width="1.5" stroke-dasharray="3,3" />
+            <line x1="740" y1="126.25" x2="825" y2="126.25" stroke="#4f46e5" stroke-width="1.5" stroke-dasharray="3,3" />
+
+            <!-- ================= Step 1: 人件費削減 (最重要ベネフィット / +1,440万円 / height: 90px) ================= -->
+            <rect x="45" y="75" width="110" height="90" rx="6" fill="#10b981" />
+            <text x="100" y="52" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">創出効果 ①</text>
+            <text x="100" y="68" text-anchor="middle" font-family="monospace" font-size="14" font-weight="900" fill="#059669">+1,440万円</text>
+            <text x="100" y="125" text-anchor="middle" font-size="13" font-weight="bold" fill="#ffffff">人件費削減</text>
+            <text x="100" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">月400h × 3,000円</text>
+            <text x="100" y="200" text-anchor="middle" font-size="10" fill="#64748b">定常手動入力ゼロ化</text>
+
+            <!-- ================= Step 2: ミス損失ゼロ化 (+480万円 / height: 30px / 累計1,920万円へ) ================= -->
+            <rect x="240" y="45" width="110" height="30" rx="6" fill="#34d399" />
+            <text x="295" y="26" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">創出効果 ②</text>
+            <text x="295" y="40" text-anchor="middle" font-family="monospace" font-size="13" font-weight="900" fill="#059669">+480万円</text>
+            <text x="295" y="65" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">ミス防止</text>
+            <text x="295" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#059669">違約金・再鑑査ゼロ</text>
+            <text x="295" y="200" text-anchor="middle" font-size="10" fill="#64748b">年間24件の事故防止</text>
+
+            <!-- ================= Step 3: 初期開発費回収 (-1,200万円 / height: 75px / 累計720万円へ) ================= -->
+            <rect x="435" y="45" width="110" height="75" rx="6" fill="#f43f5e" />
+            <text x="490" y="38" text-anchor="middle" font-family="monospace" font-size="13" font-weight="900" fill="#e11d48">-1,200万円</text>
+            <text x="490" y="85" text-anchor="middle" font-size="12" font-weight="bold" fill="#ffffff">初期開発費</text>
+            <text x="490" y="100" text-anchor="middle" font-size="10" fill="#ffe4e6">確定原価 (投資回収)</text>
+            <text x="490" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#e11d48">初年度全額回収</text>
+            <text x="490" y="200" text-anchor="middle" font-size="10" fill="#64748b">内製自律基盤</text>
+
+            <!-- ================= Step 4: クラウド年間保守 (-100万円 / height: 6.25px / 累計620万円へ) ================= -->
+            <rect x="630" y="120" width="110" height="6.25" rx="2" fill="#fb7185" />
+            <text x="685" y="104" text-anchor="middle" font-size="10" font-weight="bold" fill="#64748b">年間保守費</text>
+            <text x="685" y="117" text-anchor="middle" font-family="monospace" font-size="12" font-weight="900" fill="#e11d48">-100万円</text>
+            <text x="685" y="185" text-anchor="middle" font-size="11" font-weight="bold" fill="#64748b">クラウド実費</text>
+            <text x="685" y="200" text-anchor="middle" font-size="10" fill="#64748b">インフラ維持費</text>
+
+            <!-- ================= Step 5: 着地純益 (Target: +620万円 / height: 38.75px / ★ ROI 152%) ================= -->
+            <rect x="825" y="126.25" width="110" height="38.75" rx="6" fill="url(#wfBrandGrad)" />
+            <rect x="815" y="55" width="130" height="20" rx="10" fill="#059669" />
+            <text x="880" y="69" text-anchor="middle" font-size="10" font-weight="black" fill="#ffffff">★ ROI 152% 達成</text>
+            <text x="880" y="90" text-anchor="middle" font-size="11" font-weight="bold" fill="#4f46e5">初年度純利益</text>
+            <text x="880" y="108" text-anchor="middle" font-family="monospace" font-size="15" font-weight="900" fill="#059669">+620万円</text>
+            <text x="880" y="150" text-anchor="middle" font-size="12" font-weight="black" fill="#ffffff">着地純益</text>
+            <text x="880" y="185" text-anchor="middle" font-size="11" font-weight="black" fill="#0f172a">初年度着地 (FY2026)</text>
+            <text x="880" y="200" text-anchor="middle" font-size="10" font-weight="bold" fill="#059669">回収完了・純増へ</text>
+          </svg>
+        </div>
+
+        <!-- 下部示唆サマリ（So What?）カード3枚（余白独立・重なりゼロ） -->
+        <div class="grid grid-cols-3 gap-4 pt-3 border-t border-slate-100 text-xs">
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="font-bold text-slate-800 mb-0.5 text-xs">① 人件費削減の再現性</div>
+            <div class="text-slate-500 text-[11px] leading-relaxed">月400時間の定常手動入力作業をゼロ化し、4名の稼働を企画業務へ転換。</div>
+          </div>
+          <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+            <div class="font-bold text-slate-800 mb-0.5 text-xs">② ミス起因損失の根絶</div>
+            <div class="text-slate-500 text-[11px] leading-relaxed">年間24件発生していた締め後修正・違約金をゼロ化し、信用毀損リスクを遮断。</div>
+          </div>
+          <div class="bg-brand-50/70 p-3 rounded-lg border border-brand-200">
+            <div class="font-bold text-brand-900 mb-0.5 text-xs">③ 8ヶ月での原価回収</div>
+            <div class="text-brand-700 text-[11px] leading-relaxed">初年度に投資1,200万円を回収完了。2年目以降は年間1,820万円の利益が永続。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">06 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 7: 全体像・階層マッピング (architecture_mapping)】
+         3層スタックアーキテクチャ（Client ➔ API & AI Core ➔ Data & Storage）
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 課題
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            02. 比較
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            03. 要因
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">4</span>
+            04. 構想・工程
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Architecture Mapping</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              クライアント・API統合・基幹連携を疎結合化し、全社統制とアジリティを両立する
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">3層スタックアーキテクチャ</span>
+        </div>
+      </div>
+
+      <!-- メインコンテンツ: 3層スタックアーキテクチャ構造 -->
+      <div class="my-auto flex flex-col space-y-3.5">
+        <!-- Layer 1: Client & UI Layer (利用者フロント) -->
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <div class="w-56 shrink-0 font-bold text-xs text-slate-700 uppercase border-r border-slate-200 pr-3">
+            <div class="text-brand-600 font-black text-sm">01. Client & UI</div>
+            <div class="text-[10px] text-slate-400 font-normal mt-0.5">全社共通利用者フロント</div>
+          </div>
+          <div class="flex-1 flex items-center gap-3">
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              社内Webポータル
+              <div class="text-[10px] text-slate-400 font-normal">React / Next.js</div>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              現場入力タブレット
+              <div class="text-[10px] text-slate-400 font-normal">PWA / Offline対応</div>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              管理ダッシュボード
+              <div class="text-[10px] text-slate-400 font-normal">KPIリアルタイム可視化</div>
+            </div>
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded">HTTPS / OAuth2</span>
+          </div>
+        </div>
+
+        <!-- Layer 2: Gateway & Orchestration (自律AI基盤 - CORE強調枠) -->
+        <div class="flex items-center gap-4 bg-brand-50/70 p-4 rounded-xl border-2 border-brand-500 shadow-sm">
+          <div class="w-56 shrink-0 font-bold text-xs text-brand-900 uppercase border-r border-brand-200 pr-3">
+            <div class="flex items-center justify-between mb-0.5">
+              <span class="text-brand-700 font-black text-sm">02. Gateway & AI</span>
+              <span class="bg-brand-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full">★ CORE</span>
+            </div>
+            <div class="text-[10px] text-brand-600 font-normal">自律オーケストレーション</div>
+          </div>
+          <div class="flex-1 flex items-center gap-3">
+            <div class="flex-1 p-3 bg-white rounded-lg border border-brand-200 text-center text-xs font-bold text-brand-950 shadow-xs">
+              API Gateway (Kong)
+              <div class="text-[10px] text-brand-600 font-normal">レート制限・認証統合</div>
+            </div>
+            <div class="flex-1 p-3 bg-white rounded-lg border-2 border-brand-500 text-center text-xs font-black text-brand-900 shadow-xs">
+              自律AIエージェント群
+              <div class="text-[10px] text-brand-600 font-bold">推論検証・不整合自動修復</div>
+            </div>
+            <div class="flex-1 p-3 bg-white rounded-lg border border-brand-200 text-center text-xs font-bold text-brand-950 shadow-xs">
+              監査ログ・ガードレール
+              <div class="text-[10px] text-brand-600 font-normal">SOX準拠・改ざん防止</div>
+            </div>
+            <span class="text-[10px] font-mono font-bold bg-brand-200 text-brand-900 px-2.5 py-1 rounded">gRPC / Async</span>
+          </div>
+        </div>
+
+        <!-- Layer 3: Data & Enterprise Systems (基幹・外部SaaS) -->
+        <div class="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-xs">
+          <div class="w-56 shrink-0 font-bold text-xs text-slate-700 uppercase border-r border-slate-200 pr-3">
+            <div class="text-slate-800 font-black text-sm">03. Enterprise Core</div>
+            <div class="text-[10px] text-slate-400 font-normal mt-0.5">基幹DB・連携外部SaaS</div>
+          </div>
+          <div class="flex-1 flex items-center gap-3">
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              基幹ERP (SAP)
+              <div class="text-[10px] text-slate-400 font-normal">仕訳・会計確定マスタ</div>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              顧客管理 (Salesforce)
+              <div class="text-[10px] text-slate-400 font-normal">商談・請求ステータス</div>
+            </div>
+            <div class="flex-1 p-3 bg-slate-50 rounded-lg border border-slate-200 text-center text-xs font-bold text-slate-800">
+              社内DWH (BigQuery)
+              <div class="text-[10px] text-slate-400 font-normal">全社分析・イベント保管</div>
+            </div>
+            <span class="text-[10px] font-mono font-bold bg-slate-200 text-slate-700 px-2.5 py-1 rounded">TLS 1.3 / Private</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 下部示唆カード2枚 -->
+      <div class="grid grid-cols-2 gap-4 pt-3 border-t border-slate-200/80 text-xs">
+        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-black shrink-0">1</span>
+          <div>
+            <div class="font-bold text-slate-800 text-xs">完全疎結合アーキテクチャ</div>
+            <div class="text-slate-500 text-[11px]">API中継により基幹側レガシー改修をゼロ化し、追加SaaS連携も最短2営業日で完了。</div>
+          </div>
+        </div>
+        <div class="bg-white p-3 rounded-lg border border-slate-200 shadow-xs flex items-center gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-black shrink-0">2</span>
+          <div>
+            <div class="font-bold text-slate-800 text-xs">統制と監査性の担保</div>
+            <div class="text-slate-500 text-[11px]">全エージェントの操作トランザクションを暗号化してDWHへ記録し、内部統制を保証。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">07 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 8: 境界線・NG/OK対比 (boundary_comparison)】
+         左右50:50対比（対象外Out of Scope ✕ vs 今回コミットMUST対象 ✓）
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 課題
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            02. 比較
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            03. 要因
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">4</span>
+            04. 構想・工程
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-slate-200 text-slate-700 text-xs font-bold tracking-wider uppercase">Boundary & Scope</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              第1期は定常転記とマスタ同期にスコープを限定し、外部SaaS直結は第2期へ委ねる
+            </h2>
+          </div>
+          <span class="text-xs text-brand-600 font-mono font-bold bg-brand-50 px-2.5 py-1 rounded border border-brand-200">第1期コミット範囲</span>
+        </div>
+      </div>
+
+      <!-- メインコンテンツ: 左右50:50対比レイアウト -->
+      <div class="grid grid-cols-2 gap-8 my-auto items-stretch">
+        <!-- 左: 対象外・次期送り (Out of Scope / ✕) -->
+        <div class="bg-rose-50/30 rounded-xl p-6 border border-rose-200 flex flex-col justify-between shadow-xs">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-rose-200">
+              <div class="flex items-center gap-2 text-rose-800 font-extrabold text-sm">
+                <span class="w-5 h-5 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center text-xs font-black">✕</span>
+                <span>対象外 / 今回やらないこと (Out of Scope)</span>
+              </div>
+              <span class="bg-rose-100 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded">Phase 2以降</span>
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 bg-white rounded-lg border border-rose-100 shadow-xs">
+                <div class="font-bold line-through text-slate-400 mb-0.5">1. 外部SaaS・Slack双方向同期</div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">メール/Webhookの片方向通知で運用代替可能なため次期策定。</p>
+              </div>
+              <div class="p-3 bg-white rounded-lg border border-rose-100 shadow-xs">
+                <div class="font-bold line-through text-slate-400 mb-0.5">2. 非定型PDFのOCR読取</div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">誤判定リスクを回避し、第2期PoCで精度検証後に導入。</p>
+              </div>
+              <div class="p-3 bg-white rounded-lg border border-rose-100 shadow-xs">
+                <div class="font-bold line-through text-slate-400 mb-0.5">3. レガシーDBスキーマ刷新</div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">APIラッパーで中継吸収し、工期長期化と改修コストを抑制。</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-rose-200 text-[11px] text-rose-700 flex justify-between items-center">
+            <span>※追加要望は変更管理委員会（CR）の承認必須</span>
+            <span class="font-bold">要件凍結: 完了</span>
+          </div>
+        </div>
+
+        <!-- 右: 今回コミット対象 (In Scope: ★MUST強調枠) -->
+        <div class="bg-white rounded-xl p-6 border-2 border-brand-500 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between pb-3 mb-4 border-b border-brand-200">
+              <div class="flex items-center gap-2 text-brand-900 font-extrabold text-sm">
+                <span class="w-5 h-5 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-black">✓</span>
+                <span>MUST: 今回コミット対象 (In Scope)</span>
+              </div>
+              <span class="bg-brand-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full shadow-xs">★ 第1期確約</span>
+            </div>
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 bg-brand-50/40 rounded-lg border border-brand-200 shadow-xs">
+                <div class="flex justify-between font-bold text-brand-900 mb-0.5">
+                  <span>1. 定常400hの入力転記自動化</span>
+                  <span class="text-[10px] bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded font-bold">最優先</span>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">現場手作業を100%排除し、人件費1,440万円削減を必達。</p>
+              </div>
+              <div class="p-3 bg-brand-50/40 rounded-lg border border-brand-200 shadow-xs">
+                <div class="flex justify-between font-bold text-brand-900 mb-0.5">
+                  <span>2. 権限管理 ＆ 監査ログ保存</span>
+                  <span class="text-[10px] bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded font-bold">必須Gate</span>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">個人情報保護・SOX法要件を満たす全操作ログ取得を内包。</p>
+              </div>
+              <div class="p-3 bg-brand-50/40 rounded-lg border border-brand-200 shadow-xs">
+                <div class="flex justify-between font-bold text-brand-900 mb-0.5">
+                  <span>3. ERP / Salesforce夜間同期</span>
+                  <span class="text-[10px] bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded font-bold">業務保証</span>
+                </div>
+                <p class="text-[11px] text-slate-600 leading-relaxed">安全なバッチ連携を確立し、業務停止ゼロで新旧基盤を切替。</p>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 pt-2.5 border-t border-brand-200 text-xs font-bold text-brand-700 flex justify-between items-center">
+            <span>リリース目標: 2026年11月末本番反映</span>
+            <span class="font-mono">SLA 99.9% 保証</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">08 / 09</div>
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         【Slide 9: ステップ・時系列フロー (step_process)】
+         自社ステップバッジ＋矢印コネクタ＋★Gate関門の強調
+         ======================================================================== -->
+    <section class="slide p-12 justify-between bg-slate-50 border border-slate-200" contenteditable="true">
+      <div class="flex-shrink-0 border-b border-slate-200/80 pb-3">
+        <!-- 章トラッカー -->
+        <div class="flex items-center gap-2 text-[11px] font-medium text-slate-400 mb-2">
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            Summary
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            01. 課題
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            02. 比較
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1 text-slate-500">
+            <span class="w-3.5 h-3.5 rounded-full bg-slate-200 text-slate-700 flex items-center justify-center text-[9px] font-bold">✓</span>
+            03. 要因
+          </span>
+          <span class="text-slate-300">›</span>
+          <span class="flex items-center gap-1.5 font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded border border-brand-200">
+            <span class="w-3.5 h-3.5 rounded-full bg-brand-600 text-white flex items-center justify-center text-[9px] font-bold">4</span>
+            04. 構想・工程
+          </span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div class="flex items-center gap-3">
+            <span class="shrink-0 whitespace-nowrap px-2.5 py-1 rounded bg-brand-100 text-brand-700 text-xs font-bold tracking-wider uppercase">Sequential Workflow</span>
+            <h2 class="text-xl font-extrabold text-slate-900 tracking-tight keep-all break-keep">
+              Step 2のセキュリティ監査承認をGateとし、12月の全社本番稼働まで段階展開する
+            </h2>
+          </div>
+          <span class="text-xs text-slate-400 font-mono">2026年Q4 タイムライン</span>
+        </div>
+      </div>
+
+      <!-- 4ステッププロセス（★Gate強調） -->
+      <div class="my-auto py-2">
+        <div class="grid grid-cols-4 gap-4">
+          <!-- Step 1 -->
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                <span class="text-xs font-mono font-bold text-slate-400">STEP 01</span>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">10月上旬</span>
+              </div>
+              <div class="text-xs font-bold text-slate-900 mb-2">基盤プロトタイプ構築</div>
+              <ul class="space-y-1.5 text-[11px] text-slate-600">
+                <li>・API連携コネクタの実装</li>
+                <li>・HTML/SVG描画エンジンの検証</li>
+                <li>・テストデータでの動作疎通確認</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-medium text-slate-500 flex items-center justify-between">
+              <div><span class="text-slate-400">成果物:</span> PoCレポート</div>
+              <span class="inline-flex items-center gap-1 text-[10px] text-slate-400 font-mono"><span class="w-1.5 h-1.5 rotate-45 bg-slate-400"></span>M1</span>
+            </div>
+          </div>
+
+          <!-- Step 2: Critical Gate (視覚的アンカー強調 & マイルストーン) -->
+          <div class="bg-brand-50/70 rounded-xl p-4 border-2 border-brand-500 shadow-sm flex flex-col justify-between relative">
+            <div class="absolute -top-2.5 right-3 bg-brand-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow flex items-center gap-1.5">
+              <span class="inline-block w-2 h-2 rotate-45 bg-amber-400"></span>
+              必須関門 (Gate M2)
+            </div>
+            <div>
+              <div class="flex items-center justify-between border-b border-brand-200/80 pb-2 mb-3">
+                <span class="text-xs font-mono font-bold text-brand-700">STEP 02</span>
+                <span class="text-[10px] font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded">10月下旬</span>
+              </div>
+              <div class="text-xs font-bold text-brand-900 mb-2">セキュリティ監査 ＆ 承認</div>
+              <ul class="space-y-1.5 text-[11px] text-slate-700">
+                <li>・機密データ暗号化・権限分離監査</li>
+                <li>・CISO / セキュリティ委員会審査</li>
+                <li>・脆弱性診断の全クリア</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-2.5 border-t border-brand-200 text-[11px] font-bold text-brand-800 flex items-center justify-between">
+              <div>通過条件: 監査サインオフ必須</div>
+              <span class="inline-flex items-center gap-1 text-[10px] text-brand-700 font-mono"><span class="w-2 h-2 rotate-45 bg-brand-600"></span>M2</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                <span class="text-xs font-mono font-bold text-slate-400">STEP 03</span>
+                <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">11月中旬</span>
+              </div>
+              <div class="text-xs font-bold text-slate-900 mb-2">パイロット実務運用</div>
+              <ul class="space-y-1.5 text-[11px] text-slate-600">
+                <li>・先行2部署での実業務投入</li>
+                <li>・現場担当者向けオンボーディング</li>
+                <li>・UI/操作性フィードバックの回収</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-medium text-slate-500 flex items-center justify-between">
+              <div><span class="text-slate-400">成果物:</span> パイロット評価報告</div>
+              <span class="inline-flex items-center gap-1 text-[10px] text-slate-400 font-mono"><span class="w-1.5 h-1.5 rotate-45 bg-slate-400"></span>M3</span>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
+                <span class="text-xs font-mono font-bold text-slate-400">STEP 04</span>
+                <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">12月1日</span>
+              </div>
+              <div class="text-xs font-bold text-slate-900 mb-2">全社本番展開 ＆ 監視</div>
+              <ul class="space-y-1.5 text-[11px] text-slate-600">
+                <li>・全社アカウント一斉有効化</li>
+                <li>・旧スプレッドシート運用の完全停止</li>
+                <li>・障害監視体制の常時稼働 (SLA 99.9%)</li>
+              </ul>
+            </div>
+            <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-bold text-emerald-700 flex items-center justify-between">
+              <div>Goal: 全社自律化完了</div>
+              <span class="inline-flex items-center gap-1 text-[10px] text-emerald-700 font-mono"><span class="w-2 h-2 rotate-45 bg-emerald-600"></span>M4</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between items-center pt-3 border-t border-slate-200/80 text-xs text-slate-500">
+        <div>ACME Corporation | 経営戦略プレゼンテーション</div>
+        <div class="font-mono">09 / 09</div>
       </div>
     </section>
 

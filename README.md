@@ -52,9 +52,10 @@
 | **用紙・印刷** | **4大アスペクト比・用紙サポート** | 16:9（Web投影）、4:3（従来型）、**A4横（印刷配布・稟議）**、**A4縦（1-Pager）** |
 | | **余白ゼロ印刷CSS (`@page`)** | ブラウザの「印刷（PDFに保存）」で改ページずれゼロ・余白ゼロのPDFを出力 |
 | **デザイン統制** | **Anti-AI-Smell ガードレール** | 均等3分割を禁止し推奨案を強調。抽象バズワードを排除し、完全文のAction Title（動詞結び）義務化 |
-| | **社内向け6大情報構造パターン** | 課題打ち手、トレードオフ比較、スコープ境界線、全体像、ステップ手順、落とし穴FAQ |
-| | **企業公式デザインテンプレート** | CIカラー、公式ロゴ、機密区分バッジ、定位置フッターを固定化（[Template-Builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) 連携） |
-| | **インラインSVGビジネスチャート** | 外部JS不使用の複合チャート（棒・折れ線）＆ 推奨列ハイライト付き比較テーブル |
+| | **基本骨格（サマリ・目次）の原則標準化** | 複数枚スライドでは表紙直後にエグゼクティブサマリ＆目次を原則標準配置（1枚もの除外） |
+| | **社内向け厳選6大情報構造パターン** | 課題打ち手、トレードオフ比較、ステップ手順、要因分解ウォーターフォール、全体像、境界線NG/OK対比 |
+| | **戦略コンサル型 示唆アノテーション** | 差分矢印（Difference Arrow / CAGR）、ハーベイボール（● ◕ ◐ ◔ ○）、章トラッカー（Breadcrumbs） |
+| | **企業公式デザインShowcaseテンプレート** | CIカラー・ロゴに加え、各パターンの自社UIスタイル集（Showcase全9枚・全パターン網羅）を固定化（[Template-Builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) 連携） |
 | **AIビジュアル** | **AI生成画像 (Concept Imagery)** | 4大テイスト（リアル／漫画／3Dアイコン／フラット）の日本語プロンプト設計 |
 | | **Zero-Cropping 構図同期** | スライド枠比率とプロンプト比率を事前同期し、CSSトリミング切り落としをゼロ化（D&D差し替え対応） |
 | | **Base64 完全インライン化** | 生成画像やCIロゴをData URIとしてHTML内に直接埋め込み、単一ファイル（Single-File）で完全完結 |
@@ -166,7 +167,8 @@ AINativeSlide/
 ├── README_EN.md             # 英語ドキュメント
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
 ├── agents/                  # 各種AIエージェント向けマニフェスト定義
-│   └── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
+│   ├── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
+│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT / Custom GPTs 導入設定ガイド＆専用プロンプト
 ├── assets/                  # Agent Skills 標準資材ディレクトリ
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
 │   ├── speech_script_example.md # 発表台本文書サンプル
@@ -174,7 +176,9 @@ AINativeSlide/
 ├── scripts/
 │   └── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
 └── references/              # 詳細技術リファレンス
-    ├── slide-patterns.md    # スライド情報構造＆レイアウトパターン集（Anti-AI-Smell・6大構成）
+    ├── slide-patterns.md    # スライド情報構造＆厳選6大パターン集（Anti-AI-Smell・Deck骨格）
+    ├── components-consulting.md # 戦略コンサル型示唆パーツ集（マリメッコ・ガント・ハーベイボール）
+    ├── data-visual-binding.md # データ表（CSV/MD）からの自動ビジュアル化プロトコル
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
     ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 比率・印刷CSS仕様
     ├── ai-concept-imagery.md # コンセプト画像プロンプト設計仕様

@@ -30,18 +30,27 @@ description: >-
    - `4:3 標準` (`w-[1024px] h-[768px]` / `@page { size: 4in 3in; }`)【従来型プロジェクター】
    - `A4 横（Landscape）` (`w-[1188px] h-[840px]` / `@page { size: A4 landscape; }`)【印刷配布・役員稟議資料に推奨】
    - `A4 縦（Portrait）` (`w-[840px] h-[1188px]` / `@page { size: A4 portrait; }`)【1枚企画書・要約ペーパーに推奨】
-3. **全スライドの構成案**:
-   - 各スライドの論理情報構造パターン（[スライドパターン集](./references/slide-patterns.md)）を選定。**対話言語に応じた完全分離ルールを厳守すること（混在厳禁）**：
+3. **全スライドの構成案（目次・エグゼクティブサマリの原則標準化）**:
+   - **原則標準化ルール（Default: ON）**: 複数枚スライド（通常4枚以上）の提案書・報告・ピッチでは、意思決定を加速させるため**表紙の直後に必ず「エグゼクティブサマリ（全体総括）」と「目次（アジェンダ）」を標準配置**する：
+     - `[表紙]` ➔ `[エグゼクティブサマリ]` ➔ `[目次（アジェンダ）]` ➔ `[各論スライド群]` ➔ `[まとめ/Next Step]`
+     - ※除外例外: 1枚もの資料（A4縦・横の1-Pager、要約ペーパー）、またはユーザーから「目次不要」「サマリは省いて」等の明示的な拒否指示があった場合のみ除外する。
+   - **各スライドの論理情報構造パターン（[スライドパターン集](./references/slide-patterns.md)）を選定**:
      - **日本語での対話時**: 開発者用英語ID（`problem_solution` 等）は一切出さず、直感的な日本語パターン名のみで提示する：
-       - `【課題・打ち手型】`: 左右対比で現場ペインと具体的解決策・定量的効果を対比
-       - `【トレードオフ比較表】`: 複数案のメリデリ・費用・保守性を一覧比較し推奨案を強調
-       - `【スコープ境界線（やる/やらない）】`: In Scope と Out of Scope を二分して期待値を制御
-       - `【全体像・階層マッピング】`: クライアント・API・DB等の階層や業務全体を俯瞰
-       - `【ステップ・時系列フロー】`: 時系列手順と通過必須の品質Gate（関門）を可視化
-       - `【落とし穴・NG/OK対比】`: よくある誤り（アンチパターン）と正しい運用の対比
+       - `【エグゼクティブサマリ】`: 左に論点表題・右に大きな事実と結論を掲げ、課題・打ち手・ROI・体制を1枚で総括【原則標準】
+       - `【目次（アジェンダ）】`: 全体の章立てと現在地を俯瞰【原則標準】
+       - `【課題・打ち手型】`: 左右対比で現場ペイン・根本原因と具体施策・定量的効果を対比
+       - `【トレードオフ比較表】`: 複数案比較＋ハーベイボール（● ◕ ◐ ◔ ○）による多軸評価
+       - `【ステップ・時系列フロー】`: 時系列手順（STEP 1〜4）と通過必須の品質Gate（関門）を可視化
+       - `【要因分解・ウォーターフォール】`: 売上・利益増減やKPI変動ステップを戦略コンサル型増減ステップで可視化
+       - `【全体像・階層マッピング】`: クライアント・API・DB等のシステム階層や業務全体の俯瞰
+       - `【境界線・NG/OK対比】`: In/Out Scopeの境界線設定、またはアンチパターン（NG）と推奨手法（OK）の対比
+       - `【マリメッコ市場分析】`: TAM市場規模（横幅）× 自社シェア（縦高さ）の2次元競合分析
+       - `【タイムライン＆マイルストーン】`: 四半期（Q1〜Q4）工程表と重要マイルストーン（◆）の可視化
      - **英語での対話時**: 日本語は一切出さず、英語パターン名のみで提示する：
-       - `[Problem & Solution]`, `[Comparison Matrix]`, `[Scope & Boundary]`, `[Architecture Mapping]`, `[Sequential Workflow]`, `[Pitfalls & Best Practices]`
+       - `[Executive Summary]`, `[Table of Contents / Agenda]`, `[Problem & Solution]`, `[Comparison Matrix]`, `[Sequential Workflow]`, `[Waterfall Breakdown]`, `[Architecture Mapping]`, `[Boundary & Best Practices]`, `[Mekko Market Share]`, `[Timeline & Milestone]`
    - スライドごとの見出しは名詞止めではなく、**ファクト＋示唆・結論を含む完全な1文（40〜60文字の Action Title / リードメッセージ）** として提示する。
+   - 戦略コンサル・エグゼクティブ示唆パーツ（実績/予測境界線、軸ブレイク、差分矢印、CAGR、ハーベイボール、章トラッカー）を適宜組み込み、聞き手に「So What?（示唆）」を直感的に伝える。
+   - **データ直接ビジュアル化プロトコル（Data-to-Visual Binding）**: ユーザーからCSV、TSV、Markdown表、数値データが提示された場合は、手動再入力を求めず、自動で差分・CAGRを計算してウォーターフォール、マリメッコ、または比較表へ直接バインドして構成案を提示すること。
 4. **AI生成画像の使用要否 ＆ テイスト選択（リアル系 / 漫画系 / 3Dアイコン系 / フラット系）**:
    - [A] 不要（CSSカード・アイコン図解で論理表現）
    - [B] リアル・実写・シネマティック系（重厚な役員ピッチ・企業ビジョン向け）
@@ -56,26 +65,34 @@ description: >-
 > ユーザーから構成案に対する「承認」「OK」「これで進めて」等の合意を得るまで、手順2（HTMLコード生成）を開始してはならない。
 
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
-- **必須手順**: ユーザーの承認を得た後、必ず `view_file` ツールを用いて [assets/template_base.html](./assets/template_base.html) を読み込み、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして取得すること。
+- **必須手順**: ユーザーの承認を得た後、必ずベース骨格（[assets/template_base.html](./assets/template_base.html)）を取得し、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして使用すること。
+  - **ツールが使える環境（Antigravity, Claude Code等）**: `view_file` ツールを用いて `assets/template_base.html` を読み込む。
+  - **GPT環境（ChatGPT / Custom GPTs 等）**:
+    - **Code Interpreterが使える場合（最優先推奨・完全動作保証）**: Pythonスクリプトでナレッジ内の `assets/template_base.html` を読み込み、スライドコンテンツ（`<section class="slide ...">` と `.slide-meta-box`）を置換して完成HTMLファイルを出力・ダウンロードリンクを提供する（トークン上限によるJS中略が物理的に発生せず、100%完全動作する）。
+    - **チャット出力環境**: `template_base.html` の軽量化スクリプト（約210行）を中略（`// ...` 等）することなく、完全な単一コードブロックとして出力する。
 - 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/corporate_default.html](./assets/corporate_default.html) を参照すること。
 
 ### 手順3: 単一HTML（Single-File HTML）の生成規則
 自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：
-1. **固定ヘッダーツールバー**: `[📝 編集: ON]`, `[📋 指示をコピー]`, `[▶ 全画面発表]`, `[🖨 PDF保存]` の4ボタン構造をそのまま維持する。
-2. **堅牢スライドボックス**: 全スライド要素は `<section class="slide ...">` とし、固定幅・固定高・`overflow-hidden` を付与する。
-3. **スライド共通骨格（Base Anatomy）の厳守**:
+1. **編集機能のフェイルセーフ保証（Fail-safe Editability）**:
+   - `<body class="... is-editable">`: `body` タグには必ず初期クラスとして `is-editable` を含め、ロード直後から即座に編集可能状態にする。
+   - `<section class="slide ... contenteditable="true">`: 全スライド要素に静的に `contenteditable="true"` を必ず付与する。これによりJavaScriptが万が一遅延・停止してもブラウザネイティブで即座にテキスト編集できる安全網を死守する。
+   - `pointer-events: none` の禁止: CSSにおいてスライド要素（`main .slide`）へのマウス操作・クリックを遮断する `pointer-events: none` を記述してはならない。
+2. **固定ヘッダーツールバー**: `[📝 編集: ON]`, `[📋 指示をコピー]`, `[▶ 全画面発表]`, `[🖨 PDF保存]` の4ボタン構造をそのまま維持する。
+3. **堅牢スライドボックス**: 全スライド要素は `<section class="slide ...">` とし、固定幅・固定高・`overflow-hidden` を付与する。
+4. **スライド共通骨格（Base Anatomy）の厳守**:
    - `[Kicker / Category]`（任意: カテゴリ・章名）
    - `【Lead Message】` 1スライド1主張を体現する完全な結論文（Action Title: 40〜60文字・動詞結び）
    - `Main Content Body`（パターン別のワイヤーフレーム・`flex-1 min-h-0`）
    - `[Footer / Note]` 補足注記、データソース、前提条件、スライド番号
-4. **メタ情報枠の 1:1 配置**: すべての `<section class="slide ...">` の直下に、同番の `<div class="slide-meta-box no-print ...">` を必ず1つ対で配置する。
-5. **文字溢れの物理的抑止**: 本文コンテンツは `<div class="ai-content">` で囲み、見出し（`h2`, `h3`）、段落（`p`）、箇条書き（`ul`, `li`）を使用する。Tailwindの `line-clamp` により枠外突き抜けを完全に遮断する。
-6. **画像生成・配置の厳格ルール（完全Base64インライン化 ＆ Zero-Cropping）**:
+5. **メタ情報枠の 1:1 配置**: すべての `<section class="slide ...">` の直下に、同番の `<div class="slide-meta-box no-print ...">` を必ず1つ対で配置する。
+6. **文字溢れの物理的抑止**: 本文コンテンツは `<div class="ai-content">` で囲み、見出し（`h2`, `h3`）、段落（`p`）、箇条書き（`ul`, `li`）を使用する。Tailwindの `line-clamp` により枠外突き抜けを完全に遮断する。
+7. **画像生成・配置の厳格ルール（完全Base64インライン化 ＆ Zero-Cropping）**:
    - 画像を配置する場合、**必ず1スライドにつき1枚ずつ専用プロンプトで個別に生成し、スライド枠のアスペクト比（16:9等）と完全同期させてトリミングなし（Zero-Cropping）で配置すること**（1枚の画像をCSSトリミングして使い回す手抜きは厳禁）。
    - **完全単一ファイル完結（Single-File Complete Architecture）の死守**: 外部画像フォルダ（`./images/...` や `./demo_assets/...`）や外部CDN URLへの参照は一切禁止する。AIが生成した画像やユーザー提供画像は、**必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）に変換して `<img src="...">` に直接インライン埋め込みすること**。これにより、HTMLファイル単体のみをダウンロード・共有・オフライン閲覧しても画像リンク切れ（404）が絶対に発生しない完全なポータビリティを保証する。
    - ※ユーザーから素材画像が提供された場合も、同様にBase64エンコードしてインライン埋め込むこと。
-7. **完全インラインSVG**: グラフやチャートは外部JSライブラリ（Chart.js等）をロードせず、純粋なインライン `<svg>` で描画する。
-8. **言語の自動同期**: 依頼文が日本語の場合は `<html lang="ja">`、英語の場合は `<html lang="en">` を設定する。テンプレート内のJSがヘッダー文言やプレースホルダーを自動的に完全同期する。
+8. **完全インラインSVG**: グラフやチャートは外部JSライブラリ（Chart.js等）をロードせず、純粋なインライン `<svg>` で描画する。
+9. **言語の自動同期**: 依頼文が日本語の場合は `<html lang="ja">`、英語の場合は `<html lang="en">` を設定する。テンプレート内のJSがヘッダー文言やプレースホルダーを自動的に完全同期する。
 
 ### 手順4: 自律品質検証 ＆ 自動修復ループ（Self-Repair Loop）
 HTMLコードをユーザーに提示する前に、環境に応じた品質チェックを実施すること：
@@ -142,6 +159,8 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 14. **中途半端な単語分断改行の禁止 (Anti-AI-Smell / Semantic Line Breaking)**: コンテナ端に到達した成り行きで単語の途中や助詞で1〜2文字だけ次行に落ちる改行を厳禁とする。見出しや本文では文節・意味の切れ目で明示的に `<br>` を挿入するか幅・文字サイズを調整して自然なリズムで改行すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 15. **右肩バッジの折り返し ＆ ヘッダー下部余白ゼロの禁止 (Header Spacing & Badge Protection)**: 見出しが2行化した際、右肩バッジが押しつぶされて複数行に分断されてはならない（必ず `shrink-0 whitespace-nowrap` を付与し、ヘッダーは `items-start gap-6` 構造とすること）。また、見出しとメインコンテンツが密着して余白がゼロにならないよう、必ずヘッダー下部に十分な余白（`mb-5`〜`mb-6`）および視覚的境界線（`pb-3 border-b border-slate-800` 等）を設けること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 16. **外部画像ファイルパス・URL参照の禁止 (Single-File純度の死守)**: `<img src="./images/..." >` や `<img src="https://..." >` などの外部パス参照を行ってはならない。画像は必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）として HTML 内に直接インライン埋め込みし、HTMLファイル単体での完全動作を死守すること。
+17. **スライドへの `contenteditable="true"` および `body` への `is-editable` 欠落の禁止 (Fail-safe Editability)**: スライドへの静的編集属性付与（`<section class="slide ... contenteditable="true">`）や初期クラス（`<body class="... is-editable">`）を省略してはならない。万が一スクリプトが停止しても、ブラウザ標準機能による直接編集を常に担保すること。
+18. **スライド全域への `pointer-events: none` 适用の禁止**: スライド要素へのマウスクリックやテキスト選択を完全遮断するような CSS（`pointer-events: none`）をスライドや body に適用してはならない。
 
 ---
 
@@ -160,7 +179,9 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 
 必要に応じて以下のリファレンスを `view_file` で参照し、詳細な設計仕様を取得すること：
 
-- [references/slide-patterns.md](./references/slide-patterns.md): スライド情報構造＆レイアウトパターン集（Anti-AI-Smell ガードレール、Base Anatomy、6大パターン、表紙・SVG・画像枠、JSON Schema）
+- [references/slide-patterns.md](./references/slide-patterns.md): スライド情報構造＆レイアウトパターン集（Anti-AI-Smell ガードレール、Base Anatomy、Deck全体骨格、厳選6大パターン、JSON Schema）
+- [references/components-consulting.md](./references/components-consulting.md): 戦略コンサル型 示唆・高度コンポーネント集（差分矢印、ハーベイボール、章トラッカー、実績/予測境界線、軸ブレイク、マリメッコ、ガント）
+- [references/data-visual-binding.md](./references/data-visual-binding.md): データ表（CSV/Markdown）からの直接ビジュアル化プロトコル（決定論的パターン変換マトリクス）
 - [references/grill-workflow.md](./references/grill-workflow.md): Grill詳細フロー、構成提案書テンプレート、台本文書仕様
 - [references/ratio-and-print-specs.md](./references/ratio-and-print-specs.md): 各比率の寸法計算、余白ゼロ印刷CSS、解像度換算
 - [references/ai-concept-imagery.md](./references/ai-concept-imagery.md): 4大テイスト別プロンプト構文、D&D差し替えJS仕様

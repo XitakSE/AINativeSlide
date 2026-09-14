@@ -52,9 +52,9 @@
 | **Paper & Print** | **4 Aspect Ratios & Formats** | Supports 16:9 Widescreen, 4:3 Standard, **A4 Landscape (Handouts/Memos)**, and **A4 Portrait (1-Pagers)**. |
 | | **Zero-Margin Print CSS (`@page`)** | Produces pixel-perfect, margin-free PDF exports directly via standard browser print (`Ctrl+P` / `Cmd+P`). |
 | **Design Governance** | **Anti-AI-Smell Guardrails** | Bans equal 3-card grids, eliminates empty buzzwords, and mandates Action Titles (complete 40–60 character sentences with verbs). |
-| | **6 Enterprise Wireframe Patterns** | Problem/Solution, Comparison Matrix, Scope Boundary, Architecture, Phased Workflow, and Pitfalls/FAQ. |
-| | **Corporate Design Templates** | Standardizes CI colors, logo, confidential badges, and footer positioning (works with [Template-Builder](https://github.com/XitakSE/AINativeSlide-Template-Builder)). |
-| | **Inline SVG Charts & Matrix Tables** | Pure inline SVG combo charts (bars & lines) and evaluation matrix tables with clear recommendation badges. |
+| | **6 Enterprise Wireframe Patterns** | Problem/Solution, Comparison Matrix, Sequential Workflow, Waterfall Breakdown, Architecture Mapping, and Boundary & Best Practices. |
+| | **Corporate Design Showcase Template** | Standardizes CI colors, logo, and builds an official 9-slide Showcase catalog covering all patterns ([Template-Builder](https://github.com/XitakSE/AINativeSlide-Template-Builder)). |
+| | **Inline SVG Charts & Matrix Tables** | Pure inline SVG waterfall charts (geometrically proportional), Harvey Balls (`● ◕ ◐ ◔ ○`), and safe enclosed recommendation badges. |
 | **AI Visuals** | **Concept Imagery Generation** | Curated prompts across 4 visual styles: Photorealistic, Manga/Comic, 3D Isometric, and Flat Vector. |
 | | **Zero-Cropping Aspect Alignment** | Pre-aligns container ratios with prompt aspect ratios to eliminate unwanted CSS cropping (supports drag-and-drop replacement). |
 | | **Pure Base64 Inlining** | Embeds all AI imagery and brand logos directly as Data URIs for true Single-File zero-dependency portability. |
@@ -166,7 +166,8 @@ AINativeSlide/
 ├── README_EN.md             # English documentation
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── agents/                  # Multi-Agent manifest definitions
-│   └── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
+│   ├── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
+│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT / Custom GPTs setup guide & system instructions
 ├── assets/                  # Agent Skills standard assets directory
 │   ├── template_base.html   # Base HTML template engine optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script sample document
@@ -175,6 +176,8 @@ AINativeSlide/
 │   └── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
 └── references/              # Detailed technical specifications
     ├── slide-patterns.md    # Information structuring & wireframe patterns (Anti-AI-Smell)
+    ├── components-consulting.md # Executive consulting visual components (Mekko, Gantt, Harvey balls)
+    ├── data-visual-binding.md # Data-to-visual binding protocols from CSV/Markdown tables
     ├── grill-workflow.md    # Cognitive alignment interview specification
     ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 aspect ratio & print CSS specs
     ├── ai-concept-imagery.md # Concept image generation prompt guidelines

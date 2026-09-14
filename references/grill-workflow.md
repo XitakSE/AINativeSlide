@@ -61,23 +61,26 @@
 
 **【英語での提示例（日本語は一切含めない）】**:
 - `Slide 1 [Cover]`: Title, department, date, confidentiality
-- `Slide 2 [Problem & Solution]`: Lead message + pain vs. solution contrast
-- `Slide 3 [Comparison Matrix]`: Lead message + multi-option tradeoff table with visual anchor
-- `Slide 4 [Scope & Boundary]`: Lead message + In Scope vs. Out of Scope separation
-- `Slide 5 [Sequential Workflow]` *(or `[Architecture Mapping]`)*: Lead message + 4-step flow with critical gate
-- `Slide 6 [Pitfalls & Best Practices]`: Lead message + anti-pattern vs. best practice contrast
+- `Slide 2 [Executive Summary]`: 4 horizontal split rows with key facts & claims
+- `Slide 3 [Agenda]`: Chapter breakdown with active highlight
+- `Slide 4 [Problem & Solution]`: Lead message + pain vs. solution contrast
+- `Slide 5 [Comparison Matrix]`: Lead message + multi-option tradeoff table with Harvey Balls
+- `Slide 6 [Waterfall Breakdown]`: Lead message + variance step breakdown with delta arrows
+- `Slide 7 [Architecture Mapping]`: Lead message + 3-tier stack with governance lane
+- `Slide 8 [Boundary & Scope Contrast]`: Lead message + In Scope vs. Out of Scope separation
+- `Slide 9 [Sequential Workflow]`: Lead message + 3-step flow with critical decision gate
 
-#### 💡 スライド情報構造パターン（全6種）の言語別対照表
+#### 💡 スライド情報構造パターン（6大本文パターン）の言語別対照表
 Grill提示時は、ユーザーの言語に合わせて一方のみを使用してください（混在厳禁）：
 
 | 日本語対話時（日本語のみ） | 英語対話時（英語のみ） | 内部ID (`pattern_id`) | レイアウトの特徴・使い所 |
 | :--- | :--- | :--- | :--- |
-| **【課題・打ち手型】** | `[Problem & Solution]` | `problem_solution` | 左右対比で現場ペインと具体アクション・成果を対比 |
-| **【トレードオフ比較表】** | `[Comparison Matrix]` | `tradeoff_matrix` | 複数案の評価軸を一覧比較し推奨案を強調 |
-| **【スコープ境界線】** | `[Scope & Boundary]` | `scope_boundary` | In Scope と Out of Scope を二分して期待値調整 |
-| **【全体像・階層マッピング】** | `[Architecture Mapping]` | `architecture_mapping` | クライアント・API・DB等の階層や全体像を俯瞰 |
+| **【課題・打ち手型】** | `[Problem & Solution]` | `problem_solution` | 左右対比で現場ペイン・原因と具体施策・定量的効果を対比 |
+| **【トレードオフ比較表】** | `[Comparison Matrix]` | `tradeoff_matrix` | 複数案の評価軸比較＋ハーベイボール（●◕◐◔○）で多軸評価 |
 | **【ステップ・時系列フロー】** | `[Sequential Workflow]` | `step_process` | 時系列手順（STEP 1〜4）と必須Gate（関門）を可視化 |
-| **【落とし穴・NG/OK対比】** | `[Pitfalls & Best Practices]` | `pitfalls_faq` | よくある誤りと正しいベストプラクティスを左右対比 |
+| **【要因分解・ウォーターフォール】** | `[Waterfall Breakdown]` | `waterfall_breakdown` | 売上・利益増減やKPI変動ステップを幾何学比例SVGで可視化 |
+| **【全体像・階層マッピング】** | `[Architecture Mapping]` | `architecture_mapping` | クライアント・API・DB等のシステム階層や業務全体の俯瞰 |
+| **【境界線・NG/OK対比】** | `[Boundary & Best Practices]` | `boundary_comparison` | In/Out Scope境界線設定、またはアンチパターン（NG）と推奨（OK）の対比 |
 
 ### 4. AI生成画像の要否 & スタイル（テイスト）選択
 - [A] **画像不要**: すべてCSSグリッド・カード・アイコン・図解ボックスで論理的に表現

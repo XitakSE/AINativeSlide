@@ -140,7 +140,7 @@
     .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
 
-    /* ── 編集モード状態に応じた選択・操作制御 ── */
+    /* ── 編集モード状態に応じた選択・操作制御（フェイルセーフ設計） ── */
     body.is-editable main .slide {
       user-select: text;
       -webkit-user-select: text;
@@ -149,7 +149,6 @@
       user-select: none !important;
       -webkit-user-select: none !important;
       cursor: default !important;
-      pointer-events: none !important; /* 編集OFF時はクリック・テキスト選択を完全無効化 */
     }
 
     /* 編集可能モードのアウトライン視覚化 */
@@ -186,7 +185,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
+<body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20 is-editable">
 
   <!-- 固定操作ツールバー（印刷時は非表示） -->
   <header class="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between gap-4 min-h-[56px]">

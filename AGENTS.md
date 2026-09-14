@@ -45,11 +45,10 @@ AINativeSlide/
 │   ├── speech_script_example.md    # Speaker script document example
 │   └── corporate_default.html      # Corporate design template (CI/VI compliance)
 ├── references/                     # Detailed technical specifications
+│   ├── slide-patterns.md           # Information structuring, layout patterns, and core wireframes
+│   ├── components-consulting.md    # Executive consulting visual components (Mekko, Gantt, Harvey balls)
+│   ├── data-visual-binding.md      # Data-to-visual binding protocols from CSV/Markdown tables
 │   ├── grill-workflow.md           # Cognitive-drift prevention grill protocol
-│   ├── ratio-and-print-specs.md    # Aspect ratios & zero-margin print CSS specs
-│   ├── ai-concept-imagery.md       # AI concept imagery prompt engineering
-│   ├── design-system.md            # Typography & robust box-model guidelines
-│   └── slide-patterns.md           # Information structuring, layout patterns, and SVG charts
 └── scripts/
     └── verify_slide.py             # Automated quality & layout regression checker
 ```
@@ -179,6 +178,11 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
 - **Zero External Image Dependencies**: Never reference external local paths (`./images/...`, `./demo_assets/...`) or remote CDN URLs in `<img src="...">`.
 - **Mandatory Base64 Data URI**: All AI-generated images or user-provided image assets must be converted to Base64 Data URIs (`data:image/jpeg;base64,...` or `data:image/png;base64,...`) and embedded directly into the HTML document.
 - **100% Portability**: The resulting HTML slide deck must remain completely self-contained, ensuring that downloading, emailing, or viewing offline will never encounter broken image links (404).
+
+### Rule 10: Fail-safe In-Browser Editability Guarantee
+- **Default Editable State**: Always include `is-editable` in the `<body>` class list (`<body class="... is-editable">`). Slides must be immediately editable upon browser render without waiting for JavaScript.
+- **Static `contenteditable="true"`**: Every slide element must statically declare `<section class="slide ... contenteditable="true">`. Even if runtime scripts fail, are omitted by token limits, or are blocked, standard in-browser direct editing must remain fully operational.
+- **No Pointer Events Blocking**: Never apply `pointer-events: none` to slides in CSS. Mouse clicks, caret positioning, and text selection must never be completely suppressed.
 
 ---
 

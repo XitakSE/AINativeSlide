@@ -127,6 +127,16 @@ def main():
                 f'({", ".join(set(dangerous_matches))})。'
             )
 
+        # スライド要素の静的編集属性（contenteditable="true"）の検査（通常スライドで必須）
+        if not is_corporate_template:
+            slide_tag = slide.group(0).split('>')[0]
+            if not re.search(r'\bcontenteditable=["\']true["\']|\bcontenteditable\b(?!=["\']false["\'])', slide_tag, re.IGNORECASE):
+                errors.append(
+                    f'Slide {slide_num}: スライド要素 (<section class="slide ...">) に contenteditable="true" が静的に付与されていません。'
+                    f'JavaScriptランタイム未ロード時でもブラウザ標準で即座にテキスト編集できるフェイルセーフを死守するため、'
+                    f'必ず contenteditable="true" を付与してください。'
+                )
+
         # 外部画像パス・URL参照の静的検査（Single-File Complete Architecture）
         img_src_pattern = re.compile(r'<img\b[^>]*\bsrc=["\']([^"\']+)["\']', re.IGNORECASE)
         for img_match in img_src_pattern.finditer(inner_html):
@@ -179,6 +189,23 @@ def main():
                     f'Slide {slide_num}: 3均等グリッド (grid-cols-3) 内に視覚的アンカー（推奨案・CORE・最重要課題の強調）が見当たりません (Anti-AI-Smell)。'
                     f'無意味な均等カード化を避け、推奨案や重要要素に色枠やバッジ等のアンカーを設定してください。'
                 )
+
+        # (4) 【再発防止】バッジ見切れ検査 (Overflow-Hidden vs Negative Absolute / Margin)
+        if 'overflow-hidden' in inner_html:
+            clipped_badges = re.findall(r'<[a-z0-9]+[^>]*class=["\'][^"\']*(?:absolute\s+[^"\']*-top-|-mt-)[^"\']*["\'][^>]*>', inner_html, re.IGNORECASE)
+            if clipped_badges:
+                errors.append(
+                    f'Slide {slide_num}: 親要素の `overflow-hidden` と競合して上部が見切れるリスクのあるバッジ/要素が検出されました (検出: {len(clipped_badges)}件)。'
+                    f'バッジは見出しセル内にインライン配置するか、親要素から overflow-hidden を除外して領域（pt-など）を確保してください。'
+                )
+
+        # (5) 【再発防止】パーセンテージマージンによる要素衝突検査 (Margin-Percentage Hack Collision)
+        margin_percentage_hacks = re.findall(r'(?:mb|mt)-\[\d+%(?:/\d+)?\]', inner_html, re.IGNORECASE)
+        if margin_percentage_hacks:
+            errors.append(
+                f'Slide {slide_num}: 脆弱なパーセンテージマージンハック ({", ".join(set(margin_percentage_hacks))}) が検出されました。'
+                f'ブラウザ環境による要素の重なり（Collision）の原因となるため、決定論的なインラインSVG（viewBox）または固定Flex/Gridレイアウトで描画してください。'
+            )
 
     # メタボックス内のバッジ番号チェック
     for idx, box in enumerate(meta_boxes):
@@ -234,6 +261,22 @@ def main():
     for rid in required_ids:
         if not re.search(rf'id=["\']{rid}["\']', html, re.IGNORECASE):
             errors.append(f'必須要素 id="{rid}" がHTML内に存在しません。')
+
+    # ========================================================
+    # 3.5. 編集機能フェイルセーフ検査 (Fail-safe Editability)
+    # ========================================================
+    if not is_corporate_template:
+        if not re.search(r'<body[^>]*class=["\'][^"\']*\bis-editable\b', html, re.IGNORECASE):
+            errors.append(
+                'body タグに "is-editable" クラスが付与されていません (<body class="... is-editable">)。'
+                '初期ロード時の即時編集可能状態を保証するため必ず付与してください。'
+            )
+
+        if re.search(r'body:not\(\.is-editable\)[^{]*\{[^}]*pointer-events\s*:\s*none', html, re.IGNORECASE):
+            errors.append(
+                'CSS内にスライドへのマウス操作を完全遮断する危険な "pointer-events: none" が検出されました。'
+                'JavaScript未ロード時やGPTのトークン省略時に編集機能が完全に死亡するため削除してください。'
+            )
 
     # ========================================================
     # 4. 印刷・PDF余白ゼロ設定（16:9, 4:3, A4 landscape, A4 portrait）

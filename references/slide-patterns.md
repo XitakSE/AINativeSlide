@@ -8,67 +8,23 @@
 
 ## 1. エージェント行動規範（Anti-AI-Smell Guardrails: 正本/SSOT）
 
-> **📌 Anti-AI-Smell マスター定義（Single Source of Truth）**:
-> 本セクションは、生成AI特有の「薄っぺらい整然さ（AIくささ）」を排除するための正本仕様です。
-> `SKILL.md` の絶対禁止事項（項目10〜13）および出力前自己検証チェックリストは本書を基準としています。
-> エージェントはスライド生成・修正時に以下の規範とリライト指針を厳守してください。
+エージェントはスライド生成・推敲時に以下の絶対規範を厳守してください（`SKILL.md` 禁止事項と完全連動）：
 
-### 1.1 禁止事項（DO NOT）
+1. **無意味な3均等カード化の禁止**: 3列以上並ぶ場合は必ず推奨案・関門に視覚的アンカー（幅拡張、ハイライト色枠等）を設定する。
+2. **抽象バズワード連呼の禁止**: 「シナジー」「DX推進」等の空虚語句を廃止し、「月40h削減」「承認者2名体制」等の具体動作に直す。
+3. **飾りアイコン要求の禁止**: 文脈と無関係なロケット・電球等のアイコンを廃止し、状態記号（`✓`/`!`）、矢印（`➔`）、実数値に限定する。
+4. **トピックタイトル（名詞止め見出し）のみの禁止**: 「〇〇について」等の名詞止めを禁じ、結論を含む完全文（Action Title: 40〜60文字・動詞結び）を出力する。
+5. **中途半端な単語分断改行の禁止 (Semantic Line Breaking)**: 単語や助詞の途中での不自然な改行を禁じ、文節で明示的に `<br>` を入れる。
+6. **右肩バッジの折り返し＆ヘッダー余白ゼロの禁止**: バッジには `shrink-0 whitespace-nowrap` を付与し、ヘッダー下部に十分な余白（`mb-5`）を設ける。
+7. **外部画像パス参照の禁止**: 画像は必ず Base64 Data URI（`data:image/...`）でインライン埋め込みし、単一ファイル完結を死守する。
 
-1. **無意味な3均等カード化の禁止**
-   - 3つ並ぶブロックの幅・文字量・強調度をすべて均等に配置してはならない。必ず「推奨案」「最重要課題」「最大のボトルネック」に視覚的アンカー（幅拡張、背景ハイライト、またはフラグ付け）を設定すること。
-   - **NG例**: 3枚のカードすべてが同一の `w-1/3 p-4 bg-white border border-slate-200`
-   - **OK例**: 推奨案のみ `w-[40%] bg-blue-50/80 border-2 border-blue-500 shadow-md`、他2つは `w-[30%] opacity-80`
-
-2. **抽象バズワードの連呼禁止**
-   - 「シナジーの最大化」「シームレスな連携」「DX推進の加速」「柔軟な対応」など、具体のアクションが想起できない語彙を出力してはならない。
-   - **NG例**: 「シナジーの最大化により業務効率化とDXを加速」
-   - **OK例**: 「受発注データを日次API同期し、月間80時間の手動転記をゼロ化」
-
-3. **飾りアイコンの要求禁止**
-   - 文脈と直結しないロケット、電球、握手、歯車などの汎用アイコン配置を指定してはならない。ステータス表示（チェック `✓`、アラート `✕` 等）または既定ロゴに限定すること。
-   - **NG例**: アイデアの横に電球アイコン、成長の横にロケットアイコン、提携の横に握手アイコン
-   - **OK例**: 状態を示す記号バッジ（`✓ 完了` / `! 要対応` / `✕ 却下`）、矢印（`➔`）、または企業公式ロゴ・実データ数値
-
-4. **トピックタイトル（名詞止め見出し）のみの出力禁止**
-   - 「〇〇について」「今後の展望」のようなラベルのみをスライドタイトルにしてはならない。必ずファクトと示唆を含む完全文（Action Title: 40〜60文字・動詞結び）を出力すること。
-   - **NG例**: 「2024年度のシステム刷新について」
-   - **OK例**: 「受発注基盤をクラウドへ移行し、障害復旧時間を従来の1/4に短縮する」
-
-5. **中途半端な単語分断改行の禁止（Semantic Line Breaking）**
-   - コンテナ端に到達した成り行きで、単語の途中や助詞・活用語尾で1〜2文字だけ次行に落ちる中途半端な改行（Bad Wrap）を厳禁とする。
-   - 見出し（Action Title: H1/H2）や要約文では、文節（句読点や助詞「〜し、」「〜により、」「〜から、」の切れ目）で明示的に `<br>` を挿入するか、フォントサイズ・幅を微調整して自然な日本語リズムで改行すること。
-   - **NG例**: 「破綻しない構造と自律検証でプロ品質を即座に量」/「産する」
-   - **OK例**: 「破綻しない構造と自律検証で、」<br>「プロ品質のスライドを即座に量産する」
-
-6. **右肩バッジの複数行折り返し ＆ ヘッダー下部余白ゼロの禁止**
-   - 見出しが2行化した際、右肩のメタバッジが押しつぶされて複数行に分断されてはならない（必ず `shrink-0 whitespace-nowrap` を付与し、ヘッダーは `items-start gap-6` 構造とすること）。
-   - 見出しが2行化したことで下のメインコンテンツとの余白がゼロ（または数px）になって密着してはならない。必ずヘッダー下部に十分な余白（`mb-5`〜`mb-6`）および視覚的区切り（`pb-3 border-b border-slate-800` 等）を設け、コンテンツとの間に適切な垂直余白（呼吸空間）を確保すること。
-
-7. **外部画像ファイルパス・URL参照の禁止（Single-File純度の死守）**
-   - `<img src="./images/..." >` や `<img src="https://..." >` などの外部パス・URL参照を行ってはならない。
-   - スライドに画像を配置する場合は、必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）として直接インライン埋め込みし、HTMLファイル単体での完全な自己完結性を死守すること。
-
-### 1.2 必須要件（MUST）
-
-1. **リードメッセージ（Action Title）の原則**
-   - スライド最上部には、そのスライドが主張する「ファクト＋示唆・結論」を完全な1文（40〜60文字程度、動詞結び）で記述すること。
-2. **主語・数値・動作の明記**
-   - 「誰が（対象組織・役職）」「何を（対象データ・業務）」「どうする（動詞）」「どれくらい（定量値・期間）」を具体化すること。
-3. **対比とメリハリ**
-   - 「現状 vs 理想」「自チーム vs 他チーム」「In Scope vs Out of Scope」「NG vs OK」など、比較軸を設けて境界線を引くこと。
-4. **ヘッダーとコンテンツの垂直余白の確保**
-   - ヘッダー見出しとメインコンテンツの間に `mb-5`〜`mb-6` および `pb-3 border-b border-slate-800` 相当の余白・境界線を設け、視覚的な階層とゆとりを維持すること。
-
-### 1.3 出力前自己検証チェックリスト（詳細内省基準）
-
-一般のエンタープライズ環境（ChatGPT Enterprise, Claude for Work等）では、開発用IDEや外部APIコールは使用できません。エージェント自身が出力直前に以下のチェックリストを用いて「雰囲気・解像度」を自律内省（Reflection）してください。完璧を求める必要はありませんが、現場で伝わる具体性を確保します（`SKILL.md` のクイックチェックリストと連動）。
-
-- [ ] **リード文検証**: リード文は名詞止め（「〇〇について」）ではなく、動詞で終わる完全な文（40〜60文字のAction Title）になっているか？
-- [ ] **雰囲気・解像度内省**: 現場担当者が読んだ際に「明日から誰が何をすればよいか」が想起できるか？「シナジー」「シームレス」「最適化」「推進」「共創」「伴走」等の空虚な語句を、具体的な物理動作（「手動入力の廃止」「夜間バッチ同期」「承認者2名体制」等）や定量数値に自律リライトしたか？
-- [ ] **均等分割の回避**: 3列以上のレイアウトを採用する場合、強調対象（推奨、関門、最重要）に視覚的アンカー（幅拡張、バッジ、色枠）を設定したか？
-- [ ] **余白保護**: テキストを詰め込みすぎていないか？（1スライドあたりの総文字数は日本語で200〜300字以内を推奨、最大700文字厳守）
-- [ ] **不要装飾の排除**: 視覚的な飾りアイコン（ロケット、握手、電球等）を排除したか？
+### 出力前自己内省チェックリスト
+- [ ] リード文は動詞結びの完全な1文（40〜60文字のAction Title）になっているか？
+- [ ] 現場担当者が読んだ時に「明日から誰が何をすべきか」の具体動作・数値が想起できるか？
+- [ ] `overflow-hidden` 親要素内で `-top-` バッジを使って見切れ（クリッピング）を発生させていないか？
+- [ ] チャート類で `mb-[..%]` 等のパーセンテージマージンハックを使って要素重なり（コリジョン）を発生させていないか？
+- [ ] ウォーターフォール図のバー高さ（height）は、表示数値に厳密比例しているか？（適当な手打ち値による「数値と高さの不一致」を防止）
+- [ ] 1スライドあたりのテキスト量は適切か？（日本語200〜300文字推奨、最大700文字厳守）
 
 ---
 
@@ -90,149 +46,187 @@
 +-------------------------------------------------------------------+
 ```
 
-### Tailwind CSS による基本構造スニペット
-
 ```html
 <section class="slide w-[1280px] h-[720px] p-12 justify-between flex flex-col overflow-hidden relative bg-white border border-slate-200" contenteditable="true">
-  <!-- 1. ヘッダー: Kicker & Lead Message (Action Title) -->
+  <!-- 1. ヘッダー (Action Title) -->
   <div class="flex-shrink-0 border-b border-slate-100 pb-3">
-    <div class="flex items-center justify-between">
-      <span class="text-xs font-bold tracking-wider text-brand-600 uppercase">Kicker / Category Title</span>
-      <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded border border-slate-200">CONFIDENTIAL</span>
-    </div>
-    <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight leading-snug mt-1">
-      【Lead Message】ファクトと具体的な示唆・結論を含む完全な1文をここに配置する（40〜60文字）
-    </h2>
+    <div class="flex items-center justify-between"><span class="text-xs font-bold text-brand-600 uppercase">Category</span><span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded">CONFIDENTIAL</span></div>
+    <h2 class="text-xl font-extrabold text-slate-900 tracking-tight mt-1">【Lead Message】結論を含む完全な1文（40〜60文字）</h2>
   </div>
-
-  <!-- 2. メインコンテンツ: Main Content Body (flex-1 min-h-0 で伸縮) -->
-  <div class="flex-1 min-h-0 flex flex-col justify-center my-auto py-2">
-    <!-- パターン別ワイヤーフレームをここに挿入 -->
-  </div>
-
-  <!-- 3. フッター: Footer / Note -->
+  <!-- 2. メインコンテンツ (flex-1 min-h-0) -->
+  <div class="flex-1 min-h-0 flex flex-col justify-center my-auto py-2"><!-- パターンワイヤーフレーム --></div>
+  <!-- 3. フッター -->
   <div class="flex-shrink-0 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-400">
-    <div class="truncate max-w-[900px]">※注記: 補足前提条件、データ出典、適用スコープ等を記載</div>
-    <div class="font-mono text-slate-500 shrink-0">02 / 06</div>
+    <div class="truncate">※注記: 補足前提条件、データ出典等を記載</div><div class="font-mono text-slate-500">02 / 06</div>
   </div>
 </section>
 ```
 
 ---
 
-## 3. 社内資料向け6大情報構造パターン（6 Core Enterprise Wireframes）
+## 2.2 プレゼンテーション全体骨格（Deck Meta Skeleton）
 
-Grill（事前確認）やスライド設計時は、対話言語に合わせて一方のみを使用してください（**日本語対話時は英語IDを混ぜず日本語名称のみ、英語対話時は英語名称のみ**）：
+複数枚で構成されるプレゼンテーション（提案書、稟議資料、ピッチデック等）では、**「表紙」の直後に「エグゼクティブサマリ」と「目次（アジェンダ）」を原則標準として配置**します。
 
-| 日本語対話時（日本語のみ） | 英語対話時（英語のみ） | 内部識別子 (`pattern_id`) | レイアウトの特徴・最適な使い所 |
+> **📌 エグゼクティブサマリ＆目次の原則標準化ルール**:
+> - **【原則標準（Default: ON）】**: 通常の複数枚スライド（4枚以上）。意思決定者が即座に判断できるよう、表紙直後にエグゼクティブサマリと目次を配置する。
+>   - 構成順序: `[表紙]` ➔ `[エグゼクティブサマリ]` ➔ `[目次（アジェンダ）]` ➔ `[本文スライド群]` ➔ `[Next Steps/推進体制]`
+> - **【除外条件（Exception: OFF）】**:
+>   - 1枚ものの資料（A4縦・横の1-Pager、企画ペーパー、要約ペーパー）
+>   - ユーザーから明示的な拒否・除外指示があった場合（「目次は不要」「3枚以内で作って」等）
+
+### 骨格A：【エグゼクティブサマリ】（Executive Summary）
+- **識別子 (`pattern_id`)**: `executive_summary`
+- **目的**: 役員や意思決定者が1枚で即断できるよう、「左に論点・表題（25%）」「右に端的な事実・結論・巨大な主張フォント（75%）」の横スプリット4段構造で提示する（※目次アジェンダの縦型カード列との混同を完全に防止）。
+- **実装**: 実稼働の完全なサンプルは `corporate_default.html` の Slide 2 を参照。
+
+```html
+<!-- エグゼクティブサマリ（左表題・右巨大事実/主張の横スプリット4段・サブ文章なし） -->
+<div class="my-auto py-2 flex flex-col gap-4">
+  <!-- Row 1: 課題 -->
+  <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+    <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+      <div class="text-[11px] font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded uppercase">01. 直面する課題</div>
+      <div class="text-sm font-extrabold text-slate-800 mt-1">現場ボトルネック</div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-lg font-black text-slate-900 leading-relaxed">手動転記に年間4,800時間。<span class="text-rose-600 underline decoration-rose-300">1,920万円の年間機会損失</span> が発生</div>
+    </div>
+  </div>
+  <!-- Row 2: 推奨解決策（視覚的アンカー強調） -->
+  <div class="flex items-center gap-6 p-5 bg-brand-50/80 rounded-xl border-2 border-brand-500 shadow-sm relative">
+    <div class="absolute -top-2.5 right-6 px-2.5 py-0.5 rounded-full bg-brand-600 text-white text-[10px] font-extrabold">★ 推奨アプローチ</div>
+    <div class="w-56 shrink-0 border-r border-brand-200 pr-4">
+      <div class="text-[11px] font-bold text-brand-800 bg-brand-100 px-2 py-0.5 rounded uppercase">02. 抜本的解決策</div>
+      <div class="text-sm font-extrabold text-brand-950 mt-1">自律AI基盤の全社導入</div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-lg font-black text-brand-950 leading-relaxed">API連携と自動描画を直結し、定常工数を <span class="text-brand-600 bg-white px-2.5 py-0.5 rounded border border-brand-300 font-black">92% 削減</span> してゼロ化</div>
+    </div>
+  </div>
+  <!-- Row 3: 定量ROI -->
+  <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+    <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+      <div class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded uppercase">03. 投資対効果 (ROI)</div>
+      <div class="text-sm font-extrabold text-slate-800 mt-1">初年度ROI 152%</div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-lg font-black text-slate-900 leading-relaxed">初期投資1,200万に対し人件費1,820万削減。<span class="text-emerald-600 underline decoration-emerald-300">8ヶ月で原価回収</span> を完了</div>
+    </div>
+  </div>
+  <!-- Row 4: 計画・体制 -->
+  <div class="flex items-center gap-6 p-5 bg-white rounded-xl border border-slate-200 shadow-xs">
+    <div class="w-56 shrink-0 border-r border-slate-100 pr-4">
+      <div class="text-[11px] font-bold text-slate-700 bg-slate-100 px-2 py-0.5 rounded uppercase">04. 推進体制・計画</div>
+      <div class="text-sm font-extrabold text-slate-800 mt-1">2026年Q4 全社展開</div>
+    </div>
+    <div class="flex-1 min-w-0">
+      <div class="text-lg font-black text-slate-900 leading-relaxed">10月PoC、11月パイロットを経て <span class="bg-slate-100 px-2.5 py-0.5 rounded font-black">12月に全社本番稼働</span> を完遂</div>
+    </div>
+  </div>
+</div>
+```
+
+---
+
+### 骨格B：【目次・アジェンダ】（Table of Contents / Agenda）
+- **識別子 (`pattern_id`)**: `agenda`
+- **目的**: プレゼンテーション全体の論理展開（章立て）を俯瞰させ、聞き手が現在地を常に把握できるようにする。
+- **章ガイド**: ヘッダー上部に戦略コンサル型章トラッカー（Breadcrumbs）を配置し、`✓ Summary › [1] 01. 目次` をアクティブ表示する。
+- **実装**: 実稼働サンプルは `corporate_default.html` の Slide 3 を参照。
+
+```html
+<!-- 目次・アジェンダ（4章グリッド） -->
+<div class="grid grid-cols-4 gap-6 my-auto">
+  <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-between">
+    <div><div class="font-mono text-2xl font-black text-slate-300 mb-2">01</div><h3 class="text-sm font-bold text-slate-800 mb-1">背景と事業課題</h3><p class="text-xs text-slate-500">運用ペインと工数増大要因の分析</p></div>
+    <div class="mt-4 text-[11px] font-mono text-slate-400">P. 04 - 05</div>
+  </div>
+  <!-- 注目章（ハイライト） -->
+  <div class="bg-brand-50/60 p-6 rounded-xl border-2 border-brand-400 shadow-sm flex flex-col justify-between">
+    <div><div class="font-mono text-2xl font-black text-brand-400 mb-2">02</div><h3 class="text-sm font-bold text-brand-900 mb-1">刷新方針と打ち手</h3><p class="text-xs text-brand-700">自律化アーキテクチャと推奨案</p></div>
+    <div class="mt-4 text-[11px] font-mono text-brand-600 font-bold">P. 06 - 08</div>
+  </div>
+  <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-between">
+    <div><div class="font-mono text-2xl font-black text-slate-300 mb-2">03</div><h3 class="text-sm font-bold text-slate-800 mb-1">投資対効果と検証</h3><p class="text-xs text-slate-500">PoC成果、定量ROI、リスクヘッジ</p></div>
+    <div class="mt-4 text-[11px] font-mono text-slate-400">P. 09 - 10</div>
+  </div>
+  <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 flex flex-col justify-between">
+    <div><div class="font-mono text-2xl font-black text-slate-300 mb-2">04</div><h3 class="text-sm font-bold text-slate-800 mb-1">ロードマップ・体制</h3><p class="text-xs text-slate-500">導入工程、必須Gate、推進体制</p></div>
+    <div class="mt-4 text-[11px] font-mono text-slate-400">P. 11 - 12</div>
+  </div>
+</div>
+```
+
+---
+
+## 3. 社内資料向け厳選6大情報構造パターン（6 Core Enterprise Wireframes）
+
+| 日本語対話時 | 英語対話時 | 内部識別子 (`pattern_id`) | レイアウトの特徴・使い所 |
 | :--- | :--- | :--- | :--- |
-| **【課題・打ち手型】** | `[Problem & Solution]` | `problem_solution` | 左右対比で「現場のペイン・損失」と「具体アクション・定量的成果」を対比 |
-| **【トレードオフ比較表】** | `[Comparison Matrix]` | `tradeoff_matrix` | 複数案のメリデリ・費用・保守性を一覧比較し、推奨案に視覚的アンカー（色枠）を設定 |
-| **【スコープ境界線】** | `[Scope & Boundary]` | `scope_boundary` | 「今回やること (In Scope)」と「やらないこと (Out of Scope)」を二分して期待値調整 |
-| **【全体像・階層マッピング】** | `[Architecture Mapping]` | `architecture_mapping` | クライアント・API・DBなどの階層や、業務フローの全体像を俯瞰 |
-| **【ステップ・時系列フロー】** | `[Sequential Workflow]` | `step_process` | 時系列の運用・リリース手順（STEP 1〜4）と、通過必須の品質Gate（関門）を可視化 |
-| **【落とし穴・NG/OK対比】** | `[Pitfalls & Best Practices]` | `pitfalls_faq` | やりがちな誤り（アンチパターン）と正しいベストプラクティスを左右対比 |
+| **【課題・打ち手型】** | `[Problem & Solution]` | `problem_solution` | 左右対比で「現場ペイン・原因」と「施策・定量的効果」を対比 |
+| **【トレードオフ比較表】** | `[Comparison Matrix]` | `tradeoff_matrix` | 複数案比較＋**ハーベイボール（●◕◐◔○）** で多軸評価。推奨列を強調 |
+| **【ステップ・時系列フロー】** | `[Sequential Workflow]` | `step_process` | 時系列の運用手順（STEP 1〜4）と、通過必須の品質Gate（関門）を可視化 |
+| **【要因分解・ウォーターフォール】** | `[Waterfall Breakdown]` | `waterfall_breakdown` | 売上・利益増減、コスト構造、KPIドライバーの変動ステップを戦略コンサル型増減ステップで可視化 |
+| **【全体像・階層マッピング】** | `[Architecture Mapping]` | `architecture_mapping` | クライアント・API・DBなどのシステム階層や業務フロー全体の構造を俯瞰 |
+| **【境界線・NG/OK対比】** | `[Boundary & Best Practices]` | `boundary_comparison` | In/Out Scope境界線設定、またはアンチパターン（NG）と推奨（OK）の対比 |
 
 ---
 
 ### パターン1：【課題・打ち手型】（problem_solution）
-- **識別子 (`pattern_id`)**: `problem_solution`
-- **主用途**: 業務改善提案、ツール導入起案、施策優先順位の合意
-- **目的**: 現状のペインと、そのボトルネックを解消する具体アクションの因果関係を示す。
-- **比率**: 左右 40% : 60%（または 50% : 50%）
+- **主用途**: 業務改善提案、ツール導入起案、施策優先順位の合意（左右 40% : 60%）
 
-#### ワイヤーフレーム
+#### ワイヤーフレーム＆スロット
 ```text
-+-------------------------------------------------------------------+
-| Lead: 月間40時間の重複入力を解消するため、マスタ同期スクリプトを導入する |
-+---------------------------------+---------------------------------+
-| 【現状の課題 / Bottleneck】     | 【解決策 / Action & Solution】  |
-| ■ 発生事象 (Fact)               | ■ 実施内容 (To-Be)              |
-|   ・スプレッドシートの手動転記   |   ・夜間バッチによる自動同期    |
-|   ・月40hの工数ロス             |   ・手動入力フローの完全廃止    |
-| ■ 根本原因 (Root Cause)         | ■ 期待効果 (Outcome)            |
-|   ・DBと管理表の連携仕様が未策定 |   ・作業工数：月40h → 0h        |
-|                                 |   ・転記ミス：月平均5件 → 0件   |
-+---------------------------------+---------------------------------+
+[Lead: 月間40時間の重複入力を解消するため、マスタ同期スクリプトを導入する]
+┌─ 【現状の課題 / Bottleneck (40%)】 ─┬─ 【解決策 / Action & Solution (60%)】 ─┐
+│ ● 発生事象: 手動転記による二重管理  │ ● 実施内容: 差分検知バッチによる自動同期 │
+│ ● 根本原因: DB連携仕様の未策定      │ ● 期待効果: 工数40h→0h / ミス5件→0件     │
+│ [損失試算: 年間480時間 / 約190万円]  │ [所要期間: 3週間 / 担当: データ統括]    │
+└─────────────────────────────────────┴─────────────────────────────────────────┘
+スロット: lead_message, col_problem (fact, root_cause), col_solution (action, outcome)
 ```
 
-#### スロット定義
-- `lead_message`: 施策の目的と導入対象を明記した完全文
-- `col_problem`: `fact` (現場で起きている生々しい損失), `root_cause` (根本原因)
-- `col_solution`: `action` (誰が何を実装するか), `outcome` (定量的成果指標)
-
-#### HTML / Tailwind スニペット
+#### 骨格HTML構造スニペット
 ```html
+<!-- 左右4:6分割（左: 課題・損失試算 / 右: 施策・定量的効果） -->
 <div class="grid grid-cols-12 gap-6 my-auto items-stretch">
-  <!-- 左: 現状の課題 (40% = cols-5) -->
+  <!-- 左: 現状の課題 (cols-5) -->
   <div class="col-span-5 bg-rose-50/40 rounded-xl p-6 border border-rose-200/80 flex flex-col justify-between">
     <div>
-      <div class="flex items-center gap-2 text-rose-700 font-bold text-sm mb-4">
-        <span class="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-xs font-bold text-rose-600">✕</span>
+      <div class="flex items-center gap-2 text-rose-700 font-bold text-sm mb-3">
+        <span class="w-5 h-5 rounded-full bg-rose-100 flex items-center justify-center text-xs text-rose-600">✕</span>
         <span>現状の課題 / Bottleneck</span>
       </div>
-      <div class="space-y-4">
-        <div>
-          <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span>発生事象 (Fact)
-          </div>
-          <ul class="space-y-1.5 text-xs text-slate-600 pl-3">
-            <li>・スプレッドシートへの手動転記による二重管理</li>
-            <li>・締め作業時の整合性確認に月40時間の工数ロス</li>
-          </ul>
-        </div>
-        <div>
-          <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>根本原因 (Root Cause)
-          </div>
-          <p class="text-xs text-slate-600 pl-3 leading-relaxed">
-            基幹DBと現場管理表の連携仕様が未策定のまま個別運用が形骸化していること
-          </p>
-        </div>
+      <div class="space-y-3 text-xs text-slate-600">
+        <div><span class="font-bold text-slate-700">● 発生事象:</span> スプレッドシート手動転記による二重管理</div>
+        <div><span class="font-bold text-slate-700">● 根本原因:</span> 基幹DB連携の仕様未策定・個別運用の形骸化</div>
       </div>
     </div>
-    <div class="mt-4 pt-3 border-t border-rose-200/60 text-xs font-bold text-rose-700">
-      損失試算: 年間 480時間 / 人件費 約190万円相当
-    </div>
+    <div class="mt-4 pt-3 border-t border-rose-200/60 text-xs font-bold text-rose-700">損失試算: 年間480時間 / 人件費 約190万円</div>
   </div>
 
-  <!-- 右: 解決策 (60% = cols-7) -->
+  <!-- 右: 解決策 (cols-7) -->
   <div class="col-span-7 bg-emerald-50/40 rounded-xl p-6 border border-emerald-200/80 flex flex-col justify-between">
     <div>
-      <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-4">
-        <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-600">✓</span>
+      <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm mb-3">
+        <span class="w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-xs text-emerald-600">✓</span>
         <span>解決策 / Action & Solution</span>
       </div>
-      <div class="space-y-4">
-        <div>
-          <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>実施内容 (To-Be)
+      <div class="space-y-3">
+        <div class="text-xs text-slate-600">・Webhookによる差分検知自動同期バッチ常駐<br>・手動入力フローの完全廃止</div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="p-2.5 bg-white rounded-lg border border-emerald-100 text-xs">
+            <div class="text-[10px] text-slate-500">作業工数</div><div class="text-base font-extrabold text-emerald-600">40h → 0h</div>
           </div>
-          <ul class="space-y-1.5 text-xs text-slate-600 pl-3">
-            <li>・Webhookを用いた差分検知による自動同期バッチの常駐</li>
-            <li>・手動入力フローの完全廃止とバリデーション機能の一元化</li>
-          </ul>
-        </div>
-        <div>
-          <div class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5 flex items-center gap-1.5">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>期待効果 (Outcome)
-          </div>
-          <div class="grid grid-cols-2 gap-3 pl-3">
-            <div class="p-2.5 bg-white rounded-lg border border-emerald-100 shadow-sm">
-              <div class="text-[11px] text-slate-500">月間作業工数</div>
-              <div class="text-base font-extrabold text-emerald-600">40h → 0h</div>
-            </div>
-            <div class="p-2.5 bg-white rounded-lg border border-emerald-100 shadow-sm">
-              <div class="text-[11px] text-slate-500">転記ミス発生件数</div>
-              <div class="text-base font-extrabold text-emerald-600">月5件 → 0件</div>
-            </div>
+          <div class="p-2.5 bg-white rounded-lg border border-emerald-100 text-xs">
+            <div class="text-[10px] text-slate-500">転記ミス</div><div class="text-base font-extrabold text-emerald-600">月5件 → 0件</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="mt-4 pt-3 border-t border-emerald-200/60 text-xs font-bold text-emerald-700 flex justify-between items-center">
-      <span>所要導入期間: 3週間</span>
-      <span class="text-slate-500 font-normal">担当: データ統括チーム</span>
+    <div class="mt-4 pt-3 border-t border-emerald-200/60 text-xs font-bold text-emerald-700 flex justify-between">
+      <span>所要期間: 3週間</span><span class="text-slate-500 font-normal">担当: データ統括チーム</span>
     </div>
   </div>
 </div>
@@ -245,6 +239,8 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
 - **主用途**: アーキテクチャ選定、ベンダー選定、施策オプションの意思決定
 - **目的**: 複数選択肢のメリデリを公正に並べ、推奨案の採用論拠を示す。
 - **比率**: 表形式（推奨案列を強調）
+- **示唆アノテーション**: 多軸評価には記号（◎/◯/△）に加え、**ハーベイボール（● ◕ ◐ ◔ ○）** を積極的に活用する。
+- **実装**: 実稼働の完全なサンプルは `corporate_default.html` の Slide 4 を参照。
 
 #### ワイヤーフレーム
 ```text
@@ -253,10 +249,10 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
 +--------------+------------------+------------------+--------------+
 | 評価軸       | 案A: SaaS導入    | 【推奨】案B: 内製 | 案C: 既存改修 |
 +--------------+------------------+------------------+--------------+
-| 初期費用     | 低 (50万円)      | 高 (200万円)     | 極小 (10万円) |
-| 月額ランコス | 高 (15万円/月)   | サーバー代のみ   | 0円          |
-| カスタマイズ | 不可（仕様固定） | 完全自由         | 制限あり     |
-| 保守体制     | ベンダー依存     | 自チーム完結     | 属人化継続   |
+| 初期費用     | ● 低 (50万円)    | ○ 高 (200万円)   | ● 極小 (10万) |
+| 月額ランコス | ○ 高 (15万円/月) | ● サーバ実費のみ | ◐ 0円        |
+| 拡張性       | ◔ 不可           | ● 完全自由       | ◐ 制限あり   |
+| 保守内製度   | ◔ ベンダー依存   | ● 自チーム完結   | ○ 属人化継続 |
 +--------------+------------------+------------------+--------------+
 | 判定・総評   | △ コスト増リスク | ◎ 長期ROI最善    | × 課題未解決 |
 +--------------+------------------+------------------+--------------+
@@ -267,57 +263,46 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
 - `criteria`: 評価軸リスト（最低3〜4軸）
 - `options`: 各案の名称および属性値
 - `recommended_option_id`: 強調対象となる列（背景ハイライト、推奨バッジ、色枠）
-- `tradeoff_rationale`: 記号（◎◯△）＋ 具体的なデメリット許容理由
+- `tradeoff_rationale`: ハーベイボール／判定記号 ＋ 具体的なデメリット許容理由
 
-#### HTML / Tailwind スニペット
+#### 骨格HTML構造スニペット
 ```html
+<!-- トレードオフ比較テーブル（推奨列ハイライト枠＆ハーベイボール） -->
 <div class="my-auto overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
   <table class="w-full text-left text-xs border-collapse">
     <thead>
       <tr class="bg-slate-50/80 border-b border-slate-200 text-slate-600">
-        <th class="p-3.5 font-bold w-1/4">評価軸</th>
-        <th class="p-3.5 font-semibold text-slate-500 w-1/4">案A: SaaSツール導入</th>
-        <!-- 推奨案列: 視覚的アンカー -->
-        <th class="p-3.5 font-bold text-brand-700 bg-brand-50/70 border-x-2 border-t-2 border-brand-500 w-1/4 relative">
-          <span class="absolute -top-2.5 right-3 bg-brand-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow">本提案・推奨</span>
-          案B: 基盤内製開発
+        <th class="p-3 font-bold w-1/4">評価軸</th>
+        <th class="p-3 font-semibold text-slate-500 w-1/4">案A: SaaS導入</th>
+        <!-- 推奨列（視覚的アンカー・バッジ安全内包） -->
+        <th class="p-3 font-bold text-white bg-brand-600 border-x-2 border-t-2 border-brand-500 w-1/4">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-[10px] text-brand-200 font-normal">本命案</span>
+            <span class="bg-amber-400 text-slate-950 text-[10px] font-black px-2 py-0.5 rounded-full shadow-xs">★ 推奨</span>
+          </div>
+          案B: 内製開発
         </th>
-        <th class="p-3.5 font-semibold text-slate-500 w-1/4">案C: 既存システム改修</th>
+        <th class="p-3 font-semibold text-slate-500 w-1/4">案C: 既存改修</th>
       </tr>
     </thead>
     <tbody class="divide-y divide-slate-100 text-slate-700">
-      <tr class="hover:bg-slate-50/50">
-        <td class="p-3 font-bold text-slate-900 bg-slate-50/30">初期開発・導入費</td>
-        <td class="p-3 text-slate-600">低 (50万円 / 初期設定のみ)</td>
-        <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-medium text-slate-800">高 (200万円 / 開発工数要)</td>
-        <td class="p-3 text-slate-600">極小 (10万円 / パッチ当て)</td>
+      <tr>
+        <td class="p-2.5 font-bold text-slate-900 bg-slate-50/30">初期開発費</td>
+        <td class="p-2.5">● 低 (50万)</td>
+        <td class="p-2.5 bg-brand-50/30 border-x-2 border-brand-500 font-medium">○ 高 (200万)</td>
+        <td class="p-2.5">● 極小 (10万)</td>
       </tr>
-      <tr class="hover:bg-slate-50/50">
-        <td class="p-3 font-bold text-slate-900 bg-slate-50/30">月額運用コスト</td>
-        <td class="p-3 text-rose-600 font-medium">高 (15万円/月 / アカウント課金)</td>
-        <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-bold text-brand-900">極小 (インフラ実費のみ 約1.5万円)</td>
-        <td class="p-3 text-slate-600">0円 (追加費用なし)</td>
-      </tr>
-      <tr class="hover:bg-slate-50/50">
-        <td class="p-3 font-bold text-slate-900 bg-slate-50/30">要件適合性・拡張性</td>
-        <td class="p-3 text-slate-500">不可 (仕様変更不可)</td>
-        <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-bold text-emerald-700">完全自由 (社内独自フローに合致)</td>
-        <td class="p-3 text-slate-500">制限あり (既存技術的負債に制約)</td>
-      </tr>
-      <tr class="hover:bg-slate-50/50">
-        <td class="p-3 font-bold text-slate-900 bg-slate-50/30">保守・トラブル対応</td>
-        <td class="p-3 text-slate-500">ベンダー依存 (SLA依存)</td>
-        <td class="p-3 bg-brand-50/30 border-x-2 border-brand-500 font-semibold text-brand-900">自チーム完結 (即日修正可能)</td>
-        <td class="p-3 text-rose-600">属人化継続 (担当退職リスク)</td>
+      <tr>
+        <td class="p-2.5 font-bold text-slate-900 bg-slate-50/30">月額運用費</td>
+        <td class="p-2.5 text-rose-600">○ 高 (15万/月)</td>
+        <td class="p-2.5 bg-brand-50/30 border-x-2 border-brand-500 font-bold text-brand-900">● 実費のみ (~1.5万)</td>
+        <td class="p-2.5">◐ 0円</td>
       </tr>
       <tr class="bg-slate-50/60 font-semibold">
-        <td class="p-3.5 font-bold text-slate-900">判定・トレードオフ総評</td>
-        <td class="p-3 text-amber-700"><span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 text-[11px] font-bold mr-1">△</span> 累積コスト増大リスク</td>
-        <td class="p-3 bg-brand-100/60 border-x-2 border-b-2 border-brand-500 text-brand-900 font-bold">
-          <span class="px-2 py-0.5 rounded bg-brand-600 text-white text-[11px] font-bold mr-1">◎</span>
-          初期費を許容し3年ROI最善
-        </td>
-        <td class="p-3 text-rose-700"><span class="px-2 py-0.5 rounded bg-rose-100 text-rose-800 text-[11px] font-bold mr-1">✕</span> 根本課題が未解決で再発</td>
+        <td class="p-3 font-bold text-slate-900">判定・総評</td>
+        <td class="p-3 text-amber-700">△ コスト増リスク</td>
+        <td class="p-3 bg-brand-100/60 border-x-2 border-b-2 border-brand-500 text-brand-900 font-bold">◎ 3年ROI最善</td>
+        <td class="p-3 text-rose-700">✕ 根本課題未解決</td>
       </tr>
     </tbody>
   </table>
@@ -326,195 +311,195 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
 
 ---
 
-### パターン3：【スコープ境界線（やる/やらない）】（scope_boundary / Scope & Boundary）
-- **識別子 (`pattern_id`)**: `scope_boundary`
-- **主用途**: キックオフ、要件定義、タスク切り出し時の合意形成
-- **目的**: 期待値のズレを防ぐため、「やること」以上に「今回はやらないこと」を明文化する。
-- **比率**: 左右 50% : 50%
+### パターン3：【ステップ・時系列フロー】（step_process / Sequential Workflow）
+- **主用途**: 業務運用手順、リリース手順、障害対応、オンボーディング（3〜4ステップ）
 
-#### ワイヤーフレーム
+#### ワイヤーフレーム＆スロット
 ```text
-+-------------------------------------------------------------------+
-| Lead: 今回リリースは基本機能に絞り、外部連携・一括処理はPhase 2へ送る  |
-+---------------------------------+---------------------------------+
-| 【対象範囲 / In Scope】         | 【対象外 / Out of Scope】       |
-| 1. 単体レコードのCRUD操作       | 1. CSV一括インポート/エクスポート|
-|    - 理由: コア業務の早期稼働   |    - 理由: Phase 2にて要件定義   |
-| 2. 権限管理 (管理者/一般)       | 2. Slack/Teams通知連携          |
-|    - 理由: セキュリティ必須要件 |    - 理由: 手動運用で代替可能    |
-+---------------------------------+---------------------------------+
+[Lead: Step 2のレビュー承認を完了するまで本番マージ・デプロイは不可]
+┌─ STEP 01 (実装) ──┬─ ★ STEP 02 (Gate) ──┬─ STEP 03 (QA) ────┬─ STEP 04 (本番) ──┐
+│ ・ブランチ作成     │ ・シニア2名承認     │ ・自動E2E検証     │ ・カナリアデプロイ│
+│ [成果物: PR]       │ [通過条件: 承認ログ] │ [成果物: サイン]  │ [Goal: 稼働確認]  │
+└───────────────────┴─────────────────────┴───────────────────┴───────────────────┘
+スロット: lead_message, steps (step_number, title, tasks, gate_or_output)
 ```
 
-#### スロット定義
-- `lead_message`: スコープ境界の基準（何を基準に切り分けたか）
-- `in_scope_items`: `title` (対象項目名), `reason` (今回含める理由)
-- `out_of_scope_items`: `title` (対象外項目名), `handling` (なぜ外すのか／いつ・誰が対応するか)
-
-#### HTML / Tailwind スニペット
+#### 骨格HTML構造スニペット
 ```html
-<div class="grid grid-cols-2 gap-8 my-auto">
-  <!-- In Scope (対象範囲) -->
-  <div class="bg-white rounded-xl p-6 border-2 border-brand-500 shadow-sm flex flex-col justify-between relative">
-    <div class="absolute -top-3 left-6 bg-brand-600 text-white text-[11px] font-extrabold px-3 py-0.5 rounded-full shadow">
-      MUST: 今回リリース対象 (Phase 1)
+<!-- 4ステップ横並びプロセス（Gate強調＆マイルストーン：実稼働サンプルは corporate_default.html Slide 6 参照） -->
+<div class="grid grid-cols-4 gap-4 my-auto">
+  <!-- 通常Step -->
+  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between border-b border-slate-100 pb-2 mb-2 text-xs font-mono"><span>STEP 01</span><span class="text-slate-400">10月上旬</span></div>
+      <div class="text-xs font-bold text-slate-900 mb-1">基盤構築</div>
+      <ul class="text-[11px] text-slate-600 space-y-1"><li>・API連携</li><li>・疎通テスト</li></ul>
     </div>
-    <div class="mt-2 space-y-4">
-      <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-slate-900">1. 単体レコードのCRUD操作</span>
-          <span class="text-[10px] font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200">優先度: 高</span>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          <strong>採用理由:</strong> 現場の日常入力業務を即座に稼働させ、最低限のデータ蓄積を最速で開始するため。
-        </p>
-      </div>
-      <div class="p-3.5 bg-slate-50 rounded-lg border border-slate-200">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-slate-900">2. ロール別アクセス権限管理（管理者/一般）</span>
-          <span class="text-[10px] font-bold text-brand-700 bg-brand-50 px-2 py-0.5 rounded border border-brand-200">優先度: 高</span>
-        </div>
-        <p class="text-xs text-slate-600 leading-relaxed">
-          <strong>採用理由:</strong> 個人情報保護・セキュリティ監査要件を満たすための必須要件。
-        </p>
-      </div>
-    </div>
-    <div class="mt-4 pt-3 border-t border-slate-100 text-xs font-bold text-brand-700">
-      リリース目標: 2026年11月末
-    </div>
+    <div class="pt-2 border-t border-slate-100 text-[10px] text-slate-400">成果物: PoCレポート</div>
   </div>
 
-  <!-- Out of Scope (対象外) -->
-  <div class="bg-slate-50/70 rounded-xl p-6 border border-slate-300 flex flex-col justify-between relative">
-    <div class="absolute -top-3 left-6 bg-slate-600 text-white text-[11px] font-bold px-3 py-0.5 rounded-full">
-      OUT: 今回は対応しない項目
+  <!-- 必須Gate Step (視覚的アンカー強調) -->
+  <div class="bg-brand-50/70 rounded-xl p-4 border-2 border-brand-500 shadow-sm flex flex-col justify-between relative">
+    <div class="absolute -top-2.5 right-3 bg-brand-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow flex items-center gap-1">
+      <span class="w-2 h-2 rotate-45 bg-amber-400"></span>必須関門 (Gate)
     </div>
-    <div class="mt-2 space-y-4">
-      <div class="p-3.5 bg-white rounded-lg border border-slate-200">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-slate-700 line-through">1. CSV一括インポート / エクスポート</span>
-          <span class="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded">Phase 2 検討</span>
-        </div>
-        <p class="text-xs text-slate-500 leading-relaxed">
-          <strong>除外理由 & 対応方針:</strong> データ移行は初回バッチで対応可能。差分取込仕様は次期フェーズ（2027年Q1）で策定。
-        </p>
-      </div>
-      <div class="p-3.5 bg-white rounded-lg border border-slate-200">
-        <div class="flex items-center justify-between mb-1">
-          <span class="text-xs font-bold text-slate-700 line-through">2. Slack / Teams 通知連携</span>
-          <span class="text-[10px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded">手動運用で代替</span>
-        </div>
-        <p class="text-xs text-slate-500 leading-relaxed">
-          <strong>除外理由 & 対応方針:</strong> 初期はメール通知およびダッシュボード確認で実運用上代替可能なためカット。
-        </p>
-      </div>
+    <div>
+      <div class="flex justify-between border-b border-brand-200 pb-2 mb-2 text-xs font-mono font-bold text-brand-700"><span>STEP 02</span><span>10月下旬</span></div>
+      <div class="text-xs font-bold text-brand-900 mb-1">セキュリティ監査</div>
+      <ul class="text-[11px] text-slate-700 space-y-1"><li>・暗号化監査</li><li>・脆弱性診断</li></ul>
     </div>
-    <div class="mt-4 pt-3 border-t border-slate-200 text-xs text-slate-500 font-medium">
-      ※スコープ追加要望がある場合は要件変更申請（Change Request）を起案のこと
+    <div class="pt-2 border-t border-brand-200 text-[10px] font-bold text-brand-800">通過条件: 監査承認必須</div>
+  </div>
+
+  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between border-b border-slate-100 pb-2 mb-2 text-xs font-mono"><span>STEP 03</span><span class="text-slate-400">11月中旬</span></div>
+      <div class="text-xs font-bold text-slate-900 mb-1">パイロット運用</div>
+      <ul class="text-[11px] text-slate-600 space-y-1"><li>・2部署実務投入</li><li>・FB回収</li></ul>
     </div>
+    <div class="pt-2 border-t border-slate-100 text-[10px] text-slate-400">成果物: 評価報告</div>
+  </div>
+
+  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
+    <div>
+      <div class="flex justify-between border-b border-slate-100 pb-2 mb-2 text-xs font-mono"><span>STEP 04</span><span class="text-emerald-700 font-bold">12月1日</span></div>
+      <div class="text-xs font-bold text-slate-900 mb-1">全社本番展開</div>
+      <ul class="text-[11px] text-slate-600 space-y-1"><li>・全アカウント有効化</li><li>・24h監視体制</li></ul>
+    </div>
+    <div class="pt-2 border-t border-slate-100 text-[10px] font-bold text-emerald-700">Goal: 自律化完了</div>
   </div>
 </div>
 ```
 
 ---
 
-### パターン4：【全体像・階層マッピング】（architecture_mapping / Architecture & Layering）
-- **識別子 (`pattern_id`)**: `architecture_mapping`
-- **主用途**: システム構成説明、業務フロー全体像、組織ロールの可視化
-- **目的**: コンポーネント間の依存関係とデータ／情報の流れを俯瞰させる。
-- **比率**: 左レイヤーラベル（25%） : 右ブロック構成（75%）
+### パターン4：【要因分解・ウォーターフォール】（waterfall_breakdown / Waterfall Breakdown）
+- **識別子 (`pattern_id`)**: `waterfall_breakdown`
+- **主用途**: 売上・利益増減、コスト削減内訳、工数・業務時間削減（人月/h）、人員変動（名）、顧客・ユーザー増減（社/人）、粗利率・KPI率(pt/%)、システム性能(ms)など、**金額スケールの大小（数千円〜数千億円）や単位を問わず「開始値 ＋ 各増減要因 ＋ 着地値」を持つあらゆる定量的指標**
+- **目的**: 開始値（Base）から終了値（Target）に至るまでのプラス要因・マイナス要因の累積インパクトを戦略コンサル標準の増減ステップで可視化する。
+- **示唆アノテーション**: 単なる棒グラフではなく、**ステップごとの増減差分と最終着地、およびCAGR・成長率矢印**で示唆（So What?）を語る。
+- **数値・高さ厳格比例原則**: 各バーの描画高さ（`height`）は単位・スケールに関わらず表示数値の絶対値に厳密比例（`scale = max_height / max_val`）させ、手打ちの不自然な高さを厳禁とする。コネクタ破線は前ステップのバー端点と同一 `y` 座標に接続する。
+- **実装**: 実稼働の完全なサンプルは `corporate_default.html` の Slide 5 を参照。
 
 #### ワイヤーフレーム
 ```text
 +-------------------------------------------------------------------+
-| Lead: フロントエンドと基幹DBを疎結合化し、API層を中継して認証・ログを統合する |
-+----------------+--------------------------------------------------+
-| Client Layer   | [ Web UI (Next.js) ]      [ Mobile App ]         |
-|                |              │                   │               |
-|                |              ▼ (REST / HTTPS)    ▼               |
-+----------------+--------------------------------------------------+
-| Gateway / API  | [ API Gateway ] ─── 認証・認可 (Auth0)           |
-|                |              │                                   |
-|                |              ▼ (gRPC)                            |
-+----------------+--------------------------------------------------+
-| Data / Core    | [ Core Service ] ───▶ [ RDS (PostgreSQL) ]       |
-+----------------+--------------------------------------------------+
+| Lead: 新機能投入と解約防止により、単価減を吸収してARR +35%成長を達成する |
++-------------------------------------------------------------------+
+| [前期ARR: 10.0億]                                                  |
+|   └── (+) 新規獲得: +2.8億 (大型エンタープライズ成約)               |
+|   └── (+) 解約防止: +1.2億 (CS体制刷新)                            |
+|   └── (-) 単価改定影響: -0.5億 (一部ディスカウント)                 |
+|   └── [当期目標ARR: 13.5億] (★差分: +3.5億 / CAGR +35%)             |
++-------------------------------------------------------------------+
 ```
 
 #### スロット定義
-- `lead_message`: アーキテクチャの変更点、または設計上最も留意すべき結合点
-- `layers`: 上下に階層化されたカテゴリ定義
-- `components`: 各階層に属する要素名
-- `interactions`: 要素間のインターフェース・プロトコル（線やバッジに乗せるラベルテキスト）
+- `lead_message`: 全体変動の最大要因と着地数値の完全文
+- `base_metric`: 起点数値（名称・金額・比率）
+- `breakdown_steps`: 各増減要因（プラス/マイナスの別、要因名、増減数値、背景要因）
+- `final_metric`: 着地目標数値、および全体成長率・差分（Difference / CAGR）
 
-#### HTML / Tailwind スニペット
+#### 骨格HTML構造スニペット
 ```html
-<div class="my-auto flex flex-col space-y-3.5">
+<!-- ウォーターフォール要因分解（完全インラインSVG：要素重なりゼロ保証） -->
+<div class="my-auto bg-slate-50/80 rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col justify-between">
+  <!-- 決定論的インラインSVG（座標・バー・コネクタ・ラベルが絶対に重ならない） -->
+  <div class="w-full">
+    <svg viewBox="0 0 960 190" class="w-full h-44">
+      <line x1="30" y1="150" x2="930" y2="150" stroke="#cbd5e1" stroke-width="1.5" />
+      <line x1="140" y1="80" x2="230" y2="80" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <line x1="330" y1="60" x2="430" y2="60" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <line x1="530" y1="64" x2="820" y2="64" stroke="#94a3b8" stroke-dasharray="3,3" />
+      <!-- Bar 1: 起点 (10.0億 / 70px) -->
+      <rect x="40" y="80" width="100" height="70" rx="6" fill="#94a3b8" />
+      <text x="90" y="72" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#334155">10.0億</text>
+      <text x="90" y="120" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">前期</text>
+      <text x="90" y="170" text-anchor="middle" font-size="10" fill="#64748b">2025実績</text>
+      <!-- Bar 2: 増分 1 (+2.8億 / 20px: y=60〜80) -->
+      <rect x="230" y="60" width="100" height="20" rx="6" fill="#10b981" />
+      <text x="280" y="52" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#059669">+2.8億</text>
+      <text x="280" y="75" text-anchor="middle" font-size="11" font-weight="bold" fill="#ffffff">新規獲得</text>
+      <text x="280" y="170" text-anchor="middle" font-size="10" fill="#059669">エンタープライズ</text>
+      <!-- Bar 3: 減分 (-0.5億 / 4px: y=60〜64) -->
+      <rect x="430" y="60" width="100" height="4" rx="2" fill="#f43f5e" />
+      <text x="480" y="52" text-anchor="middle" font-family="monospace" font-size="12" font-weight="bold" fill="#e11d48">-0.5億</text>
+      <text x="480" y="170" text-anchor="middle" font-size="10" fill="#64748b">値引影響</text>
+      <!-- 境界線 -->
+      <line x1="680" y1="20" x2="680" y2="150" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,4" />
+      <!-- Bar 4: 着地目標 (12.3億 / 86px: y=64〜150) -->
+      <rect x="820" y="64" width="100" height="86" rx="6" fill="#4f46e5" />
+      <text x="870" y="54" text-anchor="middle" font-family="monospace" font-size="14" font-weight="900" fill="#4f46e5">12.3億</text>
+      <text x="870" y="110" text-anchor="middle" font-size="12" font-weight="black" fill="#ffffff">当期目標</text>
+      <text x="870" y="170" text-anchor="middle" font-size="10" font-weight="bold" fill="#4f46e5">+23% YoY</text>
+    </svg>
+  </div>
+  <!-- 下部示唆サマリ -->
+  <div class="grid grid-cols-3 gap-3 pt-3 border-t border-slate-100 text-xs">
+    <div class="bg-white p-2.5 rounded border border-slate-200"><strong>① 新規獲得:</strong> セキュリティ監査機能で成約率1.8倍</div>
+    <div class="bg-white p-2.5 rounded border border-slate-200"><strong>② チャーン低減:</strong> CS自動化で離脱率4.2%→1.1%</div>
+    <div class="bg-brand-50 p-2.5 rounded border border-brand-200 text-brand-900 font-medium"><strong>③ So What:</strong> 単価減を量で相殺、利益率78%維持</div>
+  </div>
+</div>
+```
+
+---
+
+### パターン5：【全体像・階層マッピング】（architecture_mapping / Architecture & Layering）
+- **主用途**: システム構成説明、業務フロー全体像、組織ロールの可視化（上中下3層）
+
+#### ワイヤーフレーム＆スロット
+```text
+[Lead: フロントエンドと基幹DBを疎結合化し、API層を中継して認証・ログを統合する]
+┌─ 01. Client Layer (利用者UI) ───────▶ Web UI / 現場端末 (HTTPS) ──────────┐
+│                                   ▼ (双方向通信)                         │
+├─ ★ 02. Gateway & API (CORE結合部) ─▶ API Gateway ⇄ 認証基盤 (gRPC) ──────┤
+│                                   ▼ (内部呼出)                           │
+└─ 03. Data & Storage (永続化) ──────▶ DB (PostgreSQL) ＋ 監査ログ保管庫 ────┘
+スロット: lead_message, layers (name, description), components, interactions
+```
+
+#### 骨格HTML構造スニペット
+```html
+<!-- 3層スタックアーキテクチャ（左: レイヤー定義 / 右: コンポーネント群 ＆ 結合強調） -->
+<div class="my-auto flex flex-col space-y-3">
   <!-- Layer 1: Client -->
-  <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-    <div class="w-1/4 shrink-0 font-bold text-xs text-slate-700 tracking-wider uppercase border-r border-slate-200 pr-4">
+  <div class="flex items-center gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+    <div class="w-1/4 shrink-0 font-bold text-xs text-slate-700 uppercase border-r border-slate-200 pr-3">
       <div class="text-brand-600 font-extrabold">01. Client Layer</div>
-      <div class="text-[11px] text-slate-500 font-normal">利用者インターフェース</div>
+      <div class="text-[10px] text-slate-500 font-normal">利用者UI</div>
     </div>
-    <div class="w-3/4 flex items-center gap-4">
-      <div class="flex-1 p-3 bg-white rounded-lg border border-slate-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-slate-800">社内Webポータル (Next.js)</div>
-        <div class="text-[10px] text-slate-500 font-mono">PCブラウザ操作</div>
-      </div>
-      <div class="text-slate-400 text-xs">/</div>
-      <div class="flex-1 p-3 bg-white rounded-lg border border-slate-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-slate-800">現場モバイル端末</div>
-        <div class="text-[10px] text-slate-500 font-mono">バーコード読取</div>
-      </div>
-      <span class="text-[10px] font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded shrink-0">HTTPS / REST</span>
+    <div class="w-3/4 flex items-center gap-3">
+      <div class="flex-1 p-2 bg-white rounded border border-slate-200 text-center text-xs font-bold">社内Webポータル</div>
+      <div class="flex-1 p-2 bg-white rounded border border-slate-200 text-center text-xs font-bold">現場端末</div>
+      <span class="text-[10px] font-mono bg-slate-200 px-2 py-0.5 rounded">HTTPS</span>
     </div>
   </div>
-
-  <!-- Arrow Indicator -->
-  <div class="flex justify-center -my-2 text-brand-500 font-bold text-xs">↓ 双方向通信</div>
 
   <!-- Layer 2: Gateway & Auth (CORE強調) -->
-  <div class="flex items-center gap-4 bg-brand-50/60 p-4 rounded-xl border-2 border-brand-500 shadow-sm relative">
-    <div class="absolute -top-2.5 right-4 bg-brand-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full">
-      結合ポイント / CORE
-    </div>
-    <div class="w-1/4 shrink-0 font-bold text-xs text-brand-900 tracking-wider uppercase border-r border-brand-200 pr-4">
+  <div class="flex items-center gap-4 bg-brand-50/60 p-3.5 rounded-xl border-2 border-brand-500 shadow-sm relative">
+    <div class="absolute -top-2 right-4 bg-brand-600 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full">CORE 結合部</div>
+    <div class="w-1/4 shrink-0 font-bold text-xs text-brand-900 uppercase border-r border-brand-200 pr-3">
       <div class="text-brand-700 font-extrabold">02. Gateway & API</div>
-      <div class="text-[11px] text-brand-600 font-normal">流量制御・認証統合</div>
+      <div class="text-[10px] text-brand-600 font-normal">流量制御・認証統合</div>
     </div>
-    <div class="w-3/4 flex items-center gap-4">
-      <div class="flex-1 p-3 bg-white rounded-lg border border-brand-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-brand-900">API Gateway</div>
-        <div class="text-[10px] text-slate-500">レートリミット / ルーティング</div>
-      </div>
-      <div class="text-brand-400 text-xs">⇄</div>
-      <div class="flex-1 p-3 bg-white rounded-lg border border-brand-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-brand-900">認証・認可基盤 (SSO)</div>
-        <div class="text-[10px] text-slate-500">SAML / OIDC / トークン検証</div>
-      </div>
-      <span class="text-[10px] font-mono bg-brand-200 text-brand-800 px-2 py-1 rounded shrink-0">gRPC / mTLS</span>
+    <div class="w-3/4 flex items-center gap-3">
+      <div class="flex-1 p-2 bg-white rounded border border-brand-200 text-center text-xs font-bold text-brand-900">API Gateway</div>
+      <div class="flex-1 p-2 bg-white rounded border border-brand-200 text-center text-xs font-bold text-brand-900">認証基盤 (SSO)</div>
+      <span class="text-[10px] font-mono bg-brand-200 text-brand-800 px-2 py-0.5 rounded">gRPC</span>
     </div>
   </div>
 
-  <!-- Arrow Indicator -->
-  <div class="flex justify-center -my-2 text-brand-500 font-bold text-xs">↓ 内部呼出</div>
-
-  <!-- Layer 3: Data / Storage -->
-  <div class="flex items-center gap-4 bg-slate-50 p-4 rounded-xl border border-slate-200">
-    <div class="w-1/4 shrink-0 font-bold text-xs text-slate-700 tracking-wider uppercase border-r border-slate-200 pr-4">
+  <!-- Layer 3: Data -->
+  <div class="flex items-center gap-4 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+    <div class="w-1/4 shrink-0 font-bold text-xs text-slate-700 uppercase border-r border-slate-200 pr-3">
       <div class="text-slate-700 font-extrabold">03. Data & Storage</div>
-      <div class="text-[11px] text-slate-500 font-normal">永続化・監査ログ</div>
+      <div class="text-[10px] text-slate-500 font-normal">永続化・監査ログ</div>
     </div>
-    <div class="w-3/4 flex items-center gap-4">
-      <div class="flex-1 p-3 bg-white rounded-lg border border-slate-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-slate-800">トランザクションDB (PostgreSQL)</div>
-        <div class="text-[10px] text-slate-500">Multi-AZ高可用性</div>
-      </div>
-      <div class="text-slate-400 text-xs">+</div>
-      <div class="flex-1 p-3 bg-white rounded-lg border border-slate-200 text-center shadow-xs">
-        <div class="text-xs font-bold text-slate-800">監査ログ保管庫 (Object Storage)</div>
-        <div class="text-[10px] text-slate-500">改ざん防止・10年保管</div>
-      </div>
-      <span class="text-[10px] font-mono bg-slate-200 text-slate-700 px-2 py-1 rounded shrink-0">暗号化保存</span>
+    <div class="w-3/4 flex items-center gap-3">
+      <div class="flex-1 p-2 bg-white rounded border border-slate-200 text-center text-xs font-bold">トランザクションDB</div>
+      <div class="flex-1 p-2 bg-white rounded border border-slate-200 text-center text-xs font-bold">監査ログ保管庫</div>
+      <span class="text-[10px] font-mono bg-slate-200 px-2 py-0.5 rounded">暗号化</span>
     </div>
   </div>
 </div>
@@ -522,316 +507,115 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
 
 ---
 
-### パターン5：【ステップ・時系列フロー】（step_process / Sequential Workflow）
-- **識別子 (`pattern_id`)**: `step_process`
-- **主用途**: 業務運用手順、リリース手順、障害発生時対応、オンボーディング
-- **目的**: 時系列の手順と、各ステップの入力・出力・関門（チェックポイント）を示す。
-- **比率**: 3〜4ステップの横並び
+### パターン6：【境界線・NG/OK対比】（boundary_comparison / Boundary & Best Practices）
+- **主用途**: スコープ境界線（In Scope vs Out of Scope）、ポリシー（NG vs OK）、アンチパターン対比（50% : 50%）
 
-#### ワイヤーフレーム
+#### ワイヤーフレーム＆スロット
 ```text
-+-------------------------------------------------------------------+
-| Lead: Step 2のレビュー承認を完了するまで本番マージ・デプロイは不可 |
-+-----------------+-----------------+-----------------+-------------+
-| Step 1: 実装    | Step 2: レビュー| Step 3: ステージ | Step 4: 本番|
-+-----------------+-----------------+-----------------+-------------+
-| [作業]          | [作業]          | [作業]          | [作業]      |
-| ブランチ作成    | PR作成・2名承認 | 自動テスト実行  | 手動承認    |
-| ローカル検証    |                 | E2E確認         | デプロイ    |
-+-----------------+-----------------+-----------------+-------------+
-| [Output]        | [★Gate]        | [Output]        | [Goal]      |
-| PRドラフト      | コード承認ログ  | 検証完了サイン  | 本番反映    |
-+-----------------+-----------------+-----------------+-------------+
+[Lead: 今回リリースは基本機能に絞り、外部連携・一括処理はPhase 2へ送る]
+┌─ 【対象外 / NG / Out of Scope (50%)】 ─┬─ 【MUST対象 / OK / In Scope (50%)】 ──┐
+│ ✕ CSV一括入出力 (Phase 2にて定義)       │ ✓ 単体CRUD操作 (最優先で業務稼働)      │
+│ ✕ 外部SaaS・Slack連携 (手動代替可能)    │ ✓ ロール別権限管理 (セキュリティ必須)  │
+│ [※追加要望は要件変更申請起案必須]      │ [リリース目標: 2026年11月末本番反映]    │
+└────────────────────────────────────────┴────────────────────────────────────────┘
+スロット: lead_message, left_items (type, title, reason), right_items (type, title, reason)
 ```
 
-#### スロット定義
-- `lead_message`: 所要時間目安、または最も留意すべき関門の明示
-- `steps`: `step_number`, `title`, `tasks`, `gate_or_output`
-
-#### HTML / Tailwind スニペット
+#### 骨格HTML構造スニペット
 ```html
-<div class="grid grid-cols-4 gap-4 my-auto">
-  <!-- Step 1 -->
-  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
-    <div>
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
-        <span class="text-xs font-mono font-bold text-slate-400">STEP 01</span>
-        <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">開発担当</span>
-      </div>
-      <div class="text-xs font-bold text-slate-900 mb-2">実装 & 単体検証</div>
-      <ul class="space-y-1.5 text-[11px] text-slate-600">
-        <li>・featureブランチ作成</li>
-        <li>・単体テストカバレッジ80%</li>
-        <li>・静的解析ツールの通過</li>
-      </ul>
-    </div>
-    <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-medium text-slate-500">
-      <span class="text-slate-400">成果物:</span> PRドラフト
-    </div>
-  </div>
-
-  <!-- Step 2: Critical Gate (視覚的アンカー強調) -->
-  <div class="bg-brand-50/60 rounded-xl p-4 border-2 border-brand-500 shadow-md flex flex-col justify-between relative">
-    <div class="absolute -top-2.5 right-3 bg-brand-600 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-full shadow">
-      ★ 必須関門 (Gate)
-    </div>
-    <div>
-      <div class="flex items-center justify-between border-b border-brand-200/80 pb-2 mb-3">
-        <span class="text-xs font-mono font-bold text-brand-700">STEP 02</span>
-        <span class="text-[10px] font-bold text-brand-700 bg-brand-100 px-2 py-0.5 rounded">レビュアー2名</span>
-      </div>
-      <div class="text-xs font-bold text-brand-900 mb-2">コードレビュー & 承認</div>
-      <ul class="space-y-1.5 text-[11px] text-slate-700">
-        <li>・設計整合性・セキュリティ確認</li>
-        <li>・シニアエンジニア2名以上のApprove</li>
-        <li>・差分コメント全解決</li>
-      </ul>
-    </div>
-    <div class="mt-4 pt-2.5 border-t border-brand-200 text-[11px] font-bold text-brand-800">
-      通過条件: 承認ログ ＋ CI通過
-    </div>
-  </div>
-
-  <!-- Step 3 -->
-  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
-    <div>
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
-        <span class="text-xs font-mono font-bold text-slate-400">STEP 03</span>
-        <span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">QAチーム</span>
-      </div>
-      <div class="text-xs font-bold text-slate-900 mb-2">ステージング検証</div>
-      <ul class="space-y-1.5 text-[11px] text-slate-600">
-        <li>・自動E2Eシナリオ実行</li>
-        <li>・本番相当データでの負荷確認</li>
-        <li>・ステークホルダー受入確認</li>
-      </ul>
-    </div>
-    <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-medium text-slate-500">
-      <span class="text-slate-400">成果物:</span> 検証完了サイン
-    </div>
-  </div>
-
-  <!-- Step 4 -->
-  <div class="bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex flex-col justify-between">
-    <div>
-      <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-3">
-        <span class="text-xs font-mono font-bold text-slate-400">STEP 04</span>
-        <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">リリース責任者</span>
-      </div>
-      <div class="text-xs font-bold text-slate-900 mb-2">本番適用 & 監視</div>
-      <ul class="space-y-1.5 text-[11px] text-slate-600">
-        <li>・カナリアデプロイ実施</li>
-        <li>・エラートラッキング監視 (30分)</li>
-        <li>・完了アナウンス発行</li>
-      </ul>
-    </div>
-    <div class="mt-4 pt-2.5 border-t border-slate-100 text-[11px] font-bold text-emerald-700">
-      Goal: 正常稼働サインオフ
-    </div>
-  </div>
-</div>
-```
-
----
-
-### パターン6：【落とし穴・NG/OK対比】（pitfalls_faq / Pitfalls & Best Practices）
-- **識別子 (`pattern_id`)**: `pitfalls_faq`
-- **主用途**: ガイドライン周知、トラブルシューティング、開発規約の定着
-- **目的**: よくある失敗（アンチパターン）と推奨される正しい行動の対比。
-- **比率**: 左右のNG/OK対比カード
-
-#### ワイヤーフレーム
-```text
-+-------------------------------------------------------------------+
-| Lead: 環境変数はコードにハードコードせず、必ず.env経由でSecrets管理に逃がす |
-+---------------------------------+---------------------------------+
-| × よくある誤り (Anti-Pattern)   | ○ 正しい実装 (Best Practice)    |
-| const API_KEY = "xyz123...";   | const API_KEY = process.env...; |
-| 【なぜNGか】                    | 【運用のポイント】              |
-| ・リポジトリ公開時に流出する    | ・.envは.gitignoreに必須追加    |
-| ・環境ごとの切替ができない      | ・CI/CD環境側のVariablesで注入  |
-+---------------------------------+---------------------------------+
-```
-
-#### スロット定義
-- `lead_message`: 最も周知したい原則的ルール
-- `anti_pattern`: `snippet_or_fact`, `why_bad`
-- `best_practice`: `correct_action`, `key_point`
-
-#### HTML / Tailwind スニペット
-```html
+<!-- 左右50:50対比（左: 対象外NG / 右: MUST対象OK強調） -->
 <div class="grid grid-cols-2 gap-8 my-auto">
-  <!-- × Anti-Pattern (NG) -->
-  <div class="bg-rose-50/30 rounded-xl p-6 border border-rose-200 flex flex-col justify-between">
+  <!-- 左: 対象外 (Out of Scope) -->
+  <div class="bg-rose-50/30 rounded-xl p-5 border border-rose-200 flex flex-col justify-between">
     <div>
-      <div class="flex items-center gap-2 text-rose-700 font-bold text-sm mb-3">
-        <span class="w-6 h-6 rounded-full bg-rose-100 flex items-center justify-center text-xs font-bold text-rose-600">✕</span>
-        <span>よくある誤り (Anti-Pattern)</span>
+      <div class="flex justify-between mb-3 text-xs font-bold text-rose-700">
+        <span>✕ 対象外 / 今回やらないこと</span><span class="bg-rose-100 px-2 py-0.5 rounded text-[10px]">Phase 2以降</span>
       </div>
-      <div class="p-3 bg-slate-900 text-rose-300 font-mono text-[11px] rounded-lg border border-slate-800 mb-4 overflow-x-auto">
-        const API_KEY = "sk_live_9384729384...";<br>
-        // ソースコード内に秘密鍵を直接ハードコード
-      </div>
-      <div class="space-y-2">
-        <div class="text-xs font-bold text-rose-900">【なぜNGなのか】</div>
-        <ul class="space-y-1 text-xs text-slate-600 pl-3">
-          <li>・GitHubへの誤Push時に即座に全世界へクレデンシャルが流出</li>
-          <li>・開発・検証・本番環境ごとのクレデンシャル切り替えが不可能</li>
-          <li>・鍵ローテーション時に全アプリケーションの再ビルド・再デプロイが必須</li>
-        </ul>
-      </div>
-    </div>
-    <div class="mt-4 pt-3 border-t border-rose-200/60 text-xs font-bold text-rose-700">
-      リスク: インシデント発生・即時失効対応の発生
-    </div>
-  </div>
-
-  <!-- ○ Best Practice (推奨) -->
-  <div class="bg-emerald-50/30 rounded-xl p-6 border-2 border-emerald-500 shadow-sm flex flex-col justify-between">
-    <div>
-      <div class="flex items-center justify-between mb-3">
-        <div class="flex items-center gap-2 text-emerald-700 font-bold text-sm">
-          <span class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-xs font-bold text-emerald-600">✓</span>
-          <span>正しい実装 (Best Practice)</span>
+      <div class="space-y-3 text-xs">
+        <div class="p-2.5 bg-white rounded border border-rose-100">
+          <div class="font-bold line-through text-slate-400">1. CSV一括インポート/エクスポート</div>
+          <p class="text-[11px] text-slate-500 mt-1">DB直結バッチで暫定対応可能。差分取込は次期策定。</p>
         </div>
-        <span class="text-[10px] font-extrabold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">社内標準</span>
-      </div>
-      <div class="p-3 bg-slate-900 text-emerald-300 font-mono text-[11px] rounded-lg border border-slate-800 mb-4 overflow-x-auto">
-        const API_KEY = process.env.SERVICE_API_KEY;<br>
-        if (!API_KEY) throw new Error("API_KEY missing");
-      </div>
-      <div class="space-y-2">
-        <div class="text-xs font-bold text-emerald-900">【運用のポイント】</div>
-        <ul class="space-y-1 text-xs text-slate-700 pl-3">
-          <li>・ローカル環境では <code>.env.local</code> を使用し、必ず <code>.gitignore</code> に指定</li>
-          <li>・CI/CD環境では Secret Manager / Vault より実行時に動的注入</li>
-          <li>・起動時のNullチェックを徹底し、不整合状態での起動を即座にフェイル</li>
-        </ul>
+        <div class="p-2.5 bg-white rounded border border-rose-100">
+          <div class="font-bold line-through text-slate-400">2. 外部SaaS・Slack連携</div>
+          <p class="text-[11px] text-slate-500 mt-1">初期は管理画面メール通知で運用代替可能なためカット。</p>
+        </div>
       </div>
     </div>
-    <div class="mt-4 pt-3 border-t border-emerald-200/60 text-xs font-bold text-emerald-800">
-      メリット: 安全な鍵運用 ＆ 環境差異の完全吸収
+    <div class="mt-3 pt-2 border-t border-rose-200 text-[11px] text-rose-700">※追加要望は要件変更申請（CR）起案のこと</div>
+  </div>
+
+  <!-- 右: 対象 (In Scope: 強調) -->
+  <div class="bg-white rounded-xl p-5 border-2 border-brand-500 shadow-sm flex flex-col justify-between relative">
+    <div class="absolute -top-2.5 left-5 bg-brand-600 text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded-full shadow">
+      MUST: 今回コミット対象 (In Scope)
     </div>
+    <div class="mt-1 space-y-3 text-xs">
+      <div class="p-2.5 bg-brand-50/40 rounded border border-brand-200">
+        <div class="flex justify-between font-bold text-brand-900"><span>1. 単体CRUD操作 ＆ 入力バリデーション</span><span class="text-[10px] bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded">最優先</span></div>
+        <p class="text-[11px] text-slate-600 mt-1">現場の日常オペレーションを最速で稼働させデータ蓄積を開始。</p>
+      </div>
+      <div class="p-2.5 bg-brand-50/40 rounded border border-brand-200">
+        <div class="flex justify-between font-bold text-brand-900"><span>2. ロール別アクセス権限管理</span><span class="text-[10px] bg-brand-100 text-brand-700 px-1.5 py-0.5 rounded">セキュリティ必須</span></div>
+        <p class="text-[11px] text-slate-600 mt-1">個人情報保護・監査ログ要件を満たすための必須要件。</p>
+      </div>
+    </div>
+    <div class="mt-3 pt-2 border-t border-brand-100 text-xs font-bold text-brand-700">リリース目標: 2026年11月末本番反映</div>
   </div>
 </div>
 ```
 
 ---
 
-## 4. 表現強化コンポーネント（Visual Components）
+## 4. 表現強化コンポーネント ＆ 戦略コンサル型 高度パーツ
 
-### コンポーネント1：表紙・タイトルスライド (Cover Slide)
+スライドの表現力を高める各種パーツは、保守性とトークン効率を高めるためモジュール化されています。
+
+### 4.1 基本コンポーネント（Core Components）
+
+#### コンポーネント1：表紙・タイトルスライド (Cover Slide)
 - **用途**: プレゼンテーション表紙、セクション扉
-- **特徴**: 高級感のあるダークグラデーション背景、メタ情報（機密区分・日付・発表者）
+- **特徴**: 高級感のあるグラデーション背景、メタ情報（機密区分・日付・発表者）、Action Title
+- **実装**: `assets/corporate_default.html` の Slide 1 を正本として参照。
 
-```html
-<section class="slide p-16 justify-between bg-gradient-to-br from-slate-900 via-brand-950 to-slate-950 text-white border border-slate-800" contenteditable="true">
-  <div class="flex items-center justify-between z-10">
-    <span class="text-xs font-semibold tracking-widest text-accent-400 uppercase">Category Title</span>
-    <span class="text-xs font-mono text-slate-400 bg-slate-800/80 px-3 py-1 rounded-full border border-slate-700">CONFIDENTIAL</span>
-  </div>
-
-  <div class="z-10 my-auto">
-    <div class="inline-block px-3.5 py-1 rounded-md bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-semibold mb-4">
-      PROJECT PROPOSAL
-    </div>
-    <h1 class="text-5xl font-extrabold tracking-tight text-white leading-tight mb-4">
-      メインタイトルをここに記載<br>
-      <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-400 to-indigo-200">サブキャッチコピー</span>
-    </h1>
-    <p class="text-lg text-slate-300 max-w-2xl font-light leading-relaxed">
-      この企画が達成する目的、背景、および想定されるインパクトの要約文
-    </p>
-  </div>
-
-  <div class="z-10 pt-6 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-    <div>発表部門: 〇〇部 | 日付: 2026年9月</div>
-    <div class="font-mono">01 / 05</div>
-  </div>
-</section>
-```
-
----
-
-### コンポーネント2：純粋インラインSVGビジネスチャート (Inline SVG Chart & Metrics)
-- **用途**: 投資対効果（ROI）推移、月次削減工数、業績予測
-- **特徴**: 外部JSライブラリ不要（Pure Inline SVG）。CSS変数（`var(--brand-500)` 等）と完全同期。
-
-```html
-<div class="my-auto bg-slate-950/60 rounded-xl p-5 border border-slate-800/90 shadow-inner">
-  <svg viewBox="0 0 800 240" class="w-full h-48 overflow-visible">
-    <!-- グリッド線 -->
-    <line x1="60" y1="30" x2="760" y2="30" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
-    <line x1="60" y1="90" x2="760" y2="90" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
-    <line x1="60" y1="150" x2="760" y2="150" stroke="#334155" stroke-dasharray="3 3" opacity="0.4" />
-    <line x1="60" y1="210" x2="760" y2="210" stroke="#475569" stroke-width="1.5" />
-
-    <!-- 棒グラフ (工数削減) -->
-    <rect x="120" y="160" width="50" height="50" rx="4" fill="var(--brand-600)" opacity="0.8" />
-    <text x="145" y="152" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">1.2k h</text>
-
-    <rect x="270" y="125" width="50" height="85" rx="4" fill="var(--brand-500)" opacity="0.85" />
-    <text x="295" y="117" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">2.4k h</text>
-
-    <rect x="420" y="90" width="50" height="120" rx="4" fill="var(--brand-500)" opacity="0.9" />
-    <text x="445" y="82" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">3.8k h</text>
-
-    <rect x="570" y="60" width="50" height="150" rx="4" fill="var(--brand-400)" />
-    <text x="595" y="52" fill="#cbd5e1" font-size="10" font-weight="bold" text-anchor="middle">5.2k h</text>
-
-    <!-- 折れ線グラフ (累積ROI) -->
-    <polyline points="145,190 295,140 445,85 595,45" fill="none" stroke="#34d399" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    <circle cx="145" cy="190" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
-    <circle cx="295" cy="140" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
-    <circle cx="445" cy="85" r="4" fill="#10b981" stroke="#fff" stroke-width="1.5" />
-    <circle cx="595" cy="45" r="5" fill="#34d399" stroke="#fff" stroke-width="2" />
-
-    <!-- X軸ラベル -->
-    <text x="145" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2026 (導入期)</text>
-    <text x="295" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2027 (展開期)</text>
-    <text x="445" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2028 (定着期)</text>
-    <text x="595" y="230" fill="#94a3b8" font-size="11" font-weight="semibold" text-anchor="middle">2029 (自律運用期)</text>
-  </svg>
-</div>
-```
-
----
-
-### コンポーネント3：コンセプト・ビジュアルスプリット (AI生成画像 ＋ 概念解説)
+#### コンポーネント2：コンセプト・ビジュアルスプリット (AI生成画像 ＋ 概念解説)
 - **用途**: 抽象概念・将来構想・世界観の提示
-- **特徴**: 左側にアスペクト比固定のAI画像（D&D差し替え対応）、右側に要点解説カード。
+- **特徴**: 左側にアスペクト比固定のAI画像（Base64インライン埋め込み）、右側に要点解説カード。
 
 ```html
+<!-- コンセプト画像枠 (Base64インライン埋め込み) ＋ 解説カード -->
 <div class="grid grid-cols-2 gap-8 items-center my-auto">
-  <!-- AI画像枠 (ドラッグ＆ドロップ対応) -->
-  <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-950 group">
-    <!-- 画像はBase64 Data URIで直接インライン埋め込み（完全単一ファイル完結） -->
-    <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEASABIAAD/..." alt="Concept Imagery" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-    <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent pointer-events-none"></div>
-    <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[11px] text-slate-300">
-      <span class="font-mono text-accent-400">Concept Art</span>
-      <span class="bg-slate-900/80 px-2 py-0.5 rounded border border-slate-700 no-print text-[10px]">D&Dで画像変更</span>
+  <div class="image-dropzone relative aspect-video rounded-xl overflow-hidden border border-slate-700 shadow-2xl bg-slate-950">
+    <img src="data:image/jpeg;base64,/9j/..." alt="Concept" class="w-full h-full object-cover">
+    <div class="absolute bottom-2 left-3 right-3 flex justify-between text-[10px] text-slate-300 font-mono">
+      <span class="text-accent-400">Concept Art</span><span class="bg-slate-900/80 px-1.5 py-0.5 rounded no-print">D&Dで変更</span>
     </div>
   </div>
-
-  <!-- 右側テキスト解説 -->
-  <div class="flex flex-col justify-center space-y-4">
-    <p class="text-sm text-slate-300 leading-relaxed font-light">
-      システム全体像や将来構想を直感的に提示するための解説文。
-    </p>
-    <div class="space-y-3">
-      <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-        <div class="text-xs font-bold text-accent-400 mb-0.5">01. リアルタイム連携</div>
-        <div class="text-xs text-slate-300">全社DBと各SaaSが即時ストリーミングで常時同期</div>
-      </div>
-      <div class="p-3.5 bg-slate-800/80 rounded-xl border border-slate-700/80">
-        <div class="text-xs font-bold text-brand-400 mb-0.5">02. 自然言語インターフェース</div>
-        <div class="text-xs text-slate-300">現場担当者が社内AIを通じて即座にインサイトを抽出</div>
-      </div>
-    </div>
+  <div class="space-y-3 text-xs">
+    <p class="text-slate-300 leading-relaxed font-light">システム全体像や将来構想を直感提示する要約文。</p>
+    <div class="p-3 bg-slate-800/80 rounded border border-slate-700 font-bold text-accent-400">01. リアルタイム連携</div>
+    <div class="p-3 bg-slate-800/80 rounded border border-slate-700 font-bold text-brand-400">02. 自然言語IF</div>
   </div>
 </div>
 ```
+
+---
+
+### 4.2 戦略コンサル型 高度示唆コンポーネント（Advanced Visuals）
+
+> 📖 **詳細実装スニペット（Tailwind & SVG）は以下を参照してください**:  
+> 👉 [components-consulting.md](./components-consulting.md)
+
+| コンポーネント | 用途・ビジネス意図 | 構文要点 |
+| :--- | :--- | :--- |
+| **差分矢印・CAGR** | 2指標間の成長率・削減率を直結 | `difference_arrow` |
+| **ハーベイボール** | 多軸評価（●◕◐◔○）で優劣可視化 | `harvey_balls` |
+| **章トラッカー** | アジェンダ現在地を常時提示 | `agenda_breadcrumbs` |
+| **実績 vs 予測境界線** | 過去確定値とシミュレーションを区分 | `actual_forecast_divider` |
+| **軸ブレイク波線** | 突出外れ値による縮退を防止 | `axis_break` |
+| **2次元マリメッコ** | 横幅（TAM）× 縦高さ（シェア） | `mekko_chart` |
+| **ガント・タイムライン** | WBS、工程、Gate関門（◆） | `timeline_milestones` |
+| **純粋SVG複合チャート** | 棒（工数）＋ 折れ線（ROI） | Pure Inline SVG |
 
 ---
 
@@ -847,33 +631,28 @@ Grill（事前確認）やスライド設計時は、対話言語に合わせて
   "properties": {
     "pattern_id": {
       "type": "string",
-      "enum": [
-        "problem_solution",
-        "tradeoff_matrix",
-        "scope_boundary",
-        "architecture_mapping",
-        "step_process",
-        "pitfalls_faq"
-      ],
-      "description": "社内資料向け6大パターンのいずれかの識別子"
+      "enum": ["executive_summary", "agenda", "problem_solution", "tradeoff_matrix", "step_process", "waterfall_breakdown", "architecture_mapping", "boundary_comparison", "mekko_chart", "timeline_gantt"],
+      "description": "社内資料向け骨格パターンの識別子"
     },
-    "kicker": {
-      "type": "string",
-      "description": "カテゴリまたは章タイトル（10〜20文字）"
-    },
-    "lead_message": {
-      "type": "string",
-      "description": "結論・示唆を含む完全文（40〜60文字、動詞結びのAction Title）"
-    },
-    "content_slots": {
-      "type": "object",
-      "description": "各パターンに定義されたスロットごとのキー・バリュー"
-    },
-    "footer_note": {
-      "type": "string",
-      "description": "前提、出典、対象バージョン等（省略可）"
-    }
+    "kicker": { "type": "string", "description": "カテゴリまたは章タイトル" },
+    "lead_message": { "type": "string", "description": "結論を含む完全文（Action Title）" },
+    "content_slots": { "type": "object", "description": "各パターンのスロット" },
+    "footer_note": { "type": "string", "description": "前提、出典等" }
   },
   "required": ["pattern_id", "lead_message", "content_slots"]
 }
 ```
+
+---
+
+## 6. データ表からの直接ビジュアル化プロトコル (Data-to-Visual Binding)
+
+> 📖 **詳細変換レシピと実例は以下を参照してください**:  
+> 👉 [data-visual-binding.md](./data-visual-binding.md)
+
+ユーザーがプロンプトで数値データ（CSV、TSV、Markdown表、Excelコピー等）を提示した場合、エージェントは手動での再入力を求めず、以下の決定論的ルールで最適パターンへ自動変換してください：
+
+1. **時系列推移・要因データ（開始値、各期増減、着地値）**: ➔ `waterfall_breakdown`（ウォーターフォール型）へ自動バインド
+2. **2軸のセグメントデータ（市場規模・シェア構成比）**: ➔ `mekko_chart`（マリメッコ型）へ自動バインド
+3. **複数案の採点表・メリデリデータ**: ➔ `tradeoff_matrix`（ハーベイボール付き比較表）へ自動バインド
+4. **月次・四半期別タスク・工程データ**: ➔ `timeline_gantt`（マイルストーン付きガント）へ自動バインド

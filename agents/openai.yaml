@@ -19,8 +19,14 @@ assets:
     description: "Corporate design template scaffold"
 
 references:
+  - path: "agents/GPT_CUSTOM_INSTRUCTIONS.md"
+    description: "ChatGPT / Custom GPTs installation, system prompt, and Code Interpreter synthesis guide"
   - path: "references/slide-patterns.md"
-    description: "Layout patterns, wireframes, and inline SVG chart specs"
+    description: "Layout patterns, wireframes, and enterprise deck meta skeleton"
+  - path: "references/components-consulting.md"
+    description: "Executive consulting visual components (Mekko, Harvey balls, Gantt, Axis breaks)"
+  - path: "references/data-visual-binding.md"
+    description: "Deterministic data-to-visual binding protocols from CSV/Markdown tables"
   - path: "references/grill-workflow.md"
     description: "Cognitive-drift prevention grill and outline approval protocol"
   - path: "references/ratio-and-print-specs.md"

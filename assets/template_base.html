@@ -163,7 +163,7 @@
     .line-clamp-4 { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
     .line-clamp-5 { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
 
-    /* ── 編集モード状態に応じた選択・操作制御 ── */
+    /* ── 編集モード状態に応じた選択・操作制御（フェイルセーフ設計） ── */
     body.is-editable main .slide {
       user-select: text;
       -webkit-user-select: text;
@@ -172,7 +172,6 @@
       user-select: none !important;
       -webkit-user-select: none !important;
       cursor: default !important;
-      pointer-events: none !important; /* 編集OFF時はクリック・テキスト選択を完全無効化 */
     }
 
     /* 編集可能モードのアウトライン視覚化 */
@@ -209,7 +208,7 @@
     }
   </style>
 </head>
-<body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20">
+<body class="min-h-screen text-slate-800 selection:bg-brand-500 selection:text-white pb-20 is-editable">
 
   <!-- 固定操作ツールバー（印刷時は非表示） -->
   <header class="no-print sticky top-0 z-40 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 text-white px-6 py-2.5 shadow-lg flex items-center justify-between gap-4 min-h-[56px]">
@@ -371,752 +370,372 @@
   </main>
 
   <script>
-    // ----------------------------------------------------
-    // 言語設定判定（HTMLの lang 属性に基づく自動ローカライズ）
-    // ----------------------------------------------------
+    // AINativeSlide Core Runtime Engine (Zero-Dependency, Robust & Fail-safe)
     const isJapanese = !document.documentElement.lang || document.documentElement.lang.toLowerCase().startsWith('ja');
 
-    // ----------------------------------------------------
     // 1. 編集モード制御 (ON: 編集可能 / OFF: 閲覧専用・選択不可)
-    // ----------------------------------------------------
     let isEditable = true;
-
     function setEditMode(enable) {
-      isEditable = enable;
+      isEditable = !!enable;
       document.body.classList.toggle('is-editable', isEditable);
-
-      const slides = document.querySelectorAll('main .slide');
-      slides.forEach(slide => {
+      document.querySelectorAll('main .slide').forEach(slide => {
         slide.setAttribute('contenteditable', isEditable ? 'true' : 'false');
       });
-
-      // 編集OFF時は選択ツールバーを非表示化
       const tb = document.getElementById('selectionToolbar');
-      if (tb && !isEditable) {
-        tb.classList.add('hidden');
-      }
-
-      // ヘッダーボタンの表示更新
+      if (tb && !isEditable) tb.classList.add('hidden');
       const statusText = document.getElementById('editStatusText');
       const editIcon = document.getElementById('editIcon');
       const toggleBtn = document.getElementById('toggleEditBtn');
-
-      if (isEditable) {
-        if (statusText) statusText.innerText = isJapanese ? '編集: ON' : 'Edit: ON';
-        if (editIcon) {
-          editIcon.classList.add('text-brand-400');
-          editIcon.classList.remove('text-slate-500');
-        }
-        if (toggleBtn) {
-          toggleBtn.classList.remove('opacity-60');
-          toggleBtn.classList.add('border-brand-500/50');
-        }
-      } else {
-        if (statusText) statusText.innerText = isJapanese ? '編集: OFF' : 'Edit: OFF';
-        if (editIcon) {
-          editIcon.classList.remove('text-brand-400');
-          editIcon.classList.add('text-slate-500');
-        }
-        if (toggleBtn) {
-          toggleBtn.classList.add('opacity-60');
-          toggleBtn.classList.remove('border-brand-500/50');
-        }
-        // 選択解除
-        if (window.getSelection) {
-          window.getSelection().removeAllRanges();
-        }
+      if (statusText) statusText.innerText = isJapanese ? (isEditable ? '編集: ON' : '編集: OFF') : (isEditable ? 'Edit: ON' : 'Edit: OFF');
+      if (editIcon) {
+        editIcon.classList.toggle('text-brand-400', isEditable);
+        editIcon.classList.toggle('text-slate-500', !isEditable);
       }
+      if (toggleBtn) {
+        toggleBtn.classList.toggle('opacity-60', !isEditable);
+        toggleBtn.classList.toggle('border-brand-500/50', isEditable);
+      }
+      if (!isEditable && window.getSelection) window.getSelection().removeAllRanges();
     }
+    function toggleEditMode() { setEditMode(!isEditable); }
 
-    function toggleEditMode() {
-      setEditMode(!isEditable);
-    }
-
-    // ----------------------------------------------------
-    // 3. テーマカラー適用 (全体 or 選択箇所)
-    // ----------------------------------------------------
-    // Note: Corporate design template defines fixed brand CI colors in CSS
-
+    // 2. カスタムカラー適用
+    let currentCustomBrandHex = null;
     function applyCustomColor(hex) {
-      if (hasTextSelection()) {
-        formatSelection('color', hex);
-        return;
-      }
+      if (hasTextSelection()) { formatSelection('color', hex); return; }
       currentCustomBrandHex = hex;
-      currentThemeKey = 'custom';
       const root = document.documentElement;
-      root.style.setProperty('--brand-500', hex);
-      root.style.setProperty('--brand-600', hex);
+      ['--brand-500', '--brand-600'].forEach(p => root.style.setProperty(p, hex));
       root.style.setProperty('--brand-50', hex + '15');
       root.style.setProperty('--brand-100', hex + '25');
       root.style.setProperty('--brand-200', hex + '40');
       if (typeof scheduleAutoSave === 'function') scheduleAutoSave();
     }
 
-    // ----------------------------------------------------
-    // 4. テキスト選択の判定 & ミニフローティングバー
-    // ----------------------------------------------------
+    // 3. テキスト選択 & ミニ書式バー
     let savedSelectionRange = null;
-
     function hasTextSelection() {
-      const selection = window.getSelection();
-      if (!selection.rangeCount || selection.isCollapsed) return false;
-      const range = selection.getRangeAt(0);
-      let container = range.commonAncestorContainer;
-      if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
-      return !!container.closest('.slide');
+      const s = window.getSelection();
+      if (!s || !s.rangeCount || s.isCollapsed) return false;
+      let node = s.getRangeAt(0).commonAncestorContainer;
+      if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+      return !!node.closest('.slide');
     }
-
     function updateSelectionToolbar() {
-      const toolbar = document.getElementById('selectionToolbar');
-      if (!toolbar) return;
-      const selection = window.getSelection();
-      if (selection.rangeCount > 0 && !selection.isCollapsed) {
-        const range = selection.getRangeAt(0);
-        let container = range.commonAncestorContainer;
-        if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
-        if (container.closest('.slide')) {
-          savedSelectionRange = range.cloneRange();
-          const rect = range.getBoundingClientRect();
+      const tb = document.getElementById('selectionToolbar');
+      if (!tb) return;
+      const s = window.getSelection();
+      if (s && s.rangeCount > 0 && !s.isCollapsed) {
+        const r = s.getRangeAt(0);
+        let node = r.commonAncestorContainer;
+        if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+        if (node.closest('.slide')) {
+          savedSelectionRange = r.cloneRange();
+          const rect = r.getBoundingClientRect();
           if (rect.width > 0 && rect.height > 0) {
-            toolbar.style.top = `${rect.top + window.scrollY - 12}px`;
-            toolbar.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
-            toolbar.classList.remove('hidden');
+            tb.style.top = `${rect.top + window.scrollY - 12}px`;
+            tb.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+            tb.classList.remove('hidden');
             return;
           }
         }
       }
-      toolbar.classList.add('hidden');
+      tb.classList.add('hidden');
     }
+    document.addEventListener('selectionchange', () => setTimeout(updateSelectionToolbar, 20));
 
-    document.addEventListener('selectionchange', () => {
-      setTimeout(updateSelectionToolbar, 20);
-    });
-
-    document.addEventListener('mousedown', (e) => {
-      const toolbar = document.getElementById('selectionToolbar');
-      if (toolbar && !toolbar.contains(e.target) && !e.target.closest('header')) {
-        // スライド内のテキスト以外のクリック時
-      }
-    });
-
-    // ----------------------------------------------------
-    // 5. 選択テキストへのインライン書式適用
-    // ----------------------------------------------------
     function getActiveRange() {
-      const selection = window.getSelection();
-      if (selection.rangeCount > 0 && !selection.isCollapsed) {
-        return selection.getRangeAt(0);
-      }
+      const s = window.getSelection();
+      if (s && s.rangeCount > 0 && !s.isCollapsed) return s.getRangeAt(0);
       if (savedSelectionRange) {
-        selection.removeAllRanges();
-        selection.addRange(savedSelectionRange);
+        s.removeAllRanges();
+        s.addRange(savedSelectionRange);
         return savedSelectionRange;
       }
       return null;
     }
-
     function formatSelection(action, value) {
-      const range = getActiveRange();
-      if (!range) return;
-
+      const r = getActiveRange();
+      if (!r) return;
       if (action === 'bold') {
         document.execCommand('bold', false, null);
         updateSelectionToolbar();
         return;
       }
-
       const span = document.createElement('span');
-      if (action === 'color') {
-        span.style.color = value;
-      } else if (action === 'highlight') {
-        span.style.backgroundColor = value;
-      }
-
+      if (action === 'color') span.style.color = value;
+      else if (action === 'highlight') span.style.backgroundColor = value;
       try {
-        const contents = range.extractContents();
-        span.appendChild(contents);
-        range.insertNode(span);
-
-        const selection = window.getSelection();
-        const newRange = document.createRange();
-        newRange.selectNodeContents(span);
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-        savedSelectionRange = newRange.cloneRange();
+        span.appendChild(r.extractContents());
+        r.insertNode(span);
+        const s = window.getSelection();
+        const nr = document.createRange();
+        nr.selectNodeContents(span);
+        s.removeAllRanges();
+        s.addRange(nr);
+        savedSelectionRange = nr.cloneRange();
         updateSelectionToolbar();
-      } catch (e) {
-        console.error('Format selection error:', e);
-      }
+      } catch (e) { console.error('Format selection error:', e); }
     }
-
     function changeSelectionFontSize(delta) {
-      const range = getActiveRange();
-      if (!range) return;
-
-      let container = range.commonAncestorContainer;
-      if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
-
-      if (container.tagName === 'SPAN' && container.style.fontSize) {
-        let currentEm = parseFloat(container.style.fontSize) || 1.0;
-        container.style.fontSize = `${Math.max(0.6, Math.min(2.5, currentEm + delta)).toFixed(2)}em`;
+      const r = getActiveRange();
+      if (!r) return;
+      let node = r.commonAncestorContainer;
+      if (node.nodeType === Node.TEXT_NODE) node = node.parentNode;
+      if (node.tagName === 'SPAN' && node.style.fontSize) {
+        const cur = parseFloat(node.style.fontSize) || 1.0;
+        node.style.fontSize = `${Math.max(0.6, Math.min(2.5, cur + delta)).toFixed(2)}em`;
       } else {
         const span = document.createElement('span');
         span.style.fontSize = delta > 0 ? '1.25em' : '0.85em';
         try {
-          const contents = range.extractContents();
-          span.appendChild(contents);
-          range.insertNode(span);
-          const selection = window.getSelection();
-          const newRange = document.createRange();
-          newRange.selectNodeContents(span);
-          selection.removeAllRanges();
-          selection.addRange(newRange);
-          savedSelectionRange = newRange.cloneRange();
+          span.appendChild(r.extractContents());
+          r.insertNode(span);
+          const s = window.getSelection();
+          const nr = document.createRange();
+          nr.selectNodeContents(span);
+          s.removeAllRanges();
+          s.addRange(nr);
+          savedSelectionRange = nr.cloneRange();
           updateSelectionToolbar();
-        } catch (e) {
-          console.error(e);
-        }
+        } catch (e) { console.error(e); }
+      }
+    }
+    function clearSelectionFormat() {
+      if (getActiveRange()) {
+        document.execCommand('removeFormat', false, null);
+        updateSelectionToolbar();
       }
     }
 
-    function clearSelectionFormat() {
-      const range = getActiveRange();
-      if (!range) return;
-      document.execCommand('removeFormat', false, null);
-      updateSelectionToolbar();
-    }
-
-    // ----------------------------------------------------
-    // 6. 画像ドラッグ＆ドロップ差し替えスクリプト
-    // ----------------------------------------------------
+    // 4. 画像D&D差し替え
     document.addEventListener('DOMContentLoaded', () => {
-      const dropzones = document.querySelectorAll('.image-dropzone');
-      dropzones.forEach(zone => {
-        zone.addEventListener('dragover', (e) => {
+      document.querySelectorAll('.image-dropzone').forEach(z => {
+        z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('ring-2', 'ring-brand-500'); });
+        z.addEventListener('dragleave', () => z.classList.remove('ring-2', 'ring-brand-500'));
+        z.addEventListener('drop', e => {
           e.preventDefault();
-          zone.classList.add('ring-2', 'ring-brand-500');
-        });
-        zone.addEventListener('dragleave', () => {
-          zone.classList.remove('ring-2', 'ring-brand-500');
-        });
-        zone.addEventListener('drop', (e) => {
-          e.preventDefault();
-          zone.classList.remove('ring-2', 'ring-brand-500');
-          const file = e.dataTransfer.files[0];
-          if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              const img = zone.querySelector('img');
-              if (img) {
-                img.src = event.target.result;
-              }
-            };
-            reader.readAsDataURL(file);
+          z.classList.remove('ring-2', 'ring-brand-500');
+          const f = e.dataTransfer.files[0];
+          if (f && f.type.startsWith('image/')) {
+            const r = new FileReader();
+            r.onload = ev => { const img = z.querySelector('img'); if (img) img.src = ev.target.result; };
+            r.readAsDataURL(f);
           }
         });
       });
     });
 
-    // ----------------------------------------------------
-    // 7. スライド修正指示処理
-    // ----------------------------------------------------
+    // 5. スライド修正指示処理
     function clearSlideComment(btn) {
       const box = btn.closest('.slide-meta-box, .slide-comment-box');
       if (box) {
         const input = box.querySelector('.slide-comment-input');
-        if (input) {
-          input.innerText = '';
-          input.focus();
-        }
+        if (input) { input.innerText = ''; input.focus(); }
       }
     }
-
     function collectSlideComments() {
-      const boxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
       const comments = [];
-      boxes.forEach((box, index) => {
+      document.querySelectorAll('.slide-meta-box, .slide-comment-box').forEach((box, idx) => {
         const input = box.querySelector('.slide-comment-input');
         const text = input ? input.innerText.trim() : '';
-        if (text) {
-          comments.push({
-            slideNumber: index + 1,
-            comment: text
-          });
-        }
+        if (text) comments.push({ slideNumber: idx + 1, comment: text });
       });
       return comments;
     }
-
     function copySlideComments() {
       const comments = collectSlideComments();
-      const copyBtn = document.getElementById('copyCommentsBtn');
-      const originalHtml = copyBtn ? copyBtn.innerHTML : '';
-
+      const btn = document.getElementById('copyCommentsBtn');
+      const origHtml = btn ? btn.innerHTML : '';
       if (comments.length === 0) {
-        alert(isJapanese
-          ? '修正指示が入力されていません。\n各スライドの下にある「💬 修正指示」欄に修正要望を入力してください。'
-          : 'No revision feedback entered.\nPlease enter change requests in the "💬 Feedback" box under each slide.'
-        );
+        alert(isJapanese ? '修正指示が入力されていません。\n各スライドの下にある「💬 修正指示」欄に修正要望を入力してください。' : 'No feedback entered. Please type change requests in the feedback boxes.');
         return;
       }
-
-      let formatted = isJapanese
-        ? '以下のスライド修正指示に基づき、Single-File HTMLコードを改訂してください。指示のないスライドは元の推敲テキストやレイアウトを維持してください。\n\n'
-        : 'Please revise the Single-File HTML code based on the following slide revision instructions. Preserve the existing layout and content for slides without changes.\n\n';
-
-      comments.forEach(c => {
-        formatted += isJapanese
-          ? `【スライド ${c.slideNumber} への修正指示】\n${c.comment}\n\n`
-          : `【Slide ${c.slideNumber} Feedback】\n${c.comment}\n\n`;
-      });
-
-      navigator.clipboard.writeText(formatted.trim()).then(() => {
-        if (copyBtn) {
-          copyBtn.innerHTML = `
-            <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            <span class="text-emerald-300">${isJapanese ? 'コピー完了!' : 'Copied!'}</span>
-          `;
-          setTimeout(() => {
-            copyBtn.innerHTML = originalHtml;
-          }, 2500);
+      let text = isJapanese ? '以下のスライド修正指示に基づき、Single-File HTMLコードを改訂してください。指示のないスライドは元の推敲テキストやレイアウトを維持してください。\n\n' : 'Please revise the HTML slides based on the following instructions:\n\n';
+      comments.forEach(c => { text += isJapanese ? `【スライド ${c.slideNumber} への修正指示】\n${c.comment}\n\n` : `【Slide ${c.slideNumber} Feedback】\n${c.comment}\n\n`; });
+      navigator.clipboard.writeText(text.trim()).then(() => {
+        if (btn) {
+          btn.innerHTML = `<svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg><span class="text-emerald-300">${isJapanese ? 'コピー完了!' : 'Copied!'}</span>`;
+          setTimeout(() => { btn.innerHTML = origHtml; }, 2500);
         }
-      }).catch(err => {
-        console.error('Copy failed:', err);
-        prompt(isJapanese 
-          ? '以下の修正指示をコピーしてAIに貼り付けてください:' 
-          : 'Copy the following revision instructions and paste into your AI assistant:', 
-          formatted
-        );
-      });
+      }).catch(() => { prompt(isJapanese ? '以下の修正指示をコピーしてAIに貼り付けてください:' : 'Copy instructions:', text); });
     }
 
-    // ----------------------------------------------------
-    // ----------------------------------------------------
-    // 9. 全画面プレゼンテーション（スライドショーモード）
-    // ----------------------------------------------------
+    // 6. 全画面プレゼンテーション
     let isPresentationMode = false;
     let currentPresentationIndex = 0;
-
-    function getMainSlides() {
-      return document.querySelectorAll('main .slide');
-    }
-
+    function getMainSlides() { return document.querySelectorAll('main .slide'); }
     function getMostVisibleSlideIndex() {
       const slides = getMainSlides();
       if (!slides.length) return 0;
-      let minDiff = Infinity;
-      let bestIdx = 0;
-      const centerY = window.innerHeight / 2;
-
-      slides.forEach((slide, idx) => {
-        const rect = slide.getBoundingClientRect();
-        const slideCenterY = rect.top + rect.height / 2;
-        const diff = Math.abs(slideCenterY - centerY);
-        if (diff < minDiff) {
-          minDiff = diff;
-          bestIdx = idx;
-        }
+      let minDiff = Infinity, bestIdx = 0, cy = window.innerHeight / 2;
+      slides.forEach((s, idx) => {
+        const diff = Math.abs(s.getBoundingClientRect().top + s.getBoundingClientRect().height / 2 - cy);
+        if (diff < minDiff) { minDiff = diff; bestIdx = idx; }
       });
       return bestIdx;
     }
-
     function startPresentation(startIndex) {
       const slides = getMainSlides();
       if (!slides.length) return;
-
-      currentPresentationIndex = (typeof startIndex === 'number') 
-        ? Math.max(0, Math.min(slides.length - 1, startIndex)) 
-        : getMostVisibleSlideIndex();
-
+      currentPresentationIndex = typeof startIndex === 'number' ? Math.max(0, Math.min(slides.length - 1, startIndex)) : getMostVisibleSlideIndex();
       const modal = document.getElementById('presentationModal');
-      if (!modal) return;
-
-      modal.classList.remove('hidden');
-      isPresentationMode = true;
-
-      // ブラウザフルスクリーンのリクエスト（任意）
-      if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
-      }
-
+      if (modal) { modal.classList.remove('hidden'); isPresentationMode = true; }
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(() => {});
       renderPresentationSlide();
     }
-
     function stopPresentation() {
       const modal = document.getElementById('presentationModal');
       if (modal) modal.classList.add('hidden');
       isPresentationMode = false;
-
       const stage = document.getElementById('presentationStage');
       if (stage) stage.innerHTML = '';
-
-      if (document.fullscreenElement && document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      }
+      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
     }
-
     function fitPresentationSlide() {
       const stage = document.getElementById('presentationStage');
       if (!stage) return;
-      const slide = stage.querySelector('.slide');
-      if (!slide) return;
-
-      let slideW = 1280;
-      let slideH = 720;
-
-      // 各比率・用紙サイズの正確な判定 (16:9, 4:3, A4横, A4縦)
-      if (slide.classList.contains('w-[840px]') || slide.classList.contains('h-[1188px]') || slide.classList.contains('h-[1123px]')) {
-        // A4 縦 (Portrait)
-        slideW = 840;
-        slideH = 1188;
-      } else if (slide.classList.contains('w-[1188px]') || slide.classList.contains('h-[840px]')) {
-        // A4 横 (Landscape)
-        slideW = 1188;
-        slideH = 840;
-      } else if (slide.classList.contains('w-[1024px]') || slide.classList.contains('h-[768px]')) {
-        // 4:3 標準
-        slideW = 1024;
-        slideH = 768;
-      } else {
-        // 16:9 ワイド (デフォルト) または要素実寸
-        slideW = slide.offsetWidth || 1280;
-        slideH = slide.offsetHeight || 720;
-      }
-      
-      const availW = window.innerWidth;
-      const availH = window.innerHeight;
-      const scale = Math.min((availW - 32) / slideW, (availH - 32) / slideH);
-
+      const s = stage.querySelector('.slide');
+      if (!s) return;
+      let sw = 1280, sh = 720;
+      if (s.classList.contains('w-[840px]') || s.classList.contains('h-[1188px]') || s.classList.contains('h-[1123px]')) { sw = 840; sh = 1188; }
+      else if (s.classList.contains('w-[1188px]') || s.classList.contains('h-[840px]')) { sw = 1188; sh = 840; }
+      else if (s.classList.contains('w-[1024px]') || s.classList.contains('h-[768px]')) { sw = 1024; sh = 768; }
+      else { sw = s.offsetWidth || 1280; sh = s.offsetHeight || 720; }
+      const scale = Math.min((window.innerWidth - 32) / sw, (window.innerHeight - 32) / sh);
       stage.style.transform = `scale(${Math.max(0.15, scale)})`;
       stage.style.transformOrigin = 'center center';
     }
-
     function renderPresentationSlide() {
       const slides = getMainSlides();
       if (!slides.length) return;
-      if (currentPresentationIndex < 0) currentPresentationIndex = 0;
-      if (currentPresentationIndex >= slides.length) currentPresentationIndex = slides.length - 1;
-
+      currentPresentationIndex = Math.max(0, Math.min(slides.length - 1, currentPresentationIndex));
       const stage = document.getElementById('presentationStage');
       if (!stage) return;
       stage.innerHTML = '';
-
-      const originalSlide = slides[currentPresentationIndex];
-      const clone = originalSlide.cloneNode(true);
+      const clone = slides[currentPresentationIndex].cloneNode(true);
       clone.setAttribute('contenteditable', 'false');
       clone.style.margin = '0';
       clone.style.boxShadow = '0 25px 60px -15px rgba(0, 0, 0, 0.8)';
       stage.appendChild(clone);
-
       const counter = document.getElementById('presentationCounter');
-      if (counter) {
-        counter.innerText = `${currentPresentationIndex + 1} / ${slides.length}`;
-      }
-
+      if (counter) counter.innerText = `${currentPresentationIndex + 1} / ${slides.length}`;
       fitPresentationSlide();
     }
-
-    function nextSlide() {
-      const slides = getMainSlides();
-      if (currentPresentationIndex < slides.length - 1) {
-        currentPresentationIndex++;
-        renderPresentationSlide();
-      }
+    function nextSlide() { if (currentPresentationIndex < getMainSlides().length - 1) { currentPresentationIndex++; renderPresentationSlide(); } }
+    function prevSlide() { if (currentPresentationIndex > 0) { currentPresentationIndex--; renderPresentationSlide(); } }
+    function firstSlide() { if (getMainSlides().length > 0) { currentPresentationIndex = 0; renderPresentationSlide(); } }
+    function lastSlide() { const s = getMainSlides(); if (s.length > 0) { currentPresentationIndex = s.length - 1; renderPresentationSlide(); } }
+    function handleStageClick(e) {
+      if (!isPresentationMode || e.target.closest('button')) return;
+      if (e.clientX < window.innerWidth * 0.25) prevSlide();
+      else nextSlide();
     }
 
-    function prevSlide() {
-      if (currentPresentationIndex > 0) {
-        currentPresentationIndex--;
-        renderPresentationSlide();
-      }
-    }
-
-    function firstSlide() {
-      const slides = getMainSlides();
-      if (slides.length > 0 && currentPresentationIndex !== 0) {
-        currentPresentationIndex = 0;
-        renderPresentationSlide();
-      }
-    }
-
-    function lastSlide() {
-      const slides = getMainSlides();
-      if (slides.length > 0 && currentPresentationIndex !== slides.length - 1) {
-        currentPresentationIndex = slides.length - 1;
-        renderPresentationSlide();
-      }
-    }
-
-    function handleStageClick(event) {
-      if (!isPresentationMode) return;
-      if (event.target.closest('#speakerNotesOverlay') || event.target.closest('button')) return;
-
-      const x = event.clientX;
-      if (x < window.innerWidth * 0.25) {
-        prevSlide();
-      } else {
-        nextSlide();
-      }
-    }
-
-    // ----------------------------------------------------
-    // 12. キーボードショートカット & リサイズリスナー
-    // ----------------------------------------------------
-    document.addEventListener('keydown', (e) => {
+    // 7. キーボードショートカット & リサイズ
+    document.addEventListener('keydown', e => {
       const isEditing = ['INPUT', 'TEXTAREA'].includes(e.target.tagName) || e.target.isContentEditable;
-
-      if (e.key === 'Escape') {
-        if (isPresentationMode) {
-          stopPresentation();
-          e.preventDefault();
-        }
-        return;
-      }
-
-      if (e.key === 'F5') {
-        e.preventDefault();
-        if (!isPresentationMode) {
-          startPresentation();
-        } else {
-          stopPresentation();
-        }
-        return;
-      }
-
+      if (e.key === 'Escape') { if (isPresentationMode) { stopPresentation(); e.preventDefault(); } return; }
+      if (e.key === 'F5') { e.preventDefault(); isPresentationMode ? stopPresentation() : startPresentation(); return; }
       if (isEditing) return;
-
-      if (e.key === 'f' || e.key === 'F') {
-        e.preventDefault();
-        if (!isPresentationMode) {
-          startPresentation();
-        } else {
-          stopPresentation();
-        }
-      } else if (!isPresentationMode && (e.key === 'e' || e.key === 'E')) {
-        e.preventDefault();
-        toggleEditMode();
-      } else if (isPresentationMode) {
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
-          e.preventDefault();
-          nextSlide();
-        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'PageUp') {
-          e.preventDefault();
-          prevSlide();
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          firstSlide();
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          lastSlide();
-        }
+      if (e.key === 'f' || e.key === 'F') { e.preventDefault(); isPresentationMode ? stopPresentation() : startPresentation(); }
+      else if (!isPresentationMode && (e.key === 'e' || e.key === 'E')) { e.preventDefault(); toggleEditMode(); }
+      else if (isPresentationMode) {
+        if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); nextSlide(); }
+        else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); prevSlide(); }
+        else if (e.key === 'Home') { e.preventDefault(); firstSlide(); }
+        else if (e.key === 'End') { e.preventDefault(); lastSlide(); }
       }
     });
+    window.addEventListener('resize', () => { if (isPresentationMode) fitPresentationSlide(); });
 
-    window.addEventListener('resize', () => {
-      if (isPresentationMode) {
-        fitPresentationSlide();
-      }
-    });
-
-    // ----------------------------------------------------
-    // 13. 多言語UI自動切替（lang属性に基づく自動ローカライズ）
-    // ----------------------------------------------------
+    // 8. 多言語自動同期
     function applyAutoLocalization() {
-      // スライド数の自動集計・同期 (日英共通)
-      const slideCount = document.querySelectorAll('main .slide').length;
+      const total = document.querySelectorAll('main .slide').length;
       const countEl = document.getElementById('deckSlideCountText');
-      if (countEl) {
-        countEl.innerText = isJapanese 
-          ? `全${slideCount}スライド` 
-          : (slideCount === 1 ? '1 Slide' : `${slideCount} Slides`);
+      if (countEl) countEl.innerText = isJapanese ? `全${total}スライド` : (total === 1 ? '1 Slide' : `${total} Slides`);
+      if (isJapanese) return;
+      const titleEl = document.getElementById('deckTitleText');
+      if (titleEl && titleEl.innerText.trim() === 'スライドタイトル') {
+        const h = document.querySelector('.slide h1, .slide h2');
+        if (h) titleEl.innerText = h.innerText.trim().replace(/\s+/g, ' ');
       }
-
-      if (isJapanese) return; // 日本語の場合はテンプレートのデフォルト表記を維持
-
-      // 英語環境（langがja以外）時のUI自動ローカライズ
-      // 1. ヘッダータイトル（デフォルトのままならスライド見出しから補完）
-      const deckTitle = document.getElementById('deckTitleText');
-      if (deckTitle && deckTitle.innerText.trim() === 'スライドタイトル') {
-        const firstHeading = document.querySelector('.slide h1, .slide h2');
-        if (firstHeading) {
-          deckTitle.innerText = firstHeading.innerText.trim().replace(/\s+/g, ' ');
-        }
-      }
-
-      // 2. 縦横比・スライド数の自動英語化
       const ratioEl = document.getElementById('deckRatioText');
-      if (ratioEl) {
-        ratioEl.innerText = ratioEl.innerText
-          .replace('ワイド', 'Widescreen')
-          .replace('スタンダード', 'Standard');
-      }
-      // ID未設定スライドへのフォールバック対応
-      document.querySelectorAll('header .text-\\[11px\\] span').forEach(el => {
-        const t = el.innerText.trim();
-        if (t.includes('ワイド')) el.innerText = t.replace('ワイド', 'Widescreen');
-        if (t.includes('スタンダード')) el.innerText = t.replace('スタンダード', 'Standard');
-        if (t.startsWith('全') && (t.endsWith('スライド') || t.endsWith('枚'))) {
-          el.innerText = `${slideCount} Slides`;
-        }
-      });
-
-      // 3. ヘッダー各ボタン・ラベル
+      if (ratioEl) ratioEl.innerText = ratioEl.innerText.replace('ワイド', 'Widescreen').replace('スタンダード', 'Standard');
       document.querySelectorAll('header span').forEach(el => {
-        const text = el.innerText.trim();
-        if (text === '指示をコピー') el.innerText = 'Copy Feedback';
-        if (text === '全画面発表') el.innerText = 'Present';
-        if (text === 'PDF保存') el.innerText = 'Save PDF';
+        const m = { '指示をコピー': 'Copy Feedback', '全画面発表': 'Present', 'PDF保存': 'Save PDF' };
+        if (m[el.innerText.trim()]) el.innerText = m[el.innerText.trim()];
       });
-
-      // ツールチップ（title属性）の完全英語化
-      const presentBtn = document.querySelector('header button[onclick="startPresentation()"]');
-      if (presentBtn) presentBtn.title = 'Start Fullscreen Presentation (F)';
-      const printBtn = document.querySelector('header button[onclick="window.print()"]');
-      if (printBtn) printBtn.title = 'Print or Save as PDF';
-
-      const copyBtn = document.getElementById('copyCommentsBtn');
-      if (copyBtn) copyBtn.title = 'Copy all slide feedback instructions to clipboard';
-
-      const editBtn = document.getElementById('toggleEditBtn');
-      if (editBtn) editBtn.title = 'Toggle Edit Mode (E)';
-      const statusText = document.getElementById('editStatusText');
-      if (statusText) statusText.innerText = isEditable ? 'Edit: ON' : 'Edit: OFF';
-
-      // メタボックスのタイトル & ボタン
-      document.querySelectorAll('.slide-meta-title').forEach(el => el.innerText = 'Feedback');
-      document.querySelectorAll('.slide-meta-box button span, .slide-comment-box button span').forEach(el => {
-        if (el.innerText.trim() === 'クリア') el.innerText = 'Clear';
-      });
-
-      // プレースホルダー
-      document.querySelectorAll('.slide-comment-input').forEach(el => {
-        el.setAttribute('data-placeholder', 'Enter revision instructions or feedback for this slide...');
-      });
-
-      // プレゼンテーションバー
-      const exitBtn = document.querySelector('#presentationModal button[onclick="stopPresentation()"]');
-      if (exitBtn) exitBtn.title = 'Exit Presentation (Esc)';
+      const st = document.getElementById('editStatusText');
+      if (st) st.innerText = isEditable ? 'Edit: ON' : 'Edit: OFF';
+      document.querySelectorAll('.slide-comment-input').forEach(el => el.setAttribute('data-placeholder', 'Enter revision feedback for this slide...'));
     }
 
-    // ----------------------------------------------------
-    // 13. LocalStorage 自動保存 & 復元（サンドボックス安全ガード付き）
-    // ----------------------------------------------------
+    // 9. LocalStorage 自動保存 & 復元 (サンドボックス安全)
     const STORAGE_PREFIX = 'ainativeslide_autosave_';
-
-    // iframe sandbox等での SecurityError を防ぐ判定ヘルパー
     function isStorageAvailable() {
-      try {
-        const testKey = '__storage_test__';
-        localStorage.setItem(testKey, testKey);
-        localStorage.removeItem(testKey);
-        return true;
-      } catch (e) {
-        return false;
-      }
+      try { const k = '__storage_test__'; localStorage.setItem(k, k); localStorage.removeItem(k); return true; }
+      catch (e) { return false; }
     }
-
     function getStorageKey() {
-      try {
-        const path = window.location.pathname || 'deck';
-        return STORAGE_PREFIX + path.replace(/[^a-zA-Z0-9_-]/g, '_');
-      } catch (e) {
-        return STORAGE_PREFIX + 'deck';
-      }
+      try { return STORAGE_PREFIX + (window.location.pathname || 'deck').replace(/[^a-zA-Z0-9_-]/g, '_'); }
+      catch (e) { return STORAGE_PREFIX + 'deck'; }
     }
-
     let saveDebounceTimer = null;
     function scheduleAutoSave() {
       clearTimeout(saveDebounceTimer);
-      saveDebounceTimer = setTimeout(() => {
-        performAutoSave();
-      }, 400);
+      saveDebounceTimer = setTimeout(performAutoSave, 400);
     }
-
     function performAutoSave() {
       if (!isStorageAvailable()) return;
       try {
-        const slides = document.querySelectorAll('main .slide');
-        const slideData = [];
-        slides.forEach(s => slideData.push(s.innerHTML));
-
-        const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
+        const slides = [];
+        document.querySelectorAll('main .slide').forEach(s => slides.push(s.innerHTML));
         const comments = [];
-        metaBoxes.forEach(box => {
-          const c = box.querySelector('.slide-comment-input');
+        document.querySelectorAll('.slide-meta-box, .slide-comment-box').forEach(b => {
+          const c = b.querySelector('.slide-comment-input');
           comments.push(c ? c.innerText : '');
         });
-
-        const saveData = {
-          slides: slideData,
-          comments: comments,
-          customHex: currentCustomBrandHex,
-          updatedAt: Date.now()
-        };
-        localStorage.setItem(getStorageKey(), JSON.stringify(saveData));
-      } catch (e) {
-        console.warn('AutoSave failed:', e);
-      }
+        localStorage.setItem(getStorageKey(), JSON.stringify({ slides, comments, customHex: currentCustomBrandHex, updatedAt: Date.now() }));
+      } catch (e) { console.warn('AutoSave failed:', e); }
     }
-
     function restoreFromStorage() {
       if (!isStorageAvailable()) return;
       try {
         const raw = localStorage.getItem(getStorageKey());
         if (!raw) return;
         const data = JSON.parse(raw);
-        if (!data) return;
-
-        if (Array.isArray(data.slides)) {
+        if (data && Array.isArray(data.slides)) {
           const slides = document.querySelectorAll('main .slide');
-          data.slides.forEach((html, idx) => {
-            if (slides[idx] && html) {
-              slides[idx].innerHTML = html;
-            }
+          data.slides.forEach((html, i) => { if (slides[i] && html) slides[i].innerHTML = html; });
+        }
+        if (data && Array.isArray(data.comments)) {
+          document.querySelectorAll('.slide-meta-box, .slide-comment-box').forEach((b, i) => {
+            const c = b.querySelector('.slide-comment-input');
+            if (c && typeof data.comments[i] === 'string') c.innerText = data.comments[i];
           });
         }
-
-        const metaBoxes = document.querySelectorAll('.slide-meta-box, .slide-comment-box');
-        metaBoxes.forEach((box, idx) => {
-          const c = box.querySelector('.slide-comment-input');
-          if (c && data.comments && typeof data.comments[idx] === 'string') c.innerText = data.comments[idx];
-        });
-
-        if (data.customHex && typeof applyCustomColor === 'function') {
-          applyCustomColor(data.customHex);
-        }
-      } catch (e) {
-        console.warn('Restore failed:', e);
-      }
+        if (data && data.customHex && typeof applyCustomColor === 'function') applyCustomColor(data.customHex);
+      } catch (e) { console.warn('Restore failed:', e); }
     }
-
     function resetSavedChanges() {
-      const msg = isJapanese 
-        ? '保存された推敲テキストをすべて破棄し、初期HTMLの状態に戻しますか？'
-        : 'Discard all saved edits and reset to original HTML?';
-      if (confirm(msg)) {
-        if (isStorageAvailable()) {
-          try {
-            localStorage.removeItem(getStorageKey());
-          } catch (e) {}
-        }
+      if (confirm(isJapanese ? '保存された推敲テキストをすべて破棄し、初期HTMLの状態に戻しますか？' : 'Discard all saved edits?')) {
+        if (isStorageAvailable()) { try { localStorage.removeItem(getStorageKey()); } catch (e) {} }
         location.reload();
       }
     }
-
     function setupAutoSaveListeners() {
-      document.addEventListener('input', (e) => {
-        if (e.target.closest('.slide') || e.target.closest('.slide-meta-box') || e.target.closest('.slide-comment-box')) {
-          scheduleAutoSave();
-        }
+      document.addEventListener('input', e => {
+        if (e.target.closest('.slide, .slide-meta-box, .slide-comment-box')) scheduleAutoSave();
       });
     }
 
+    // 10. 初期化実行（独立 try-catch による耐障害性保証）
     document.addEventListener('DOMContentLoaded', () => {
-      restoreFromStorage();
-      applyAutoLocalization();
-      setupAutoSaveListeners();
-      setEditMode(true);
+      try { restoreFromStorage(); } catch (e) { console.warn('restore error:', e); }
+      try { applyAutoLocalization(); } catch (e) { console.warn('localization error:', e); }
+      try { setupAutoSaveListeners(); } catch (e) { console.warn('autosave error:', e); }
+      try { setEditMode(true); } catch (e) { console.warn('setEditMode error:', e); }
     });
   </script>
 </body>
