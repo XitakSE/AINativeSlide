@@ -160,18 +160,21 @@ flowchart LR
 
 ```
 AINativeSlide/
-├── AGENTS.md                # AIコーディングエージェント向け指示書
+├── AGENTS.md                # AIコーディングエージェント向け総合指示書
+├── CLAUDE.md                # Claude Code CLI 向けエントリポイント指示書
 ├── SKILL.md                 # スキル仕様書（スマートGrill・自律検証ループ・パターン規約）
 ├── README.md                # 本ドキュメント（日本語）
 ├── README_EN.md             # 英語ドキュメント
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
-├── scripts/
-│   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
-│   └── gemini_pr_review.py  # 【外部依存ゼロ】Gemini API 自動PRレビュー実行スクリプト
-├── resources/
+├── agents/                  # 各種AIエージェント向けマニフェスト定義
+│   └── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
+├── assets/                  # Agent Skills 標準資材ディレクトリ
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
 │   ├── speech_script_example.md # 発表台本文書サンプル
 │   └── design_templates/    # 企業公式デザインテンプレート群（CI/VI統一）
+├── scripts/
+│   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
+│   └── gemini_pr_review.py  # 【外部依存ゼロ】Gemini API 自動PRレビュー実行スクリプト
 └── references/              # 詳細技術リファレンス
     ├── slide-patterns.md    # スライド情報構造＆レイアウトパターン集（Anti-AI-Smell・6大構成）
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
@@ -179,6 +182,14 @@ AINativeSlide/
     ├── ai-concept-imagery.md # コンセプト画像プロンプト設計仕様
     └── design-system.md     # タイポグラフィ・堅牢ボックスモデル仕様
 ```
+
+> [!TIP]
+> **💡 利用環境に応じた不要ファイルの整理・削除について**:
+> 本リポジトリは、Google Antigravity、Claude Code、ChatGPT、Cursor 等のあらゆる主要エージェントですぐに動作するよう各環境向けの設定ファイルを同梱しています。ご自身の利用環境に合わせて、不要なファイルは各自自由に削除してご利用ください：
+> - **必須のコア資材**: `SKILL.md`（スキル実行契約の正本）および `assets/`（HTML骨格・テンプレート資材）
+> - **ChatGPT 環境を使わない場合**: `agents/` ディレクトリは削除可能です。
+> - **Claude Code を使わない場合**: `CLAUDE.md` は削除可能です。
+> - **自律コーディング開発を行わない場合**: `AGENTS.md` は削除可能です。
 
 ※自社PPTXテンプレートからの移行は、初期セットアップ専用スキル [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) で実行できます。
 

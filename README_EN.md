@@ -160,18 +160,21 @@ Open the generated HTML in Chrome, Edge, or Safari:
 
 ```
 AINativeSlide/
-├── AGENTS.md                # AI coding agent instructions
+├── AGENTS.md                # General AI coding agent instructions
+├── CLAUDE.md                # Claude Code CLI entrypoint directives
 ├── SKILL.md                 # AI Agent Skill specification (Grill, auto-testing, patterns)
 ├── README.md                # Japanese documentation
 ├── README_EN.md             # English documentation
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
-├── scripts/
-│   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
-│   └── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
-├── resources/
+├── agents/                  # Multi-Agent manifest definitions
+│   └── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
+├── assets/                  # Agent Skills standard assets directory
 │   ├── template_base.html   # Base HTML template engine optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script sample document
 │   └── design_templates/   # Corporate brand design templates (CI/VI compliance)
+├── scripts/
+│   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
+│   └── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
 └── references/              # Detailed technical specifications
     ├── slide-patterns.md    # Information structuring & wireframe patterns (Anti-AI-Smell)
     ├── grill-workflow.md    # Cognitive alignment interview specification
@@ -179,6 +182,14 @@ AINativeSlide/
     ├── ai-concept-imagery.md # Concept image generation prompt guidelines
     └── design-system.md     # Typography & robust box model specifications
 ```
+
+> [!TIP]
+> **💡 Pruning Unused Files for Your Target Environment**:
+> This repository is pre-configured to work out-of-the-box across Google Antigravity, Claude Code, ChatGPT, Cursor, and other agent platforms. Feel free to prune files you do not need:
+> - **Core Essentials**: `SKILL.md` (the primary execution contract) and `assets/` (HTML skeletons and assets)
+> - **If not using ChatGPT**: You can safely delete the `agents/` directory.
+> - **If not using Claude Code**: You can safely delete `CLAUDE.md`.
+> - **If not using autonomous coding agents**: You can safely delete `AGENTS.md`.
 
 *Tip: To convert and migrate your company's existing PPTX templates, use [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder).*
 

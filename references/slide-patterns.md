@@ -2,7 +2,7 @@
 
 本書は、社内向けプレゼンテーション（提案・意思決定、認識合わせ、学習・ナレッジ共有）のスライド構成を自動生成・検証するAIエージェント向けのリファレンス仕様書です。
 
-デザインテンプレート（フォント、配色、余白設計、CIロゴ）は [AINativeSlide-Template-Builder](../../AINativeSlide-Template-Builder/SKILL.md) および `resources/design_templates/` で別管理されている前提とし、エージェントは**「情報構造（ワイヤーフレーム）の選定」「メッセージの論理構築」「スロットへのテキスト配置」**に集中してください。
+デザインテンプレート（フォント、配色、余白設計、CIロゴ）は [AINativeSlide-Template-Builder](../../AINativeSlide-Template-Builder/SKILL.md) および `assets/design_templates/` で別管理されている前提とし、エージェントは**「情報構造（ワイヤーフレーム）の選定」「メッセージの論理構築」「スロットへのテキスト配置」**に集中してください。
 
 ---
 

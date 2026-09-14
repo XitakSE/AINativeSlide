@@ -47,8 +47,8 @@ description: >-
 > ユーザーから構成案に対する「承認」「OK」「これで進めて」等の合意を得るまで、手順2（HTMLコード生成）を開始してはならない。
 
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
-- **必須手順**: ユーザーの承認を得た後、必ず `view_file` ツールを用いて [resources/template_base.html](./resources/template_base.html) を読み込み、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして取得すること。
-- 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[resources/design_templates/corporate_default.html](./resources/design_templates/corporate_default.html) を参照すること。
+- **必須手順**: ユーザーの承認を得た後、必ず `view_file` ツールを用いて [assets/template_base.html](./assets/template_base.html) を読み込み、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして取得すること。
+- 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/design_templates/corporate_default.html](./assets/design_templates/corporate_default.html) を参照すること。
 
 ### 手順3: 単一HTML（Single-File HTML）の生成規則
 自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：
@@ -92,7 +92,7 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 
 ### 手順5: 成果物の提示 ＆ 反復推敲の処理
 - 完成した完全なHTMLを、単一のコードブロック（```html ... ```）で出力する。
-- 手順1で台本生成を希望された場合は、[resources/speech_script_example.md](./resources/speech_script_example.md) に準拠した台本文書（`speech_script.md`）を併せて出力する。
+- 手順1で台本生成を希望された場合は、[assets/speech_script_example.md](./assets/speech_script_example.md) に準拠した台本文書（`speech_script.md`）を併せて出力する。
 - **ユーザーからの反復フィードバック対応**:
   - ユーザーが「📋 指示をコピー」から修正要望テキストを貼り付けて指示してきた場合、指示のないスライドはユーザーによる推敲内容を100%維持し、指示のあったスライドのみを的確に改修すること。
 
@@ -103,7 +103,7 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 1. **未承認でのコード生成開始の禁止**: 手順1のGrillで構成案・画像プロンプトを提示し、ユーザーの承認を得る前にHTMLコードを出力してはならない。
 2. **実行不能環境での検証偽装・幻覚ログ捏造の禁止（幻覚予防）**: CLI/Pythonを実行できない環境において、「テストを実行し全合格しました」「verify_slide.py を実行しました」などの架空の実行報告や、偽のターミナル出力ログを捏造してはならない。実行できない環境ではスクリプトを実行せずセルフチェックのみで納品すること。
 3. **画像のトリミング使い回し禁止**: 1枚の生成画像をCSSトリミングして複数スライドに使い回してはならない。画像枠のあるスライドには、必ず1スライドにつき1枚ずつ個別に画像を生成し、トリミングなしで使用すること（ユーザー提供画像を除く）。
-4. **ゼロからのHTML独自記述の禁止**: 必ず [resources/template_base.html](./resources/template_base.html) を複製・ベースとすること。
+4. **ゼロからのHTML独自記述の禁止**: 必ず [assets/template_base.html](./assets/template_base.html) を複製・ベースとすること。
 5. **外部重量級JSライブラリの読み込み禁止**: Chart.js, D3, Reveal.js, Mermaid CDN, React, Vue 等を勝手に読み込んではならない。
 6. **スライド内HTMLダウンロードボタンの再導入禁止**: `downloadHtmlWithComments` などのブラウザ内Blob保存ボタンを設置してはならない（AI環境自体の保存機能および「指示をコピー」に集約済み）。
 7. **スライド枠とメタボックスの 1:1 不一致の禁止**: `.slide` の数と `.slide-meta-box` の数は常に完全一致させること。

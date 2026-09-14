@@ -1,0 +1,36 @@
+interface_version: "1.0"
+name: ainativeslide
+display_name: "AINativeSlide"
+description: >-
+  AI-native presentation slide deck generator producing Single-File HTML with
+  zero-margin PDF printing, responsive aspect ratios (16:9, 4:3, A4 landscape/portrait),
+  and inline SVG charts.
+version: "1.0.0"
+
+instructions:
+  file: "../SKILL.md"
+
+assets:
+  - path: "assets/template_base.html"
+    description: "Core HTML slide skeleton, header toolbar, and runtime script engine"
+  - path: "assets/speech_script_example.md"
+    description: "Presentation speaker script template (speech_script.md)"
+  - path: "assets/design_templates/corporate_default.html"
+    description: "Corporate design template scaffold"
+
+references:
+  - path: "references/slide-patterns.md"
+    description: "Layout patterns, wireframes, and inline SVG chart specs"
+  - path: "references/grill-workflow.md"
+    description: "Cognitive-drift prevention grill and outline approval protocol"
+  - path: "references/ratio-and-print-specs.md"
+    description: "Aspect ratios, dimensions, and zero-margin PDF print rules"
+  - path: "references/design-system.md"
+    description: "Typography, color palettes, and robust CSS box-model"
+  - path: "references/ai-concept-imagery.md"
+    description: "AI concept imagery prompt guidelines and Zero-Cropping rules"
+
+scripts:
+  - path: "scripts/verify_slide.py"
+    description: "Zero-dependency Python automated slide deck quality and layout verifier"
+    interpreter: "python3"
