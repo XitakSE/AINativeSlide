@@ -171,7 +171,7 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
   * Proactively rewrite high-level corporate slogans (e.g., "最適化を図る", "伴走型支援", "エコシステムの共創") into concrete operational behaviors (e.g., "手動転記フローの廃止", "夜間バッチ同期", "承認者2名体制への移行") and quantitative metrics.
   * Perfection is not demanded, but hollow corporate fluff must be proactively mitigated through self-reflection.
 - **Action Titles (Lead Messages) Required**: Slide titles must be complete sentences (40–60 characters) stating fact + insight/conclusion with active verbs, not passive noun labels (like "〇〇について").
-- **Structured Wireframe Catalog**: Prefer the 6 enterprise wireframe patterns documented in [`references/slide-patterns.md`](references/slide-patterns.md) (`problem_solution`, `tradeoff_matrix`, `scope_boundary`, `architecture_mapping`, `step_process`, `pitfalls_faq`).
+- **Structured Wireframe Catalog**: Prefer the 6 enterprise wireframe patterns documented in [`references/slide-patterns.md`](references/slide-patterns.md) (【課題・打ち手型】`problem_solution`, 【トレードオフ比較表】`tradeoff_matrix`, 【スコープ境界線】`scope_boundary`, 【全体像・階層マッピング】`architecture_mapping`, 【ステップ・時系列フロー】`step_process`, 【落とし穴・NG/OK対比】`pitfalls_faq`).
 
 ### Rule 8: Semantic Line Breaking & Header Spacing Protection
 - **No Awkward Mid-Word Wraps**: Never let Japanese text break awkwardly mid-word or leave trailing particles (1–2 characters) on a new line due to arbitrary container boundary collisions. Always insert explicit `<br>` breaks at natural grammatical phrase boundaries (particles `〜し、`, `〜により、`, `〜から、` or punctuation), or adjust font size/container width.
