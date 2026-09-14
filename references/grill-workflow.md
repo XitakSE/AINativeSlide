@@ -39,35 +39,45 @@
 - [D] **A4 縦（Portrait）**: 1枚企画書、エグゼクティブサマリー
 
 ### 3. 全スライド構成案（情報構造パターン ＆ Action Title）
-※各スライドには、[スライドパターン集 (slide-patterns.md)](slide-patterns.md) の**日本語パターン名（および英語識別子 `pattern_id`）**と、名詞止めではない完全文の見出し（Action Title: 40〜60文字）を定義します：
-- **Slide 1 (表紙 / Cover)**: タイトル・起案部門・日付・機密区分
-- **Slide 2 【課題・打ち手型】(`problem_solution`)**:
+※対話言語に応じた完全分離ルールを厳守し、名詞止めではない完全文の見出し（Action Title: 40〜60文字）を定義します：
+
+**【日本語での提示例（英語IDは一切含めない）】**:
+- **Slide 1 【表紙】**: タイトル・起案部門・日付・機密区分
+- **Slide 2 【課題・打ち手型】**:
   - 【Lead Message】月間40時間の重複入力を解消するため、マスタ同期スクリプトを導入する
   - 構造意図: 現場の発生事象（手動転記・工数ロス）と自動化によるゼロ化効果の左右対比
-- **Slide 3 【トレードオフ比較表】(`tradeoff_matrix`)**:
+- **Slide 3 【トレードオフ比較表】**:
   - 【Lead Message】運用保守の内製化を最優先とし、初期コスト増を許容して「案B」を採用する
   - 構造意図: 評価軸（初期費用・月額ランコス・拡張性・保守体制）による3案比較と推奨案の論拠
-- **Slide 4 【スコープ境界線（やる/やらない）】(`scope_boundary`)**:
+- **Slide 4 【スコープ境界線（やる/やらない）】**:
   - 【Lead Message】今回リリースは基本機能に絞り、外部連携・一括処理はPhase 2へ送る
   - 構造意図: In Scope（CRUD・権限）と Out of Scope（CSV一括・Slack通知）の明確な切り分け
-- **Slide 5 【ステップ・時系列フロー】(`step_process`)** *(または 【全体像・階層マッピング】`architecture_mapping`)*:
+- **Slide 5 【ステップ・時系列フロー】** *(または 【全体像・階層マッピング】)*:
   - 【Lead Message】Step 2のレビュー承認を完了するまで本番マージ・デプロイは不可
   - 構造意図: 実装から本番適用までの4段階フローと品質Gateの厳格化
-- **Slide 6 【落とし穴・NG/OK対比】(`pitfalls_faq`)**:
+- **Slide 6 【落とし穴・NG/OK対比】**:
   - 【Lead Message】環境変数はコードにハードコードせず、必ず.env経由でSecrets管理に逃がす
   - 構造意図: やりがちな誤り（アンチパターン）と正しい推奨運用の左右対比
 
-#### 💡 スライド情報構造パターン（全6種）の日本語早見表
-Grill提示時は、以下の日本語名称を用いて直感的にレイアウト意図を伝えてください：
+**【英語での提示例（日本語は一切含めない）】**:
+- `Slide 1 [Cover]`: Title, department, date, confidentiality
+- `Slide 2 [Problem & Solution]`: Lead message + pain vs. solution contrast
+- `Slide 3 [Comparison Matrix]`: Lead message + multi-option tradeoff table with visual anchor
+- `Slide 4 [Scope & Boundary]`: Lead message + In Scope vs. Out of Scope separation
+- `Slide 5 [Sequential Workflow]` *(or `[Architecture Mapping]`)*: Lead message + 4-step flow with critical gate
+- `Slide 6 [Pitfalls & Best Practices]`: Lead message + anti-pattern vs. best practice contrast
 
-| 日本語パターン名 | 英語ID (`pattern_id`) | レイアウトの特徴・使い所 |
-| :--- | :--- | :--- |
-| **【課題・打ち手型】** | `problem_solution` | 左右対比で「現場のペイン・損失」と「具体アクション・定量的成果」を対比 |
-| **【トレードオフ比較表】** | `tradeoff_matrix` | 複数案のメリデリ・費用・保守性を一覧比較し、推奨案に視覚的アンカー（色枠）を設定 |
-| **【スコープ境界線】** | `scope_boundary` | 「今回やること (In Scope)」と「やらないこと (Out of Scope)」を二分して期待値調整 |
-| **【全体像・階層マッピング】** | `architecture_mapping` | クライアント・API・DBなどの階層や、業務フローの全体像を俯瞰 |
-| **【ステップ・時系列フロー】** | `step_process` | 時系列の運用・リリース手順（STEP 1〜4）と、通過必須の品質Gate（関門）を可視化 |
-| **【落とし穴・NG/OK対比】** | `pitfalls_faq` | やりがちな誤り（アンチパターン）と正しいベストプラクティスを左右対比 |
+#### 💡 スライド情報構造パターン（全6種）の言語別対照表
+Grill提示時は、ユーザーの言語に合わせて一方のみを使用してください（混在厳禁）：
+
+| 日本語対話時（日本語のみ） | 英語対話時（英語のみ） | 内部ID (`pattern_id`) | レイアウトの特徴・使い所 |
+| :--- | :--- | :--- | :--- |
+| **【課題・打ち手型】** | `[Problem & Solution]` | `problem_solution` | 左右対比で現場ペインと具体アクション・成果を対比 |
+| **【トレードオフ比較表】** | `[Comparison Matrix]` | `tradeoff_matrix` | 複数案の評価軸を一覧比較し推奨案を強調 |
+| **【スコープ境界線】** | `[Scope & Boundary]` | `scope_boundary` | In Scope と Out of Scope を二分して期待値調整 |
+| **【全体像・階層マッピング】** | `[Architecture Mapping]` | `architecture_mapping` | クライアント・API・DB等の階層や全体像を俯瞰 |
+| **【ステップ・時系列フロー】** | `[Sequential Workflow]` | `step_process` | 時系列手順（STEP 1〜4）と必須Gate（関門）を可視化 |
+| **【落とし穴・NG/OK対比】** | `[Pitfalls & Best Practices]` | `pitfalls_faq` | よくある誤りと正しいベストプラクティスを左右対比 |
 
 ### 4. AI生成画像の要否 & スタイル（テイスト）選択
 - [A] **画像不要**: すべてCSSグリッド・カード・アイコン・図解ボックスで論理的に表現
