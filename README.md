@@ -10,7 +10,7 @@
 
 <p align="left">
   <a href="https://xitakse.github.io/AINativeSlide/">
-    <img src="https://img.shields.io/badge/Live%20Demo-%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E4%BB%8A%E3%81%99%E3%81%80%E8%A9%A6%E3%81%99%EF%BC%88%E7%99%BB%E9%8C%B2%E4%B8%8D%E8%A6%81%EF%BC%89-4f46e5?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
+    <img src="https://img.shields.io/badge/Live%20Demo-%E3%83%96%E3%83%A9%E3%82%A6%E3%82%B6%E3%81%A7%E4%BB%8A%E3%81%99%E3%81%90%E8%A9%A6%E3%81%99%EF%BC%88%E7%99%BB%E9%8C%B2%E4%B8%8D%E8%A6%81%EF%BC%89-4f46e5?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Live Demo" />
   </a>
   <a href="https://github.com/XitakSE/AINativeSlide/blob/main/LICENSE">
     <img src="https://img.shields.io/badge/License-MIT-slate?style=for-the-badge" alt="License" />
