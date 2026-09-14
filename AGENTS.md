@@ -53,9 +53,10 @@ AINativeSlide/
 │   ├── slide-patterns.md           # Information structuring, layout patterns, and core wireframes
 │   ├── components-consulting.md    # Executive consulting visual components (Mekko, Gantt, Harvey balls)
 │   ├── data-visual-binding.md      # Data-to-visual binding protocols from CSV/Markdown tables
-│   ├── grill-workflow.md           # Cognitive-drift prevention grill protocol
+│   └── grill-workflow.md           # Cognitive-drift prevention grill protocol
 └── scripts/
-    └── verify_slide.py             # Automated quality & layout regression checker
+    ├── assemble_deck.py            # Deterministic deck assembler from slide fragments
+    └── verify_slide.py             # Automated quality & layout regression checker (with --fix)
 ```
 
 ### Related Companion Projects
@@ -71,18 +72,32 @@ AINativeSlide/
 
 Whenever you modify any slide HTML, templates, or scripts, you **MUST** run the following verification steps:
 
-### 1. Slide Quality Verification (Automated Regression Test)
+### 1. Deterministic Slide Deck Assembly (Recommended)
+When generating new slide decks from fragments, always use `scripts/assemble_deck.py` to deterministically assemble the full HTML:
+```bash
+python3 scripts/assemble_deck.py <slide_fragments.html> --title "My Presentation" -r 16:9 -o deck.html
+```
+- Re-indexes all slide numbers (`01 / NN`, `02 / NN`, etc.).
+- Pairs each slide with a 1:1 `.slide-meta-box` instruction element.
+- Synchronizes `@page` print CSS, language tags, and header metadata.
+- Automatically triggers `scripts/verify_slide.py` upon completion.
+
+### 2. Slide Quality Verification & Auto-Repair
 Always run `scripts/verify_slide.py` against modified HTML files:
 ```bash
+# Standard quality verification:
 python3 scripts/verify_slide.py index.html
+
+# Auto-repair mode (automatically repairs page numbers, meta boxes, print CSS, etc.):
+python3 scripts/verify_slide.py index.html --fix
 ```
 - **Exit Code 0**: Required before presenting any HTML file to the user or submitting a PR.
-- If the exit code is `1`, read the `[ERROR]` messages, fix the issue in the HTML, and re-run until all tests pass.
+- If the exit code is `1`, run with `--fix` to auto-repair structural issues, and resolve any remaining textual warnings or Anti-AI-Smell errors until all tests pass.
 
-### 2. Synchronization to Workspace Skills
-If `SKILL.md`, `assets/`, or any core documentation changes, keep `.agents/skills/ainativeslide/` in exact sync:
+### 3. Synchronization to Workspace Skills
+If `SKILL.md`, `assets/`, `scripts/`, or any core documentation changes, keep `.agents/skills/ainativeslide/` in exact sync:
 ```bash
-rsync -av --delete --exclude '.git' --exclude 'node_modules' --exclude '.DS_Store' /Users/takumi/dev/AINativeSlide/ /Users/takumi/dev/.agents/skills/ainativeslide/
+rsync -av --delete --exclude '.git' --exclude 'node_modules' --exclude '.DS_Store' /Users/takumi/dev/Project_AINativeSlide/AINativeSlide/ /Users/takumi/dev/.agents/skills/ainativeslide/
 ```
 </verification_workflows>
 

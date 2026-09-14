@@ -1,20 +1,242 @@
 #!/usr/bin/env python3
 """
-AINativeSlide Automated Slide Deck Verifier (Python 3)
+AINativeSlide Automated Slide Deck Verifier & Auto-Fixer (Python 3)
 
-外部依存なし (Pure Python 3 標準ライブラリのみ) で動作するスライド品質自動テストツール。
+外部依存なし (Pure Python 3 標準ライブラリのみ) で動作するスライド品質自動テスト＆修復ツール。
 AIエージェントが生成したHTMLスライドの構造、スライド番号の連続性、
-メタボックスの整合性、文字溢れ（Overflow）リスク、印刷設定を厳格に検査し、
-不備がある場合はAIが自律修正するための具体的な指示を出力して終了コード1を返します。
+メタボックスの整合性、文字溢れ（Overflow）リスク、印刷設定を厳格に検査します。
+
+不備がある場合は具体的な指示を出力するほか、--fix オプションを指定することで
+スライド番号のズレ、メタボックスの欠落、総数カウンター、印刷CSSを決定論的に自動修復します。
 
 使用法:
-    python3 scripts/verify_slide.py <path_to_slide.html> [--strict]
+    python3 scripts/verify_slide.py <path_to_slide.html> [--strict] [--fix]
 """
 
 import sys
 import os
 import re
 from pathlib import Path
+
+# アスペクト比・寸法仕様マッピング
+RATIO_SPECS = {
+    '16:9': {
+        'slide_class': 'w-[1280px] h-[720px]',
+        'meta_class': 'w-[1280px]',
+        'page_css': '@page {\n      size: 16in 9in;\n      margin: 0;\n    }',
+        'label_ja': '16:9 ワイド',
+    },
+    '4:3': {
+        'slide_class': 'w-[1024px] h-[768px]',
+        'meta_class': 'w-[1024px]',
+        'page_css': '@page {\n      size: 4in 3in;\n      margin: 0;\n    }',
+        'label_ja': '4:3 標準',
+    },
+    'a4_landscape': {
+        'slide_class': 'w-[1188px] h-[840px]',
+        'meta_class': 'w-[1188px]',
+        'page_css': '@page {\n      size: A4 landscape;\n      margin: 0;\n    }',
+        'label_ja': 'A4 横 (Landscape)',
+    },
+    'a4_portrait': {
+        'slide_class': 'w-[840px] h-[1188px]',
+        'meta_class': 'w-[840px]',
+        'page_css': '@page {\n      size: A4 portrait;\n      margin: 0;\n    }',
+        'label_ja': 'A4 縦 (Portrait)',
+    }
+}
+
+class SlideFixer:
+    """スライドHTML内の機械的エラーを決定論的に自動修復するクラス"""
+    def __init__(self, html: str, target_file: Path):
+        self.html = html
+        self.target_file = target_file
+        self.fix_logs = []
+
+        self.is_corporate_template = (
+            'corporate' in target_file.name.lower()
+            or 'design_templates' in str(target_file)
+            or '企業CI' in html
+            or 'ブランドカラー定義' in html
+        )
+
+    def fix_all(self) -> tuple[str, list[str]]:
+        new_html = self.html
+
+        # 1. body の is-editable クラス修復
+        new_html = self._fix_body_editable(new_html)
+
+        # 2. スライド抽出と番号・contenteditable・比率判定
+        new_html, total_slides, ratio_key = self._fix_slides(new_html)
+
+        # 3. 印刷用 @page CSS 修復
+        if ratio_key:
+            new_html = self._fix_print_css(new_html, ratio_key)
+
+        # 4. ヘッダーのカウント表示同期
+        if total_slides > 0:
+            new_html = self._fix_header_counter(new_html, total_slides)
+
+        # 5. メタボックスの1:1整合性修復
+        if not self.is_corporate_template and total_slides > 0:
+            new_html = self._fix_meta_boxes(new_html, total_slides, ratio_key)
+
+        return new_html, self.fix_logs
+
+    def _fix_body_editable(self, html: str) -> str:
+        body_pattern = re.compile(r'(<body[^>]*class=["\'])([^"\']*)(["\'][^>]*>)', re.IGNORECASE)
+        match = body_pattern.search(html)
+        if match:
+            classes = match.group(2)
+            if 'is-editable' not in classes.split():
+                new_classes = f"{classes} is-editable".strip()
+                html = body_pattern.sub(rf'\g<1>{new_classes}\g<3>', html, count=1)
+                self.fix_logs.append('body 要素に "is-editable" クラスを追加しました。')
+        return html
+
+    def _fix_slides(self, html: str) -> tuple[str, int, str]:
+        slide_pattern = re.compile(r'<section[^>]*class=["\'][^"\']*\bslide\b[^"\']*["\'][^>]*>[\s\S]*?</section>', re.IGNORECASE)
+        matches = list(slide_pattern.finditer(html))
+        total_slides = len(matches)
+        if total_slides == 0:
+            return html, 0, '16:9'
+
+        # アスペクト比の判定
+        first_slide = matches[0].group(0)
+        ratio_key = '16:9'
+        if '1024px' in first_slide and '768px' in first_slide:
+            ratio_key = '4:3'
+        elif '1188px' in first_slide and '840px' in first_slide:
+            ratio_key = 'a4_landscape'
+        elif '840px' in first_slide and '1188px' in first_slide:
+            ratio_key = 'a4_portrait'
+
+        # 後ろから置換してオフセットのズレを防止
+        new_html = html
+        for idx in reversed(range(total_slides)):
+            slide_match = matches[idx]
+            slide_num = idx + 1
+            original_slide = slide_match.group(0)
+            fixed_slide = self._fix_single_slide(original_slide, slide_num, total_slides)
+
+            if fixed_slide != original_slide:
+                start, end = slide_match.span()
+                new_html = new_html[:start] + fixed_slide + new_html[end:]
+
+        return new_html, total_slides, ratio_key
+
+    def _fix_single_slide(self, slide_html: str, slide_num: int, total_slides: int) -> str:
+        # 1. contenteditable="true" の保証
+        if 'contenteditable' not in slide_html:
+            slide_html = re.sub(r'^(<section\b)', r'\1 contenteditable="true"', slide_html, flags=re.IGNORECASE)
+            self.fix_logs.append(f'Slide {slide_num}: contenteditable="true" を付与しました。')
+
+        # 2. フッター番号表記 (XX / YY) の修復
+        expected_str = f"{slide_num:02d} / {total_slides:02d}"
+        page_pattern = re.compile(r'(?:>|\b)(?:Slide\s*)?0?(\d{1,2})\s*/\s*0?(\d{1,2})(?:<|\b)', re.IGNORECASE)
+        match = page_pattern.search(slide_html)
+        if match:
+            current_detected = match.group(0).strip('<> ')
+            if current_detected != expected_str:
+                prefix = '>' if match.group(0).startswith('>') else ''
+                suffix = '<' if match.group(0).endswith('<') else ''
+                replacement = f"{prefix}{expected_str}{suffix}"
+                slide_html = slide_html[:match.start()] + replacement + slide_html[match.end():]
+                self.fix_logs.append(f'Slide {slide_num}: フッター番号を "{current_detected}" から "{expected_str}" に自動修正しました。')
+        else:
+            # フッター領域に番号を追加
+            footer_pattern = re.compile(r'(<div[^>]*class=["\'][^"\']*(?:slide-footer|border-t)[^"\']*["\'][^>]*>[\s\S]*?)(</div>)', re.IGNORECASE)
+            if footer_pattern.search(slide_html):
+                slide_html = footer_pattern.sub(rf'\1  <div class="font-mono text-slate-500">{expected_str}</div>\n    \2', slide_html, count=1)
+                self.fix_logs.append(f'Slide {slide_num}: フッター番号 "{expected_str}" を自動挿入しました。')
+
+        return slide_html
+
+    def _fix_print_css(self, html: str, ratio_key: str) -> str:
+        spec = RATIO_SPECS.get(ratio_key, RATIO_SPECS['16:9'])
+        expected_css = spec['page_css'].strip()
+        page_pattern = re.compile(r'@page\s*\{[^}]*\}', re.IGNORECASE)
+        if page_pattern.search(html):
+            current = page_pattern.search(html).group(0)
+            if current.strip() != expected_css:
+                html = page_pattern.sub(expected_css, html, count=1)
+                self.fix_logs.append(f'印刷用 @page CSS を比率 ({ratio_key}) に合わせて自動修復しました。')
+        return html
+
+    def _fix_header_counter(self, html: str, total_slides: int) -> str:
+        counter_pattern = re.compile(r'(<span[^>]*id=["\']deckSlideCountText["\'][^>]*>).*?(</span>)', re.IGNORECASE)
+        match = counter_pattern.search(html)
+        if match:
+            expected_counter = f"{total_slides:02d}枚"
+            html = counter_pattern.sub(rf'\g<1>{expected_counter}\g<2>', html, count=1)
+            self.fix_logs.append(f'ヘッダーのスライド総数表示を "{expected_counter}" に自動同期しました。')
+        return html
+
+    def _fix_meta_boxes(self, html: str, total_slides: int, ratio_key: str) -> str:
+        slide_pattern = re.compile(r'(<section[^>]*class=["\'][^"\']*\bslide\b[^"\']*["\'][^>]*>[\s\S]*?</section>)', re.IGNORECASE)
+        slides = list(slide_pattern.finditer(html))
+        meta_pattern = re.compile(
+            r'<div[^>]*class=["\'][^"\']*\bslide-meta-box\b[^"\']*["\'][^>]*>[\s\S]*?</div>(?=(?:\s*<!--[\s\S]*?-->)*\s*(?:<section\b|</main>|<div[^>]*class=["\'][^"\']*\bslide-meta-box\b|$))',
+            re.IGNORECASE
+        )
+        meta_boxes = list(meta_pattern.finditer(html))
+
+        if len(slides) == len(meta_boxes):
+            # メタボックス内の番号のみ同期
+            new_html = html
+            for idx, meta_match in enumerate(meta_boxes):
+                slide_num = idx + 1
+                meta_html = meta_match.group(0)
+                expected_meta_label = f"Slide {slide_num} / {total_slides}"
+                updated_meta_html = re.sub(r'Slide\s*\d+\s*/\s*\d+', expected_meta_label, meta_html, flags=re.IGNORECASE)
+                if updated_meta_html != meta_html:
+                    new_html = new_html.replace(meta_html, updated_meta_html, 1)
+                    self.fix_logs.append(f'メタ情報欄 {slide_num} の表示番号を "{expected_meta_label}" に同期しました。')
+            return new_html
+
+        # メタボックスが不足している場合は再生成・対配置
+        spec = RATIO_SPECS.get(ratio_key, RATIO_SPECS['16:9'])
+        meta_class = spec['meta_class']
+
+        # 既存の全メタボックスを安全に一旦除去（スライド内容の巻き込みを防止）
+        meta_clean_pattern = re.compile(
+            r'(?:\s*<!--[^\n]*メタ情報[^\n]*-->)?\s*<div[^>]*class=["\'][^"\']*\bslide-meta-box\b[^"\']*["\'][^>]*>[\s\S]*?</div>(?=(?:\s*<!--[\s\S]*?-->)*\s*(?:<section\b|</main>|<div[^>]*class=["\'][^"\']*\bslide-meta-box\b|$))',
+            re.IGNORECASE
+        )
+        clean_html = meta_clean_pattern.sub('', html)
+        clean_html = re.sub(r'\s*<!--\s*Slide\s*\d+\s*メタ情報欄[^\n]*-->', '', clean_html, flags=re.IGNORECASE)
+
+        # 各スライドの直下にメタボックスを挿入
+        def insert_meta(match):
+            nonlocal slide_idx
+            slide_idx += 1
+            slide_content = match.group(0)
+            meta_box = f'''\n\n    <!-- Slide {slide_idx} メタ情報欄（AIへの修正指示、印刷時は非表示） -->
+    <div class="slide-meta-box no-print {meta_class} mt-2 mb-8 bg-slate-900/90 backdrop-blur border border-slate-800 rounded-xl p-3.5 shadow-lg transition-colors focus-within:border-brand-500/80 focus-within:ring-1 focus-within:ring-brand-500/50">
+      <div class="flex items-center justify-between pb-2 mb-2.5 border-b border-slate-800/80">
+        <div class="flex items-center gap-1.5 text-xs font-semibold text-brand-300">
+          <svg class="w-3.5 h-3.5 text-brand-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/></svg>
+          <span class="slide-meta-title">💬 修正指示</span>
+        </div>
+        <span class="text-[11px] font-mono text-slate-500">Slide {slide_idx} / {total_slides}</span>
+      </div>
+      <div class="flex items-start gap-2.5">
+        <div class="slide-comment-input flex-1 min-h-[38px] max-h-[140px] overflow-y-auto px-3 py-2 bg-slate-950/70 border border-slate-700/60 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-brand-500 leading-relaxed" contenteditable="true" data-placeholder="このスライドの修正・要望を入力（例: 箇条書きを3点から2点に集約、KPI数値を30%に変更、配色のトーンを青系に、等）"></div>
+        <button onclick="clearSlideComment(this)" title="指示をクリア" class="text-slate-500 hover:text-rose-400 p-1.5 rounded hover:bg-slate-800 text-xs transition-colors shrink-0">✕</button>
+      </div>
+    </div>'''
+            return slide_content + meta_box
+
+        slide_idx = 0
+        reconstructed_html = re.sub(
+            r'<section[^>]*class=["\'][^"\']*\bslide\b[^"\']*["\'][^>]*>[\s\S]*?</section>',
+            insert_meta,
+            clean_html,
+            flags=re.IGNORECASE
+        )
+        self.fix_logs.append(f'メタ情報ボックスを全スライド ({total_slides}枚) に対し1:1で自動補完・再生成しました。')
+        return reconstructed_html
+
 
 class SlideVerifier:
     def __init__(self, html: str, target_file: Path, is_strict: bool):
@@ -41,7 +263,7 @@ class SlideVerifier:
         self.slides = list(slide_pattern.finditer(self.html))
 
         metabox_pattern = re.compile(
-            r'<div[^>]*class=["\'][^"\']*\bslide-meta-box\b[^"\']*["\'][^>]*>([\s\S]*?)</div>\s*(?=(?:<!--\s*==|<section\s*class=["\'][^"\']*\bslide\b|</main>|$))',
+            r'<div[^>]*class=["\'][^"\']*\bslide-meta-box\b[^"\']*["\'][^>]*>([\s\S]*?)</div>(?=(?:\s*<!--[\s\S]*?-->)*\s*(?:<section\b|</main>|<div[^>]*class=["\'][^"\']*\bslide-meta-box\b|$))',
             re.IGNORECASE
         )
         self.meta_boxes = list(metabox_pattern.finditer(self.html))
@@ -329,10 +551,11 @@ class SlideVerifier:
 def main():
     args = sys.argv[1:]
     is_strict = '--strict' in args
+    is_fix = '--fix' in args
     file_args = [a for a in args if not a.startswith('--')]
 
     if not file_args:
-        print('[USAGE] python3 scripts/verify_slide.py <path_to_html_file> [--strict]', file=sys.stderr)
+        print('[USAGE] python3 scripts/verify_slide.py <path_to_html_file> [--strict] [--fix]', file=sys.stderr)
         sys.exit(2)
 
     target_file = Path(file_args[0]).resolve()
@@ -348,8 +571,30 @@ def main():
         print(f'[ERROR] Failed to read file: {e}', file=sys.stderr)
         sys.exit(2)
 
+    if is_fix:
+        fixer = SlideFixer(html, target_file)
+        fixed_html, fix_logs = fixer.fix_all()
+        if fix_logs:
+            print('----------------------------------------------------')
+            print(f'🛠️ AINativeSlide 自動修復ログ: {target_file.name}')
+            print('----------------------------------------------------')
+            for log in fix_logs:
+                print(f'  ✓ {log}')
+            print()
+            try:
+                with open(target_file, 'w', encoding='utf-8') as f:
+                    f.write(fixed_html)
+                html = fixed_html
+                print(f'💾 自動修復をファイルに保存しました: {target_file.name}\n')
+            except Exception as e:
+                print(f'[ERROR] Failed to write fixed file: {e}', file=sys.stderr)
+                sys.exit(2)
+        else:
+            print('ℹ️ 構造的な自動修復対象はありませんでした。\n')
+
     verifier = SlideVerifier(html, target_file, is_strict)
     sys.exit(verifier.run_all_checks())
 
 if __name__ == '__main__':
     main()
+

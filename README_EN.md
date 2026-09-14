@@ -47,7 +47,7 @@
 | Category | Feature | Description |
 | :--- | :--- | :--- |
 | **AI Output Stability** | **Forced Overflow Prevention (`line-clamp`)** | Wraps content in `<div class="ai-content">` with strict line-clamp rules (H2: 2 lines, Body: 6 lines, Lists: 3 lines). |
-| | **Autonomous Quality Testing (`verify_slide.py`)** | Zero dependencies (Pure Python 3 standard lib). Automatically validates character counts, numbering, and print CSS before delivery. |
+| | **Deterministic Deck Assembly & Auto-Repair (`assemble_deck.py` / `verify_slide.py --fix`)** | Zero dependencies (Pure Python 3 standard lib). Automatically compiles deck from fragments, validates character counts, numbering, and print CSS, with one-stop auto-repair. |
 | | **Anti-Hallucination Guardrail** | Prohibits fabricating fake terminal execution logs in CLI-less chat environments; enforces silent self-checking. |
 | **Paper & Print** | **4 Aspect Ratios & Formats** | Supports 16:9 Widescreen, 4:3 Standard, **A4 Landscape (Handouts/Memos)**, and **A4 Portrait (1-Pagers)**. |
 | | **Zero-Margin Print CSS (`@page`)** | Produces pixel-perfect, margin-free PDF exports directly via standard browser print (`Ctrl+P` / `Cmd+P`). |
@@ -178,7 +178,8 @@ AINativeSlide/
 │   ├── speech_script_example.md # Speaker speech script sample document
 │   └── corporate_default.html # Corporate brand design template (CI/VI compliance)
 ├── scripts/
-│   └── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
+│   ├── assemble_deck.py     # [Zero-Dependency] Deterministic deck assembler from slide fragments
+│   └── verify_slide.py      # [Zero-Dependency] Automated quality test tool with auto-repair (--fix)
 └── references/              # Detailed technical specifications
     ├── slide-patterns.md    # Information structuring & wireframe patterns (Anti-AI-Smell)
     ├── components-consulting.md # Executive consulting visual components (Mekko, Gantt, Harvey balls)

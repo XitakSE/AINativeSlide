@@ -57,14 +57,25 @@ description: >-
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
 - **必須手順**: ユーザーの承認を得た後、必ずベース骨格（[assets/template_base.html](./assets/template_base.html)）を取得し、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして使用すること。
   - **ツールが使える環境（Antigravity, Claude Code等）**: `view_file` ツールを用いて `assets/template_base.html` を読み込む。
-  - **GPT環境（ChatGPT / Custom GPTs 等）**:
-    - **Code Interpreterが使える場合（最優先推奨・完全動作保証）**: Pythonスクリプトでナレッジ内の `assets/template_base.html` を読み込み、スライドコンテンツ（`<section class="slide ...">` と `.slide-meta-box`）を置換して完成HTMLファイルを出力・ダウンロードリンクを提供する（トークン上限によるJS中略が物理的に発生せず、100%完全動作する）。
-    - **チャット出力環境**: `template_base.html` の軽量化スクリプト（約210行）を中略（`// ...` 等）することなく、完全な単一コードブロックとして出力する。
+  - **CLI / Python実行環境（Antigravity, Cursor, Claude Code, Code Interpreter等 - 最優先推奨）**:
+    - **決定論的合体パイプライン（Token節約 & 100%完全動作保証）**: LLMはスライドコンテンツの断片（`<section class="slide ...">...</section>`）のHTML出力に集中し、全体の骨格・メタボックス・番号再計算・印刷CSSの統合は `scripts/assemble_deck.py` で決定論的に処理する。
+  - **プレーンチャット環境（ChatGPT Enterprise, Claude Web等）**:
+    - `template_base.html` の軽量化スクリプト（約210行）を中略（`// ...` 等）することなく、完全な単一コードブロックとして出力する。
 - 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/corporate_default.html](./assets/corporate_default.html) を参照すること。
 </step>
 
 <step id="3_single_file_html">
 ### 手順3: 単一HTML（Single-File HTML）の生成規則
+
+#### 方式A: 決定論的Pythonスクリプトによる合成（CLI/Python実行環境向け・推奨）
+1. スライド要素群（各スライドの `<section class="slide ...">...</section>`）のみをファイルまたは標準入力に記述。
+2. 以下の合体スクリプトを実行し、完全なSingle-File HTMLを自動生成する：
+   ```bash
+   python3 scripts/assemble_deck.py <スライド断片ファイル> --title "<スライドタイトル>" -r 16:9 -o deck.html
+   ```
+   - スライド番号の再計算（`01 / 05`, `02 / 05`...）、メタ情報ボックス（`.slide-meta-box`）の1:1注入、印刷用 `@page` CSSの同期、ヘッダータイトルの同期が決定論的に実行され、末尾で自動品質検証（`verify_slide.py`）まで一括実行される。
+
+#### 方式B: 単一HTMLの手動/プロンプト生成（プレーンチャット環境向けフォールバック）
 自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：
 
 <generation_rules>
@@ -95,12 +106,18 @@ description: >-
 HTMLコードをユーザーに提示する前に、環境に応じた品質チェックを実施すること：
 
 - **Python / CLI実行が可能な環境の場合（Antigravity, Cursor, Claude Code, Code Interpreter等）**:
-  必ず検証スクリプトを実行して静的テストを実施する：
+  検証スクリプトを実行して静的テストを実施する：
   ```bash
   python3 scripts/verify_slide.py <スライドHTMLのパス>
   ```
   - **終了コード 0 の場合**: テスト合格。手順5へ進む。
-  - **終了コード 1 の場合**: 出力された `[ERROR]` を解析し、自律修正ループを回して合格（コード0）にしてから納品する。
+  - **終了コード 1 の場合**:
+    1. まず自動修復フラグ `--fix` を付けて実行する：
+       ```bash
+       python3 scripts/verify_slide.py <スライドHTMLのパス> --fix
+       ```
+       スライド番号、メタボックスの対配置、印刷用 `@page` CSS、ヘッダー総数表示、`is-editable` クラスが自動修復され、ファイルに保存された上で再検証される。
+    2. テキスト文字数超過やAnti-AI-Smell警告、CSSリスクなど、LLMによるリライトが必要な残存エラーがある場合は、エラー指示に従って該当スライドのコンテンツを修正し、コード0になるまで検証する。
 - **Python / CLI実行ができない環境の場合（プレーンチャット等）**:
   スクリプトの実行は行わず、自律的なコード内セルフチェック（スライド数とメタボックス数の1:1一致、ページ番号整合性、文字数・はみ出し確認）を実施する。
   **※重要（幻覚予防）**: スクリプトを実行できない環境であるにもかかわらず、「スクリプトを実行しました」「テストに合格しました」といった架空のコマンド実行報告や捏造ログを出力してはならない（実行できないなら単に実行しない）。

@@ -47,7 +47,7 @@
 | 分野 | 機能 | 概要 |
 | :--- | :--- | :--- |
 | **AI出力安定化** | **CSS物理文字溢れ防止 (`line-clamp`)** | 本文を `<div class="ai-content">` で囲み、見出し2行/本文6行/リスト3行で強制三点リーダー化 |
-| | **Python自律品質テスト (`verify_slide.py`)** | 外部依存ゼロ（標準libのみ）。文字数・連番・印刷CSSを検査し、AIが自律修正してから納品 |
+| | **Python決定論的合体 ＆ 自動修復 (`assemble_deck.py` / `verify_slide.py --fix`)** | 外部依存ゼロ（標準libのみ）。スライド断片からの確実なデッキ合成、文字数・連番・印刷CSSの検査とワンストップ自動修復 |
 | | **幻覚予防ガードレール (Anti-Hallucination)** | CLIのないプレーンチャット環境での架空テスト実行ログ捏造を厳禁化 |
 | **用紙・印刷** | **4大アスペクト比・用紙サポート** | 16:9（Web投影）、4:3（従来型）、**A4横（印刷配布・稟議）**、**A4縦（1-Pager）** |
 | | **余白ゼロ印刷CSS (`@page`)** | ブラウザの「印刷（PDFに保存）」で改ページずれゼロ・余白ゼロのPDFを出力 |
@@ -179,7 +179,8 @@ AINativeSlide/
 │   ├── speech_script_example.md # 発表台本文書サンプル
 │   └── corporate_default.html # 企業公式デザインテンプレート（CI/VI統一）
 ├── scripts/
-│   └── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
+│   ├── assemble_deck.py     # 【外部依存ゼロ】スライド断片からの決定論的デッキ合体スクリプト
+│   └── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自動修復（--fix）Pythonスクリプト
 └── references/              # 詳細技術リファレンス
     ├── slide-patterns.md    # スライド情報構造＆厳選6大パターン集（Anti-AI-Smell・Deck骨格）
     ├── components-consulting.md # 戦略コンサル型示唆パーツ集（マリメッコ・ガント・ハーベイボール）
