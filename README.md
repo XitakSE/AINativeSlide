@@ -171,7 +171,7 @@ AINativeSlide/
 ├── assets/                  # Agent Skills 標準資材ディレクトリ
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
 │   ├── speech_script_example.md # 発表台本文書サンプル
-│   └── design_templates/    # 企業公式デザインテンプレート群（CI/VI統一）
+│   └── corporate_default.html # 企業公式デザインテンプレート（CI/VI統一）
 ├── scripts/
 │   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
 │   └── gemini_pr_review.py  # 【外部依存ゼロ】Gemini API 自動PRレビュー実行スクリプト

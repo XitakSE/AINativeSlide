@@ -57,12 +57,25 @@ def main():
     slide_count = len(slides)
     metabox_count = len(meta_boxes)
 
+    # 企業デザインテンプレート（CI/VI統制）かどうかを判定
+    is_corporate_template = (
+        'corporate' in target_file.name.lower()
+        or 'design_templates' in str(target_file)
+        or '企業CI' in html
+        or 'ブランドカラー定義' in html
+    )
+
     if slide_count == 0:
         errors.append('スライド要素 (<section class="slide ...">) が1枚も見つかりません。')
 
-    # スライド数とメタボックス数の完全一致チェック
-    if slide_count > 0 and slide_count != metabox_count:
-        errors.append(f'スライド枚数 ({slide_count}枚) とメタ情報ボックス数 ({metabox_count}個) が一致していません。各スライドの直下に必ず1つの .slide-meta-box を配置してください。')
+    # スライド数とメタボックス数の完全一致チェック（通常スライドで必須、デザインテンプレートでは不要）
+    if not is_corporate_template:
+        if slide_count > 0 and slide_count != metabox_count:
+            errors.append(f'スライド枚数 ({slide_count}枚) とメタ情報ボックス数 ({metabox_count}個) が一致していません。各スライドの直下に必ず1つの .slide-meta-box を配置してください。')
+    else:
+        # デザインテンプレートでメタボックスが存在する場合はスライド数と一致しているかチェック
+        if metabox_count > 0 and slide_count != metabox_count:
+            errors.append(f'デザインテンプレート内のメタ情報ボックス数 ({metabox_count}個) がスライド枚数 ({slide_count}枚) と一致していません。')
 
     # ========================================================
     # 2. スライド番号・フッター・メタバッジの連番チェック
@@ -191,24 +204,32 @@ def main():
     else:
         errors.append('ヘッダーに id="deckSlideCountText" の要素が見つかりません。')
 
-    # 企業デザインテンプレート（CI/VI統制）かどうかを判定
-    is_corporate_template = (
-        'design_templates' in str(target_file)
-        or 'corporate' in target_file.name.lower()
-        or '企業CI' in html
-        or 'ブランドカラー定義' in html
-    )
-
-    required_ids = [
-        'deckTitleText',
-        'deckRatioText',
-        'deckSlideCountText',
-        'toggleEditBtn',
-        'copyCommentsBtn',
-        'presentationModal'
-    ]
-    if not is_corporate_template:
-        required_ids.append('selectionToolbar')
+    if is_corporate_template:
+        # デザインテンプレートはUI操作ボタンや発表モーダルを持たず、プレビュー用メタ情報のみ検証
+        required_ids = [
+            'deckTitleText',
+            'deckRatioText',
+            'deckSlideCountText'
+        ]
+        required_js_functions = []
+    else:
+        # 通常の完成スライドはフル機能（編集、指示コピー、全画面発表、書式バー）を検証
+        required_ids = [
+            'deckTitleText',
+            'deckRatioText',
+            'deckSlideCountText',
+            'toggleEditBtn',
+            'copyCommentsBtn',
+            'presentationModal',
+            'selectionToolbar'
+        ]
+        required_js_functions = [
+            'toggleEditMode',
+            'startPresentation',
+            'stopPresentation',
+            'copySlideComments',
+            'formatSelection'
+        ]
 
     for rid in required_ids:
         if not re.search(rf'id=["\']{rid}["\']', html, re.IGNORECASE):
@@ -229,15 +250,6 @@ def main():
     # ========================================================
     # 5. JavaScript ランタイム整合性 (基本プレゼン・推敲機能)
     # ========================================================
-    required_js_functions = [
-        'toggleEditMode',
-        'startPresentation',
-        'stopPresentation',
-        'copySlideComments'
-    ]
-    if not is_corporate_template:
-        required_js_functions.append('formatSelection')
-
     for fn in required_js_functions:
         if not re.search(rf'function\s+{fn}\b', html, re.IGNORECASE):
             errors.append(f'必須JavaScript関数 {fn}() が定義されていません。')

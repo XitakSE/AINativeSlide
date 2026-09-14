@@ -57,7 +57,7 @@ description: >-
 
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
 - **必須手順**: ユーザーの承認を得た後、必ず `view_file` ツールを用いて [assets/template_base.html](./assets/template_base.html) を読み込み、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして取得すること。
-- 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/design_templates/corporate_default.html](./assets/design_templates/corporate_default.html) を参照すること。
+- 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/corporate_default.html](./assets/corporate_default.html) を参照すること。
 
 ### 手順3: 単一HTML（Single-File HTML）の生成規則
 自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：

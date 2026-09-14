@@ -15,7 +15,7 @@ assets:
     description: "Core HTML slide skeleton, header toolbar, and runtime script engine"
   - path: "assets/speech_script_example.md"
     description: "Presentation speaker script template (speech_script.md)"
-  - path: "assets/design_templates/corporate_default.html"
+  - path: "assets/corporate_default.html"
     description: "Corporate design template scaffold"
 
 references:
