@@ -572,7 +572,7 @@
           <!-- Action Title: 動詞結び・40〜60文字 -->
           <h2 class="text-xl font-extrabold text-white mt-0.5 leading-snug">
             AI特有の空虚な3均等カードや抽象バズワードを排除し、<br>
-            完全文のAction Titleと視覚的アンカーで意思決定を加速させる
+            完全文のAction Titleと視覚的アンカーで会議での即時合意を引き出す
           </h2>
         </div>
         <div class="shrink-0 whitespace-nowrap px-3.5 py-1.5 rounded-lg bg-rose-950/80 border border-rose-500/40 text-xs font-mono text-rose-300 shadow-sm">
@@ -696,12 +696,12 @@
         <div class="col-span-7 p-5 rounded-2xl bg-slate-950 border-2 border-brand-500 shadow-xl flex flex-col justify-between">
           <div class="flex items-center justify-between mb-2">
             <div>
-              <span class="text-xs font-bold text-white">スライド作成工数と品質スコアの推移（実演）</span>
-              <div class="text-[10px] text-slate-400">Pure Inline SVG（Chart.js等外部JS一切不要）</div>
+              <span class="text-xs font-bold text-white">作成工数と成果物品質の比較（実演）</span>
+              <div class="text-[10px] text-slate-400">従来AIの「崩れ・手戻り」を解消し、手作業以上の高品質を10分で達成</div>
             </div>
             <div class="flex items-center gap-3 text-[10px]">
               <div class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-brand-500"></span><span class="text-slate-300">作成工数 (分)</span></div>
-              <div class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-emerald-400"></span><span class="text-slate-300">品質スコア (%)</span></div>
+              <div class="flex items-center gap-1"><span class="w-2.5 h-0.5 bg-emerald-400"></span><span class="text-slate-300">完成品質スコア (%)</span></div>
             </div>
           </div>
           <!-- SVG描画領域 (Pure Inline SVG) -->
@@ -713,29 +713,35 @@
               <line x1="40" y1="110" x2="460" y2="110" stroke="#334155" stroke-dasharray="2 2" stroke-width="0.8"/>
               <line x1="40" y1="150" x2="460" y2="150" stroke="#475569" stroke-width="1.2"/>
               <!-- Y軸ラベル -->
-              <text x="32" y="34" fill="#94a3b8" font-size="9" text-anchor="end">120m</text>
-              <text x="32" y="74" fill="#94a3b8" font-size="9" text-anchor="end">80m</text>
-              <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">40m</text>
+              <text x="32" y="34" fill="#94a3b8" font-size="9" text-anchor="end">120m / 100%</text>
+              <text x="32" y="74" fill="#94a3b8" font-size="9" text-anchor="end">80m / 66%</text>
+              <text x="32" y="114" fill="#94a3b8" font-size="9" text-anchor="end">40m / 33%</text>
               <text x="32" y="154" fill="#94a3b8" font-size="9" text-anchor="end">0</text>
               <!-- 棒グラフ: 手動作成(120m) -> 従来AI(45m) -> AINativeSlide(10m) -->
-              <!-- Bar 1: 手動 -->
+              <!-- Bar 1: 手動 (120分) -->
               <rect x="75" y="30" width="45" height="120" rx="4" fill="#475569"/>
               <text x="97.5" y="24" fill="#94a3b8" font-size="9" font-weight="bold" text-anchor="middle">120分</text>
               <text x="97.5" y="165" fill="#cbd5e1" font-size="9" text-anchor="middle">手動作成</text>
-              <!-- Bar 2: 従来AI -->
+              <!-- Bar 2: 従来AI (45分) -->
               <rect x="205" y="105" width="45" height="45" rx="4" fill="#64748b"/>
               <text x="227.5" y="99" fill="#cbd5e1" font-size="9" font-weight="bold" text-anchor="middle">45分</text>
-              <text x="227.5" y="165" fill="#cbd5e1" font-size="9" text-anchor="middle">従来AI</text>
-              <!-- Bar 3: AINativeSlide (推奨) -->
+              <text x="227.5" y="165" fill="#cbd5e1" font-size="9" text-anchor="middle">従来AI (崩れ)</text>
+              <!-- Bar 3: AINativeSlide (10分・推奨) -->
               <rect x="335" y="140" width="45" height="10" rx="4" fill="#6366f1"/>
               <text x="357.5" y="134" fill="#818cf8" font-size="9" font-weight="bold" text-anchor="middle">10分</text>
               <text x="357.5" y="165" fill="#818cf8" font-size="9" font-weight="bold" text-anchor="middle">本スキル</text>
-              <!-- 折れ線グラフ: 品質スコア (45% -> 60% -> 98%) -->
-              <polyline fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" points="97.5,125 227.5,95 357.5,35"/>
-              <circle cx="97.5" cy="125" r="3.5" fill="#10b981"/>
-              <circle cx="227.5" cy="95" r="3.5" fill="#10b981"/>
+              <!-- 折れ線グラフ: 品質スコア (手動 88% -> 従来AI 45% -> 本スキル 96%) -->
+              <!-- y座標計算: y = 150 - (120 * score/100) => 88%: y=44.4, 45%: y=96, 96%: y=34.8 -->
+              <polyline fill="none" stroke="#34d399" stroke-width="2.5" stroke-linecap="round" points="97.5,44 227.5,96 357.5,35"/>
+              <!-- 点1: 手動 88% -->
+              <circle cx="97.5" cy="44" r="3.5" fill="#10b981"/>
+              <text x="97.5" y="38" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">88% (高質)</text>
+              <!-- 点2: 従来AI 45% (手戻り多発) -->
+              <circle cx="227.5" cy="96" r="3.5" fill="#f43f5e"/>
+              <text x="227.5" y="88" fill="#fb7185" font-size="9" font-weight="bold" text-anchor="middle">45% (要修正)</text>
+              <!-- 点3: 本スキル 96% -->
               <circle cx="357.5" cy="35" r="4.5" fill="#34d399" stroke="#064e3b" stroke-width="2"/>
-              <text x="357.5" y="24" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">98%</text>
+              <text x="357.5" y="24" fill="#34d399" font-size="9" font-weight="bold" text-anchor="middle">96% (即戦力)</text>
             </svg>
           </div>
           <div class="text-[10px] text-slate-400 mt-1 text-right">※単一HTML完結のため、オフライン環境でも美しく描画されます</div>
