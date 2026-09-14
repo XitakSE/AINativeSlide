@@ -82,6 +82,11 @@ git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativesl
 2. Extract the archive and rename the folder to `ainativeslide`.
 3. Move it to `.agents/skills/ainativeslide` in your project root (ensure `SKILL.md` is directly inside).
 
+### Method C: ChatGPT Enterprise Deployment (Workspace Skills & Custom GPT Wrapper)
+In ChatGPT Enterprise (or Team / Business) environments, combine Workspace Skills with a Custom GPT:
+1. **Workspace Skills Installation**: Upload this repository to your ChatGPT Enterprise workspace Skills library (registered as `@ainativeslide`).
+2. **Custom GPT Wrapper (Recommended)**: To guarantee an immediate, rigorous Grill proposal regardless of user prompt brevity, build a dedicated Custom GPT using [`agents/GPT_CUSTOM_INSTRUCTIONS.md`](agents/GPT_CUSTOM_INSTRUCTIONS.md) that orchestrates `@ainativeslide` in the background.
+
 ---
 
 ## User Guide
@@ -167,7 +172,7 @@ AINativeSlide/
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── agents/                  # Multi-Agent manifest definitions
 │   ├── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
-│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT / Custom GPTs setup guide & system instructions
+│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT Enterprise / Custom GPTs wrapper setup guide
 ├── assets/                  # Agent Skills standard assets directory
 │   ├── template_base.html   # Base HTML template engine optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script sample document
@@ -188,7 +193,7 @@ AINativeSlide/
 > **💡 Pruning Unused Files for Your Target Environment**:
 > This repository is pre-configured to work out-of-the-box across Google Antigravity, Claude Code, ChatGPT, Cursor, and other agent platforms. Feel free to prune files you do not need:
 > - **Core Essentials**: `SKILL.md` (the primary execution contract) and `assets/` (HTML skeletons and assets)
-> - **If not using ChatGPT**: You can safely delete the `agents/` directory.
+> - **If not using ChatGPT**: You can safely delete the `agents/` directory. (Note: In ChatGPT Enterprise, install this skill into workspace Skills and build a Custom GPT wrapper using `agents/GPT_CUSTOM_INSTRUCTIONS.md`).
 > - **If not using Claude Code**: You can safely delete `CLAUDE.md`.
 > - **If not using autonomous coding agents**: You can safely delete `AGENTS.md`.
 

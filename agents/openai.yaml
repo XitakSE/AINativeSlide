@@ -20,7 +20,7 @@ assets:
 
 references:
   - path: "agents/GPT_CUSTOM_INSTRUCTIONS.md"
-    description: "ChatGPT / Custom GPTs installation, system prompt, and Code Interpreter synthesis guide"
+    description: "ChatGPT Enterprise / Custom GPTs wrapper instructions and skill orchestration guide"
   - path: "references/slide-patterns.md"
     description: "Layout patterns, wireframes, and enterprise deck meta skeleton"
   - path: "references/components-consulting.md"

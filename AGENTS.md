@@ -39,7 +39,8 @@ AINativeSlide/
 ├── README.md / README_EN.md        # User-facing documentation (JA / EN)
 ├── index.html                      # GitHub Pages root & 16:9 interactive showcase
 ├── agents/                         # Multi-Agent manifest definitions
-│   └── openai.yaml                 # OpenAI Agent / ChatGPT specification
+│   ├── openai.yaml                 # OpenAI Agent / ChatGPT specification
+│   └── GPT_CUSTOM_INSTRUCTIONS.md  # ChatGPT Enterprise / Custom GPTs wrapper guide
 ├── assets/                         # Standard Agent Skills assets directory
 │   ├── template_base.html          # Clean base template skeleton for new decks
 │   ├── speech_script_example.md    # Speaker script document example

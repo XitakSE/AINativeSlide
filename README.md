@@ -83,6 +83,11 @@ git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativesl
 2. 解凍したフォルダを `ainativeslide` にリネーム。
 3. 作業スペースの `.agents/skills/ainativeslide` に直接配置します（フォルダ直下に `SKILL.md` がある状態）。
 
+### 手順C. ChatGPT Enterprise での導入（ワークスペースSkills ＆ Custom GPTラッパー連携）
+ChatGPT Enterprise（または Team / Business）環境では、ワークスペースのスキル機能と Custom GPT を組み合わせて利用します：
+1. **ワークスペースSkillsへの登録**: 本リポジトリ一式を ChatGPT Enterprise のワークスペース Skills にインストールします（`@ainativeslide` として登録）。
+2. **Custom GPT ラッパーの作成（推奨）**: 初手プロンプトの曖昧さによらず厳格なGrill（スライド構成提案書）を一発出力させるため、[`agents/GPT_CUSTOM_INSTRUCTIONS.md`](agents/GPT_CUSTOM_INSTRUCTIONS.md) に記載の手順で社内公開用 Custom GPT を作成します（裏で `@ainativeslide` を呼び出すオーケストレーション構成）。
+
 ---
 
 ## 使い方ガイド
@@ -168,7 +173,7 @@ AINativeSlide/
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
 ├── agents/                  # 各種AIエージェント向けマニフェスト定義
 │   ├── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
-│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT / Custom GPTs 導入設定ガイド＆専用プロンプト
+│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT Enterprise / Custom GPTs ラッパー導入設定ガイド
 ├── assets/                  # Agent Skills 標準資材ディレクトリ
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
 │   ├── speech_script_example.md # 発表台本文書サンプル
@@ -189,7 +194,7 @@ AINativeSlide/
 > **💡 利用環境に応じた不要ファイルの整理・削除について**:
 > 本リポジトリは、Google Antigravity、Claude Code、ChatGPT、Cursor 等のあらゆる主要エージェントですぐに動作するよう各環境向けの設定ファイルを同梱しています。ご自身の利用環境に合わせて、不要なファイルは各自自由に削除してご利用ください：
 > - **必須のコア資材**: `SKILL.md`（スキル実行契約の正本）および `assets/`（HTML骨格・テンプレート資材）
-> - **ChatGPT 環境を使わない場合**: `agents/` ディレクトリは削除可能です。
+> - **ChatGPT 環境を使わない場合**: `agents/` ディレクトリは削除可能です。（※ChatGPT Enterprise では、ワークスペースSkillsに本リポジトリを登録し、`agents/GPT_CUSTOM_INSTRUCTIONS.md` を使ってCustom GPTラッパーを構築します）
 > - **Claude Code を使わない場合**: `CLAUDE.md` は削除可能です。
 > - **自律コーディング開発を行わない場合**: `AGENTS.md` は削除可能です。
 
