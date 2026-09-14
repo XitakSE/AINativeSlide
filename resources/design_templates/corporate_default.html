@@ -210,6 +210,28 @@
     </div>
   </div>
 
+  <!-- テキスト選択時ミニフローティング書式バー（印刷時は非表示） -->
+  <div id="selectionToolbar" class="no-print absolute hidden z-50 bg-slate-900/95 backdrop-blur-md border border-slate-700 shadow-2xl rounded-lg px-2.5 py-1.5 flex items-center gap-2 text-xs text-white transform -translate-x-1/2 -translate-y-full transition-opacity duration-150 pointer-events-auto">
+    <button onclick="formatSelection('bold')" title="太字 (Bold)" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">B</button>
+    <div class="w-px h-3.5 bg-slate-700"></div>
+    <button onclick="changeSelectionFontSize(-0.15)" title="選択文字 縮小" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A-</button>
+    <button onclick="changeSelectionFontSize(0.15)" title="選択文字 拡大" class="w-6 h-6 flex items-center justify-center font-bold hover:bg-slate-800 rounded text-slate-200">A+</button>
+    <div class="w-px h-3.5 bg-slate-700"></div>
+    <!-- 選択文字カラー -->
+    <div class="flex items-center gap-1">
+      <button onclick="formatSelection('color', '#0f172a')" title="Black" class="w-3.5 h-3.5 rounded-full bg-[#0f172a] ring-1 ring-white/30 hover:scale-125 transition-transform"></button>
+      <button onclick="formatSelection('color', '#2563eb')" title="Blue" class="w-3.5 h-3.5 rounded-full bg-[#2563eb] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+      <button onclick="formatSelection('color', '#10b981')" title="Green" class="w-3.5 h-3.5 rounded-full bg-[#10b981] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+      <button onclick="formatSelection('color', '#f59e0b')" title="Amber" class="w-3.5 h-3.5 rounded-full bg-[#f59e0b] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+      <button onclick="formatSelection('color', '#ef4444')" title="Red" class="w-3.5 h-3.5 rounded-full bg-[#ef4444] ring-1 ring-white/20 hover:scale-125 transition-transform"></button>
+    </div>
+    <div class="w-px h-3.5 bg-slate-700"></div>
+    <!-- 蛍光ペンハイライト (長方形アイコン・文字なし) -->
+    <button onclick="formatSelection('highlight', '#fef08a')" title="マーカー (黄)" class="w-5 h-3.5 rounded-sm bg-[#fef08a] border border-amber-400/80 hover:scale-110 transition-transform shadow-sm"></button>
+    <!-- リセット -->
+    <button onclick="clearSelectionFormat()" title="書式解除" class="w-5 h-5 flex items-center justify-center text-xs hover:bg-slate-800 rounded text-slate-400 hover:text-white ml-0.5">✕</button>
+  </div>
+
   <!-- ========================================================================
        【スライドメインビューポート】
        ======================================================================== -->
@@ -413,6 +435,140 @@
         console.error('Clipboard copy failed:', err);
         prompt(isJapanese ? '以下のテキストをコピーしてください:' : 'Copy instructions below:', formatted);
       });
+    }
+
+    // ----------------------------------------------------
+    // テキスト選択の判定 & ミニフローティングバー
+    // ----------------------------------------------------
+    let savedSelectionRange = null;
+
+    function hasTextSelection() {
+      const selection = window.getSelection();
+      if (!selection.rangeCount || selection.isCollapsed) return false;
+      const range = selection.getRangeAt(0);
+      let container = range.commonAncestorContainer;
+      if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
+      return !!container.closest('.slide');
+    }
+
+    function updateSelectionToolbar() {
+      const toolbar = document.getElementById('selectionToolbar');
+      if (!toolbar) return;
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0 && !selection.isCollapsed) {
+        const range = selection.getRangeAt(0);
+        let container = range.commonAncestorContainer;
+        if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
+        if (container.closest('.slide')) {
+          savedSelectionRange = range.cloneRange();
+          const rect = range.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            toolbar.style.top = `${rect.top + window.scrollY - 12}px`;
+            toolbar.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+            toolbar.classList.remove('hidden');
+            return;
+          }
+        }
+      }
+      toolbar.classList.add('hidden');
+    }
+
+    document.addEventListener('selectionchange', () => {
+      setTimeout(updateSelectionToolbar, 20);
+    });
+
+    document.addEventListener('mousedown', (e) => {
+      const toolbar = document.getElementById('selectionToolbar');
+      if (toolbar && !toolbar.contains(e.target) && !e.target.closest('header')) {
+        // スライド内のテキスト以外のクリック時
+      }
+    });
+
+    // ----------------------------------------------------
+    // 選択テキストへのインライン書式適用
+    // ----------------------------------------------------
+    function getActiveRange() {
+      const selection = window.getSelection();
+      if (selection.rangeCount > 0 && !selection.isCollapsed) {
+        return selection.getRangeAt(0);
+      }
+      if (savedSelectionRange) {
+        selection.removeAllRanges();
+        selection.addRange(savedSelectionRange);
+        return savedSelectionRange;
+      }
+      return null;
+    }
+
+    function formatSelection(action, value) {
+      const range = getActiveRange();
+      if (!range) return;
+
+      if (action === 'bold') {
+        document.execCommand('bold', false, null);
+        updateSelectionToolbar();
+        return;
+      }
+
+      const span = document.createElement('span');
+      if (action === 'color') {
+        span.style.color = value;
+      } else if (action === 'highlight') {
+        span.style.backgroundColor = value;
+      }
+
+      try {
+        const contents = range.extractContents();
+        span.appendChild(contents);
+        range.insertNode(span);
+
+        const selection = window.getSelection();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+        savedSelectionRange = newRange.cloneRange();
+        updateSelectionToolbar();
+      } catch (e) {
+        console.error('Format selection error:', e);
+      }
+    }
+
+    function changeSelectionFontSize(delta) {
+      const range = getActiveRange();
+      if (!range) return;
+
+      let container = range.commonAncestorContainer;
+      if (container.nodeType === Node.TEXT_NODE) container = container.parentNode;
+
+      if (container.tagName === 'SPAN' && container.style.fontSize) {
+        let currentEm = parseFloat(container.style.fontSize) || 1.0;
+        container.style.fontSize = `${Math.max(0.6, Math.min(2.5, currentEm + delta)).toFixed(2)}em`;
+      } else {
+        const span = document.createElement('span');
+        span.style.fontSize = delta > 0 ? '1.25em' : '0.85em';
+        try {
+          const contents = range.extractContents();
+          span.appendChild(contents);
+          range.insertNode(span);
+          const selection = window.getSelection();
+          const newRange = document.createRange();
+          newRange.selectNodeContents(span);
+          selection.removeAllRanges();
+          selection.addRange(newRange);
+          savedSelectionRange = newRange.cloneRange();
+          updateSelectionToolbar();
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+
+    function clearSelectionFormat() {
+      const range = getActiveRange();
+      if (!range) return;
+      document.execCommand('removeFormat', false, null);
+      updateSelectionToolbar();
     }
 
     // ----------------------------------------------------

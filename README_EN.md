@@ -58,6 +58,7 @@
 | | **Inline SVG Charts & Matrix Tables** | Pure inline SVG combo charts (bars & lines) and evaluation matrix tables with clear recommendation badges. |
 | **AI Visuals** | **Concept Imagery Generation** | Curated prompts across 4 visual styles: Photorealistic, Manga/Comic, 3D Isometric, and Flat Vector. |
 | | **Zero-Cropping Aspect Alignment** | Pre-aligns container ratios with prompt aspect ratios to eliminate unwanted CSS cropping (supports drag-and-drop replacement). |
+| | **Pure Base64 Inlining** | Embeds all AI imagery and brand logos directly as Data URIs for true Single-File zero-dependency portability. |
 | **Review & Present** | **Mandatory Smart Grill (Approval Gate)** | Alignment interview prior to code generation to establish outline, ratio, and image styles, eliminating cognitive drift. |
 | | **Speech Script Markdown (`speech_script.md`)** | Simultaneously generates estimated timings, key takeaways, and conversational speaker notes (optional Grill choice). |
 | | **In-Browser Direct Editing & Mini Toolbar** | Click to edit slide text directly with floating format bar (bold, colors, highlighter, font sizing). |
