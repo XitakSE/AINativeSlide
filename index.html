@@ -23,6 +23,8 @@
               50: 'var(--brand-50, #eef2ff)',
               100: 'var(--brand-100, #e0e7ff)',
               200: 'var(--brand-200, #c7d2fe)',
+              300: 'var(--brand-300, #a5b4fc)',
+              400: 'var(--brand-400, #818cf8)',
               500: 'var(--brand-500, #6366f1)',
               600: 'var(--brand-600, #4f46e5)',
               700: 'var(--brand-700, #4338ca)',
@@ -46,6 +48,8 @@
       --brand-50: #eef2ff;
       --brand-100: #e0e7ff;
       --brand-200: #c7d2fe;
+      --brand-300: #a5b4fc;
+      --brand-400: #818cf8;
       --brand-500: #6366f1;
       --brand-600: #4f46e5;
       --brand-700: #4338ca;
@@ -154,14 +158,24 @@
       outline-offset: -2px;
     }
 
-    /* スライドコメント（修正指示）入力ボックス */
+    /* スライドコメント（修正指示）入力ボックス & メタ情報ボックス */
+    .slide-meta-box {
+      color: #f1f5f9;
+    }
+    .slide-meta-title {
+      color: #a5b4fc; /* brand-300: 鮮やかで高視認性 */
+      font-weight: 600;
+    }
+    .slide-comment-input {
+      color: #f8fafc !important; /* 入力文字は鮮明な白 */
+    }
     .slide-comment-input:empty:before {
       content: attr(data-placeholder);
-      color: #64748b;
+      color: #94a3b8 !important; /* slate-400: 背景と同化せずくっきり読める */
       pointer-events: none;
     }
     .slide-comment-input:focus:empty:before {
-      color: #475569;
+      color: #cbd5e1 !important; /* フォーカス時も薄くならず視認可能 */
     }
     @media print {
       .slide-meta-box,
