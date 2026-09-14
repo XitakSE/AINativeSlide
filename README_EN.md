@@ -26,8 +26,7 @@
 4. [User Guide](#user-guide)
 5. [Keyboard Shortcuts](#keyboard-shortcuts)
 6. [Directory & File Structure](#directory--file-structure)
-7. [Automated PR Review (Gemini Code Assist)](#automated-pr-review-gemini-code-assist)
-8. [License](#license)
+7. [License](#license)
 
 ---
 
@@ -191,12 +190,6 @@ AINativeSlide/
 > - **If not using autonomous coding agents**: You can safely delete `AGENTS.md`.
 
 *Tip: To convert and migrate your company's existing PPTX templates, use [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder).*
-
----
-
-## Automated PR Review (Gemini Code Assist)
-
-This repository includes **Gemini Code Assist Automated PR Review** powered by GitHub Actions. When a Pull Request is opened or updated, the workflow runs `scripts/verify_slide.py`, checks architectural guidelines, and automatically posts inline code reviews in the PR discussion.
 
 ---
 

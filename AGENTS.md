@@ -33,8 +33,6 @@ In typical corporate enterprise deployments (e.g., ChatGPT Enterprise, Claude fo
 
 ```
 AINativeSlide/
-├── .github/workflows/
-│   └── gemini-pr-review.yml        # Automated Gemini Code Assist PR review workflow
 ├── AGENTS.md                       # This file (AI coding agent instructions)
 ├── CLAUDE.md                       # Claude Code CLI entrypoint directives
 ├── SKILL.md                        # Antigravity / Agent Skill definition file

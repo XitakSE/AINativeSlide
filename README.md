@@ -26,8 +26,7 @@
 4. [使い方ガイド](#使い方ガイド)
 5. [キーボードショートカット一覧](#キーボードショートカット一覧)
 6. [ディレクトリ・ファイル構成](#ディレクトリ・ファイル構成)
-7. [Pull Request 自動レビュー](#pull-request-自動レビュー-gemini-code-assist)
-8. [ライセンス](#ライセンス)
+7. [ライセンス](#ライセンス)
 
 ---
 
@@ -191,12 +190,6 @@ AINativeSlide/
 > - **自律コーディング開発を行わない場合**: `AGENTS.md` は削除可能です。
 
 ※自社PPTXテンプレートからの移行は、初期セットアップ専用スキル [ainativeslide-template-builder](https://github.com/XitakSE/AINativeSlide-Template-Builder) で実行できます。
-
----
-
-## Pull Request 自動レビュー (Gemini Code Assist)
-
-本リポジトリでは、GitHub Actions を通じて **Gemini Code Assist による自動コードレビュー** が常時稼働しています。Pull Request が作成されると、`scripts/verify_slide.py` の検証結果および設計規約を読み込み、PRコメント欄に品質レポートが自動投稿されます。
 
 ---
 
