@@ -173,8 +173,7 @@ AINativeSlide/
 │   ├── speech_script_example.md # 発表台本文書サンプル
 │   └── corporate_default.html # 企業公式デザインテンプレート（CI/VI統一）
 ├── scripts/
-│   ├── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
-│   └── gemini_pr_review.py  # 【外部依存ゼロ】Gemini API 自動PRレビュー実行スクリプト
+│   └── verify_slide.py      # 【外部依存ゼロ】自動品質検証＆自律修正Pythonスクリプト
 └── references/              # 詳細技術リファレンス
     ├── slide-patterns.md    # スライド情報構造＆レイアウトパターン集（Anti-AI-Smell・6大構成）
     ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様

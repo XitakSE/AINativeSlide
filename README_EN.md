@@ -173,8 +173,7 @@ AINativeSlide/
 │   ├── speech_script_example.md # Speaker speech script sample document
 │   └── corporate_default.html # Corporate brand design template (CI/VI compliance)
 ├── scripts/
-│   ├── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
-│   └── gemini_pr_review.py  # [Zero-Dependency] Gemini API PR review automation script
+│   └── verify_slide.py      # [Zero-Dependency] Pure Python 3 auto-verification & quality test tool
 └── references/              # Detailed technical specifications
     ├── slide-patterns.md    # Information structuring & wireframe patterns (Anti-AI-Smell)
     ├── grill-workflow.md    # Cognitive alignment interview specification

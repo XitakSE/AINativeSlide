@@ -53,8 +53,7 @@ AINativeSlide/
 │   ├── design-system.md            # Typography & robust box-model guidelines
 │   └── slide-patterns.md           # Information structuring, layout patterns, and SVG charts
 └── scripts/
-    ├── verify_slide.py             # Automated quality & layout regression checker
-    └── gemini_pr_review.py         # Automated Gemini PR review script
+    └── verify_slide.py             # Automated quality & layout regression checker
 ```
 
 ### Related Companion Projects
