@@ -1,10 +1,12 @@
 # 戦略コンサル型 示唆・高度コンポーネント集 (Executive & Strategic Visual Components)
 
+<consulting_components_library>
 本書は、スライドに「コンサルティング・ファーム水準の示唆（So What?）」と「高い情報密度」を与えるための高度なUI・ビジュアルコンポーネント集です。
 すべて **外部ライブラリ（Chart.js等）を一切使わず、Tailwind CSS ＋ インラインSVG のみ** で単一ファイル完結（Single-File Architecture）する仕様になっています。
 
 ---
 
+<component_summary_matrix>
 ## 1. コンポーネント一覧と用途
 
 | コンポーネント | 用途・ビジネス意図 | 実装技術 |
@@ -17,11 +19,14 @@
 | **6. 2次元マリメッコ** | 横幅（TAM規模）× 縦高さ（シェア）の2次元比較 | Tailwind Flex (`w-[..%]`) ＋ スタック |
 | **7. ガント・タイムライン** | WBS、四半期工程、重要Gateマイルストーン（◆） | CSS Grid 12分割 ＋ 回転ダイヤ（◆） |
 | **8. 純粋SVG複合チャート** | 棒グラフ（工数削減）＋ 折れ線（ROI推移） | Pure Inline SVG (`viewBox`) |
+</component_summary_matrix>
 
 ---
 
+<component_snippets>
 ## 2. 各コンポーネントのHTML / Tailwindスニペット
 
+<component id="difference_cagr_arrows">
 ### 1. 差分矢印・CAGRアノテーション (Difference & CAGR Arrows)
 2つのメトリクスカードや棒グラフの間を繋ぎ、増減率（%）や絶対額差分を明示します。
 
@@ -52,9 +57,11 @@
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="harvey_balls">
 ### 2. ハーベイボール (Harvey Balls / 多軸成熟度評価)
 表形式の比較で、満ち欠け（● ◕ ◐ ◔ ○）を用いて評価レベルを直感的に伝えます。
 
@@ -96,9 +103,11 @@
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="agenda_breadcrumbs">
 ### 3. 章トラッカー・進行バー (Agenda Breadcrumbs)
 ヘッダー直上に配置し、全体アジェンダの現在地を示します。
 
@@ -125,9 +134,11 @@
   </span>
 </div>
 ```
+</component>
 
 ---
 
+<component id="actual_forecast_divider">
 ### 4. 実績 vs 予測の境界線 (Actuals vs Forecast Divider)
 時系列推移やウォーターフォールにおいて、過去確定実績と将来目標シミュレーションを明確に線引きします。
 
@@ -168,9 +179,11 @@
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="axis_break">
 ### 5. 軸ブレイク波線 (Axis Break / Scale Break)
 突出した異常値（外れ値）を波線で中途省略し、他指標の比較スケールを保護します。
 
@@ -206,9 +219,11 @@
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="mekko_chart">
 ### 6. 2次元マリメッコチャート (Mekko Chart)
 横幅（TAM規模）× 縦高さ（シェア構成比）を純粋Tailwindで表現します。
 
@@ -253,9 +268,11 @@
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="timeline_milestones">
 ### 7. タイムライン＆マイルストーン (Timeline & Milestone)
 CSS Grid 12列で四半期スケジュールとトラック、ダイヤマーク（◆）の必須Gateを表現します。
 
@@ -312,9 +329,11 @@ CSS Grid 12列で四半期スケジュールとトラック、ダイヤマーク
   </div>
 </div>
 ```
+</component>
 
 ---
 
+<component id="inline_svg_combined_chart">
 ### 8. 純粋SVG複合ビジネスチャート (Inline SVG Combined Chart)
 棒グラフ（工数削減量）と折れ線グラフ（累積ROI推移）を外部ライブラリなしで描画します。
 
@@ -351,3 +370,6 @@ CSS Grid 12列で四半期スケジュールとトラック、ダイヤマーク
   </svg>
 </div>
 ```
+</component>
+</component_snippets>
+</consulting_components_library>

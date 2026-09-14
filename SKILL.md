@@ -10,16 +10,19 @@ description: >-
 
 # AINativeSlide エージェント実行仕様書（Agent Execution Contract）
 
+<execution_contract>
 本スキルが呼び出された場合、AIエージェントは以下の決定論的シーケンスを順序厳守で実行すること。逸脱は一切認められない。
 
 ---
 
+<execution_sequence>
 ## 1. 必須実行シーケンス（MANDATORY SEQUENCE）
 
 ```
 [手順1: 必須Grill＆構成案承認] ➔ (ユーザー承認) ➔ [手順2: ベース骨格読込] ➔ [手順3: 単一HTML生成] ➔ [手順4: 自律検証・自動修復] ➔ [手順5: 納品・反復対応]
 ```
 
+<step id="1_grill">
 ### 手順1: 必須スマートGrill ＆ 構成案の事前承認（スキップ厳禁・必ず1往復実施）
 **※いかに依頼文が詳細であっても、いきなりHTMLコード生成を開始してはならない。必ずユーザーと1往復の壁打ちを行い、構成案の承認を得てから生成を開始すること。**
 
@@ -44,9 +47,13 @@ description: >-
 - **回答コスト最小化と1行承認誘導CTA**:
   提案書の末尾には必ず標準CTA（Call to Action）を付与し、ユーザーが「OK」「承認」と1単語送るだけで最適な推奨値（A/B）で即座に制作へ移行できるようにする。
 
+<approval_gate>
 > **絶対遵守ゲート**:
 > ユーザーから構成案に対する「承認」「OK」「これで進めて」等の合意を得るまで、手順2（HTMLコード生成）を開始してはならない。
+</approval_gate>
+</step>
 
+<step id="2_skeleton">
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
 - **必須手順**: ユーザーの承認を得た後、必ずベース骨格（[assets/template_base.html](./assets/template_base.html)）を取得し、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして使用すること。
   - **ツールが使える環境（Antigravity, Claude Code等）**: `view_file` ツールを用いて `assets/template_base.html` を読み込む。
@@ -54,9 +61,13 @@ description: >-
     - **Code Interpreterが使える場合（最優先推奨・完全動作保証）**: Pythonスクリプトでナレッジ内の `assets/template_base.html` を読み込み、スライドコンテンツ（`<section class="slide ...">` と `.slide-meta-box`）を置換して完成HTMLファイルを出力・ダウンロードリンクを提供する（トークン上限によるJS中略が物理的に発生せず、100%完全動作する）。
     - **チャット出力環境**: `template_base.html` の軽量化スクリプト（約210行）を中略（`// ...` 等）することなく、完全な単一コードブロックとして出力する。
 - 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/corporate_default.html](./assets/corporate_default.html) を参照すること。
+</step>
 
+<step id="3_single_file_html">
 ### 手順3: 単一HTML（Single-File HTML）の生成規則
 自己完結した単一のHTMLコードブロック（`<!DOCTYPE html>...</html>`）を生成する。以下の規約を厳守すること：
+
+<generation_rules>
 1. **編集機能のフェイルセーフ保証（Fail-safe Editability）**:
    - `<body class="... is-editable">`: `body` タグには必ず初期クラスとして `is-editable` を含め、ロード直後から即座に編集可能状態にする。
    - `<section class="slide ... contenteditable="true">`: 全スライド要素に静的に `contenteditable="true"` を必ず付与する。これによりJavaScriptが万が一遅延・停止してもブラウザネイティブで即座にテキスト編集できる安全網を死守する。
@@ -76,7 +87,10 @@ description: >-
    - ※ユーザーから素材画像が提供された場合も、同様にBase64エンコードしてインライン埋め込むこと。
 8. **完全インラインSVG**: グラフやチャートは外部JSライブラリ（Chart.js等）をロードせず、純粋なインライン `<svg>` で描画する。
 9. **言語の自動同期**: 依頼文が日本語の場合は `<html lang="ja">`、英語の場合は `<html lang="en">` を設定する。テンプレート内のJSがヘッダー文言やプレースホルダーを自動的に完全同期する。
+</generation_rules>
+</step>
 
+<step id="4_verification_repair">
 ### 手順4: 自律品質検証 ＆ 自動修復ループ（Self-Repair Loop）
 HTMLコードをユーザーに提示する前に、環境に応じた品質チェックを実施すること：
 
@@ -91,6 +105,7 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
   スクリプトの実行は行わず、自律的なコード内セルフチェック（スライド数とメタボックス数の1:1一致、ページ番号整合性、文字数・はみ出し確認）を実施する。
   **※重要（幻覚予防）**: スクリプトを実行できない環境であるにもかかわらず、「スクリプトを実行しました」「テストに合格しました」といった架空のコマンド実行報告や捏造ログを出力してはならない（実行できないなら単に実行しない）。
 
+<reflection_checklist>
 - **全環境共通: 出力前自己検証チェックリスト（AI自律セマンティック内省: Anti-AI-Smell Reflection）**:
   ※エンタープライズ環境（ChatGPT Enterprise, Claude for Work等）ではIDEや外部APIは使用できません。エージェント自身がスライド出力直前に「雰囲気・解像度」を内省してください（詳細規範・リライト指針は [references/slide-patterns.md §1](./references/slide-patterns.md#1-エージェント行動規範anti-ai-smell-guardrails) 参照）：
   - [ ] **リード文検証**: 動詞で終わる完全な1文（40〜60字のAction Title）か？（名詞止め見出し禁止）
@@ -98,15 +113,21 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
   - [ ] **均等分割の回避**: 3列以上の構成で、推奨案や重要カードに視覚的アンカー（色枠・バッジ）を設定したか？
   - [ ] **余白保護**: テキスト過密を回避したか？（1スライド200〜300字推奨、上限700字厳守）
   - [ ] **不要装飾排除**: 文脈と無関係な飾りアイコン（ロケット、電球等）を排除したか？
+</reflection_checklist>
+</step>
 
+<step id="5_delivery_iteration">
 ### 手順5: 成果物の提示 ＆ 反復推敲の処理
 - 完成した完全なHTMLを、単一のコードブロック（```html ... ```）で出力する。
 - 手順1で台本生成を希望された場合は、[assets/speech_script_example.md](./assets/speech_script_example.md) に準拠した台本文書（`speech_script.md`）を併せて出力する。
 - **ユーザーからの反復フィードバック対応**:
   - ユーザーが「📋 指示をコピー」から修正要望テキストを貼り付けて指示してきた場合、指示のないスライドはユーザーによる推敲内容を100%維持し、指示のあったスライドのみを的確に改修すること。
+</step>
+</execution_sequence>
 
 ---
 
+<strictly_forbidden>
 ## 2. 絶対禁止事項（STRICTLY FORBIDDEN）
 
 1. **未承認でのコード生成開始の禁止**: 手順1のGrillで構成案・画像プロンプトを提示し、ユーザーの承認を得る前にHTMLコードを出力してはならない。
@@ -145,9 +166,11 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 17. **スライドへの `contenteditable="true"` および `body` への `is-editable` 欠落の禁止 (Fail-safe Editability)**: スライドへの静的編集属性付与（`<section class="slide ... contenteditable="true">`）や初期クラス（`<body class="... is-editable">`）を省略してはならない。万が一スクリプトが停止しても、ブラウザ標準機能による直接編集を常に担保すること。
 18. **スライド全域への `pointer-events: none` 适用の禁止**: スライド要素へのマウスクリックやテキスト選択を完全遮断するような CSS（`pointer-events: none`）をスライドや body に適用してはならない。
 19. **Grill時の質問攻め・手抜き名詞トピック箇条書きの禁止**: ユーザーに白紙のオープンクエスチョンを投げ返したり（丸投げ質問）、スライド構成案を単なる名詞トピックの箇条書き（例:「1. 課題, 2. 解決策」）で済ませてはならない。初回応答前に必ず [references/grill-workflow.md](./references/grill-workflow.md) を読み込み、仮説構築型で全スロットを埋めた確定Markdownテンプレート（3層構造：日本語パターン名・40〜60字の完全文Action Title・構造意図）を出力すること。
+</strictly_forbidden>
 
 ---
 
+<dimension_specifications>
 ## 3. 用紙サイズ・アスペクト比 寸法仕様一覧
 
 | 形式・サイズ | 主な用途・利用シーン | 画面表示クラス | 印刷用CSS `@page` |
@@ -156,9 +179,11 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 | **4:3 標準** | 従来型プロジェクター、学術発表 | `w-[1024px] h-[768px]` | `@page { size: 4in 3in; margin: 0; }` |
 | **A4 横（Landscape）** | オフィス複合機での印刷配布資料、役員稟議・企画提案書 | `w-[1188px] h-[840px]` | `@page { size: A4 landscape; margin: 0; }` |
 | **A4 縦（Portrait）** | Amazon流 1枚ペーパー（1-Pager）、エグゼクティブサマリー | `w-[840px] h-[1188px]` | `@page { size: A4 portrait; margin: 0; }` |
+</dimension_specifications>
 
 ---
 
+<progressive_disclosure_references>
 ## 4. 詳細リファレンス（段階的開示: Progressive Disclosure）
 
 必要に応じて以下のリファレンスを `view_file` で参照し、詳細な設計仕様を取得すること：
@@ -170,4 +195,6 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 - [references/ratio-and-print-specs.md](./references/ratio-and-print-specs.md): 各比率の寸法計算、余白ゼロ印刷CSS、解像度換算
 - [references/ai-concept-imagery.md](./references/ai-concept-imagery.md): 4大テイスト別プロンプト構文、D&D差し替えJS仕様
 - [references/design-system.md](./references/design-system.md): タイポグラフィ階層、堅牢ボックスモデル、カラーパレット
+</progressive_disclosure_references>
+</execution_contract>
 

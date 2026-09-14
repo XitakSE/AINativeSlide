@@ -1,9 +1,11 @@
 # デザインシステム & 堅牢ボックスモデル (Design System & Box Model)
 
+<design_system_specs>
 ビジネスプレゼンテーションとして即座に通用する品格（Executive Presentation Quality）と、テキスト推敲時のレイアウト崩れを防ぐ構造設計のガイドラインです。
 
 ---
 
+<typography_hierarchy>
 ## 1. タイポグラフィ階層
 
 Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練されたサンセリフ）と `Noto Sans JP`（読みやすく信頼性の高い和文フォント）を組み合わせます。
@@ -25,9 +27,11 @@ Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練�
 | **Card Heading** | `text-sm sm:text-base font-bold text-slate-900` | 14〜16px / Bold | カード内ブロックの小見出し |
 | **Body Text** | `text-xs sm:text-sm text-slate-600 leading-relaxed` | 12〜14px / Regular | 箇条書き、説明文、詳細 |
 | **Meta / Footer / Note** | `text-[11px] sm:text-xs text-slate-400 font-mono` | 11〜12px / Medium | 前提注記、データソース、日付、ページ番号 |
+</typography_hierarchy>
 
 ---
 
+<color_palette>
 ## 2. 推奨カラーパレット
 
 単調な原色を避け、Slateをベースとした深みのあるカラーリングを採用します。
@@ -46,9 +50,11 @@ Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練�
 - **Semantic (Status / Contrast)**:
   - `rose-600 / rose-50`: 課題・AS-IS・注意（✕アイコン）
   - `emerald-600 / emerald-50`: 解決策・TO-BE・達成（✓アイコン）
+</color_palette>
 
 ---
 
+<robust_box_model>
 ## 3. 堅牢なボックスモデル（文字崩れ防止ルール）
 
 テキストの推敲によって文字数が2倍〜3倍に増減しても、**要素が重なったりスライド枠を突き抜けたりしない** ための鉄則です。
@@ -82,3 +88,5 @@ Google Fonts の `Plus Jakarta Sans`（欧文・数字・幾何学的で洗練�
    </div>
    ```
    - `flex flex-col justify-between` により、カード内の高さが揃い、下部の注記やマイルストーン情報が常に底面に整列します。
+</robust_box_model>
+</design_system_specs>

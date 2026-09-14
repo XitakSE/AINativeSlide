@@ -1,11 +1,13 @@
 # スライド情報構造 ＆ レイアウトパターン集 (Slide Layout & Information Patterns)
 
+<slide_pattern_specifications>
 本書は、社内向けプレゼンテーション（提案・意思決定、認識合わせ、学習・ナレッジ共有）のスライド構成を自動生成・検証するAIエージェント向けのリファレンス仕様書です。
 
 デザインテンプレート（フォント、配色、余白設計、CIロゴ）は [AINativeSlide-Template-Builder](../../AINativeSlide-Template-Builder/SKILL.md) および `assets/corporate_default.html` で別管理されている前提とし、エージェントは**「情報構造（ワイヤーフレーム）の選定」「メッセージの論理構築」「スロットへのテキスト配置」**に集中してください。
 
 ---
 
+<anti_ai_smell_guardrails>
 ## 1. エージェント行動規範（Anti-AI-Smell Guardrails: 正本/SSOT）
 
 エージェントはスライド生成・推敲時に以下の絶対規範を厳守してください（`SKILL.md` 禁止事項と完全連動）：
@@ -18,6 +20,7 @@
 6. **右肩バッジの折り返し＆ヘッダー余白ゼロの禁止**: バッジには `shrink-0 whitespace-nowrap` を付与し、ヘッダー下部に十分な余白（`mb-5`）を設ける。
 7. **外部画像パス参照の禁止**: 画像は必ず Base64 Data URI（`data:image/...`）でインライン埋め込みし、単一ファイル完結を死守する。
 
+<self_reflection_checklist>
 ### 出力前自己内省チェックリスト
 - [ ] リード文は動詞結びの完全な1文（40〜60文字のAction Title）になっているか？
 - [ ] 現場担当者が読んだ時に「明日から誰が何をすべきか」の具体動作・数値が想起できるか？
@@ -25,9 +28,12 @@
 - [ ] チャート類で `mb-[..%]` 等のパーセンテージマージンハックを使って要素重なり（コリジョン）を発生させていないか？
 - [ ] ウォーターフォール図のバー高さ（height）は、表示数値に厳密比例しているか？（適当な手打ち値による「数値と高さの不一致」を防止）
 - [ ] 1スライドあたりのテキスト量は適切か？（日本語200〜300文字推奨、最大700文字厳守）
+</self_reflection_checklist>
+</anti_ai_smell_guardrails>
 
 ---
 
+<base_anatomy>
 ## 2. スライド共通骨格（Base Anatomy）
 
 すべてのスライドは以下の基本階層でスロットを定義します。
@@ -61,9 +67,11 @@
   </div>
 </section>
 ```
+</base_anatomy>
 
 ---
 
+<deck_meta_skeleton>
 ## 2.2 プレゼンテーション全体骨格（Deck Meta Skeleton）
 
 複数枚で構成されるプレゼンテーション（提案書、稟議資料、ピッチデック等）では、**「表紙」の直後に「エグゼクティブサマリ」と「目次（アジェンダ）」を原則標準として配置**します。
@@ -157,9 +165,11 @@
   </div>
 </div>
 ```
+</deck_meta_skeleton>
 
 ---
 
+<wireframe_catalog>
 ## 3. 社内資料向け厳選6大情報構造パターン（6 Core Enterprise Wireframes）
 
 | 日本語対話時 | 英語対話時 | 内部識別子 (`pattern_id`) | レイアウトの特徴・使い所 |
@@ -564,9 +574,11 @@
   </div>
 </div>
 ```
+</wireframe_catalog>
 
 ---
 
+<consulting_components_summary>
 ## 4. 表現強化コンポーネント ＆ 戦略コンサル型 高度パーツ
 
 スライドの表現力を高める各種パーツは、保守性とトークン効率を高めるためモジュール化されています。
@@ -616,9 +628,11 @@
 | **2次元マリメッコ** | 横幅（TAM）× 縦高さ（シェア） | `mekko_chart` |
 | **ガント・タイムライン** | WBS、工程、Gate関門（◆） | `timeline_milestones` |
 | **純粋SVG複合チャート** | 棒（工数）＋ 折れ線（ROI） | Pure Inline SVG |
+</consulting_components_summary>
 
 ---
 
+<json_schema_spec>
 ## 5. エージェント用 出力生成フォーマット（JSON Schema）
 
 エージェントが思考プロセスや中間表現としてスライド構造を定義する際は、以下の構造化スキーマに従ってください。
@@ -642,9 +656,11 @@
   "required": ["pattern_id", "lead_message", "content_slots"]
 }
 ```
+</json_schema_spec>
 
 ---
 
+<data_visual_binding_summary>
 ## 6. データ表からの直接ビジュアル化プロトコル (Data-to-Visual Binding)
 
 > 📖 **詳細変換レシピと実例は以下を参照してください**:  
@@ -656,3 +672,5 @@
 2. **2軸のセグメントデータ（市場規模・シェア構成比）**: ➔ `mekko_chart`（マリメッコ型）へ自動バインド
 3. **複数案の採点表・メリデリデータ**: ➔ `tradeoff_matrix`（ハーベイボール付き比較表）へ自動バインド
 4. **月次・四半期別タスク・工程データ**: ➔ `timeline_gantt`（マイルストーン付きガント）へ自動バインド
+</data_visual_binding_summary>
+</slide_pattern_specifications>

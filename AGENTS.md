@@ -1,9 +1,11 @@
 # AGENTS.md
 
+<coding_agent_contract>
 This document provides essential context, architectural rules, and verification workflows for AI coding agents (such as Jules, Gemini Code Assist, Claude Code, Cursor, and others) working on the **AINativeSlide** repository.
 
 ---
 
+<project_philosophy>
 ## 1. Project Overview & Philosophy
 
 **AINativeSlide** is an AI output stabilization framework for creating high-impact, pixel-perfect presentation slide decks as a **Single-File HTML** with zero-margin PDF printing (16:9 or 4:3).
@@ -26,9 +28,11 @@ In typical corporate enterprise deployments (e.g., ChatGPT Enterprise, Claude fo
   - Quality enforcement cannot solely rely on Python scripts or secondary API calls.
   - **The primary generation AI agent itself must perform autonomous semantic reflection (Approach B)** using the guardrails and self-evaluation checklists in `SKILL.md` and `references/slide-patterns.md`.
   - Python tools like `scripts/verify_slide.py` serve as zero-dependency local safety nets for developer environments and CI/CD pipelines, using forgiving heuristics rather than brittle, rigid word-match lists.
+</project_philosophy>
 
 ---
 
+<directory_structure>
 ## 2. Directory Structure & Key Files
 
 ```
@@ -58,9 +62,11 @@ AINativeSlide/
 - **`AINativeSlide-Template-Builder`** (`/Users/takumi/dev/AINativeSlide-Template-Builder/`):
   - Companion skill for converting corporate slide templates (PPTX, PDF, Keynote, screenshots) into AINativeSlide design templates.
   - Workspace Skill Mirror: `.agents/skills/ainativeslide-template-builder/`
+</directory_structure>
 
 ---
 
+<verification_workflows>
 ## 3. Essential Commands & Verification Workflows
 
 Whenever you modify any slide HTML, templates, or scripts, you **MUST** run the following verification steps:
@@ -78,9 +84,11 @@ If `SKILL.md`, `assets/`, or any core documentation changes, keep `.agents/skill
 ```bash
 rsync -av --delete --exclude '.git' --exclude 'node_modules' --exclude '.DS_Store' /Users/takumi/dev/AINativeSlide/ /Users/takumi/dev/.agents/skills/ainativeslide/
 ```
+</verification_workflows>
 
 ---
 
+<golden_architectural_rules>
 ## 4. Golden Architectural Rules for AI Agents
 
 When editing or generating slide decks in this repository, strictly adhere to these rules:
@@ -194,9 +202,11 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
   3. Structural Intent: Specific visual contrast or criteria breakdown.
 - **Standard Default Placement**: Multi-slide decks (4+ slides) must always place Executive Summary and Agenda right after the Title slide.
 - **Approval Gate**: Never output HTML code until the user provides explicit approval ("OK", "承認").
+</golden_architectural_rules>
 
 ---
 
+<definition_of_done>
 ## 5. Definition of Done for PRs / Changes
 
 Before marking any task as complete:
@@ -204,3 +214,5 @@ Before marking any task as complete:
 2. If `assets/template_base.html` or core UI logic changed, verify and mirror compatibility with `AINativeSlide-Template-Builder`.
 3. `rsync` sync to `.agents/skills/ainativeslide/` (and `.agents/skills/ainativeslide-template-builder/` if relevant) is completed.
 4. Git commit messages follow standard Conventional Commits (e.g., `feat: ...`, `fix: ...`, `refactor: ...`, `docs: ...`).
+</definition_of_done>
+</coding_agent_contract>

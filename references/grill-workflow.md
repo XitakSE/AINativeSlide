@@ -1,9 +1,11 @@
 # Grill フレームワーク（認知ドリフト防止 ＆ 事前構成提案プロトコル）
 
+<grill_framework>
 ユーザーからの曖昧な指示や前提の相違による「手戻り（認知ドリフト）」を未然に防ぎ、1往復の対話で手戻りなく高品質なスライドを完成させるための事前合意（Grill）プロトコルです。
 
 ---
 
+<grill_principles>
 ## 1. Grill の5大基本原則
 
 ### 1. いきなりコードを出力しない（スキップ厳禁）
@@ -28,15 +30,18 @@
 
 ### 5. 回答コスト最小化と承認ゲート（1行承認CTA）
 提案書の末尾には必ず標準CTA（Call to Action）を配置し、ユーザーが**「OK」「承認」と1単語送るだけで最適な推奨値（A/B）で即座に制作へ移行できる**ようにする。
+</grill_principles>
 
 ---
 
+<proposal_output_templates>
 ## 2. 厳格出力フォーマット（スライド構成提案書テンプレート）
 
 初回応答では、**以下のMarkdownテンプレート構造を一文字も崩さず、全スロットを仮説で埋めて出力すること**（要約・省略・自由書式への変更は厳禁）：
 
 ### 【日本語対話時: 確定Markdown出力テンプレート】
 
+<template lang="ja">
 ```markdown
 スライドの完成度を高め、手戻りを防ぐために以下のスライド構成案を作成しました。
 ご確認いただき、承認（または修正指示）をお願いいたします。
@@ -89,6 +94,7 @@
 👉 **この構成案でよろしければ「承認」または「OK」とご返信ください。**
 （※比率やデザインの変更がある場合は「2-C、4-Dで」のように記号でお知らせください。承認をいただき次第、スライドHTMLの生成を開始します）
 ```
+</template>
 
 ---
 
@@ -96,6 +102,7 @@
 
 英語での対話時は、日本語を一切含めず以下の英語確定テンプレートを使用すること：
 
+<template lang="en">
 ```markdown
 To ensure full alignment and eliminate cognitive drift, here is the proposed slide deck architecture.
 Please review and confirm to proceed with HTML generation.
@@ -147,9 +154,12 @@ Please review and confirm to proceed with HTML generation.
 👉 **Reply "Approved" or "OK" to proceed with this outline.**
 (To customize options, simply reply with your choices, e.g., "2-C, 4-D". Upon approval, HTML synthesis will begin immediately.)
 ```
+</template>
+</proposal_output_templates>
 
 ---
 
+<pattern_catalog>
 ## 3. スライド情報構造パターン 全10種の言語別対照表
 
 Grill提示時は、対話言語に応じたパターン名のみを使用すること（日本語対話時に英語IDを出してはならない）：
@@ -167,9 +177,11 @@ Grill提示時は、対話言語に応じたパターン名のみを使用する
 | **【境界線・NG/OK対比】** | `[Boundary & Best Practices]` | `boundary_comparison` | In/Out Scope境界線設定、またはアンチパターン（NG）と推奨（OK）の対比 |
 | **【マリメッコ市場分析】** | `[Mekko Market Share]` | `mekko_chart` | TAM市場規模（横幅）× 自社シェア（縦高さ）の2次元競合分析 |
 | **【タイムライン＆マイルストーン】** | `[Timeline & Milestone]` | `timeline_gantt` | 四半期工程表と重要マイルストーン（◆）の可視化 |
+</pattern_catalog>
 
 ---
 
+<anti_lazy_checklist>
 ## 4. 手抜き防止セルフチェックリスト（Anti-Lazy Grill Check）
 
 エージェントがGrill構成案を出力する直前に自己検証すべき必須チェックリスト：
@@ -180,15 +192,19 @@ Grill提示時は、対話言語に応じたパターン名のみを使用する
 - [ ] **標準配置検証**: 4枚以上のデッキで【エグゼクティブサマリ】と【目次（アジェンダ）】が含まれているか？
 - [ ] **1行承認CTA**: 末尾に「OK / 承認」で進められる誘導メッセージが付与されているか？
 - [ ] **コード出力抑制**: ユーザーの承認を得る前にHTMLコードを1行でも出力していないか？
+</anti_lazy_checklist>
 
 ---
 
+<post_approval_transition>
 ## 5. 合意後のコード生成フェーズ
 
 ユーザーから構成案に対する承認（「OK」「承認」「2-C, 4-Aで進めて」等）を得た後、直ちに `assets/template_base.html` を読み込み、単一HTMLスライドの生成および品質検証へ進む。
+</post_approval_transition>
 
 ---
 
+<speech_script_specification>
 ## 6. 発表用台本文書（`speech_script.md`）の仕様フォーマット
 
 台本生成が選択された場合、HTML内にメモを埋め込むのではなく、再利用・印刷・スマートフォンでの閲覧が容易な独立したMarkdownファイル（または回答内Markdownブロック）として出力する。
@@ -216,4 +232,6 @@ Grill提示時は、対話言語に応じたパターン名のみを使用する
 - **目安時間**: 2分00秒
 ...
 ```
+</speech_script_specification>
+</grill_framework>
 
