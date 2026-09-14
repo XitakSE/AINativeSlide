@@ -19,62 +19,14 @@
 ---
 
 <zero_margin_print_css>
-## 2. 印刷（PDF出力）CSSの必須ルール
+## 2. 印刷（PDF出力）CSSの決定論的注入仕様
 
-Chromium系ブラウザ（Chrome, Edge等）において、**余白ゼロ・改ページずれゼロ・スライド1枚につきぴったり1ページ** でPDF化するために、以下のCSSルールを含めます。
+印刷（PDFエクスポート）時の「余白ゼロ・改ページずれゼロ」設定は、`scripts/assemble_deck.py` および `scripts/verify_slide.py --fix` が選択された比率（16:9, 4:3, A4横, A4縦）に応じて**100%自動注入・自己修復**します。
 
-```css
-/* 1. @page ルール（比率・用紙サイズに応じて指定） */
-/* 16:9 の場合: size: 16in 9in; */
-/* 4:3 の場合:  size: 4in 3in; */
-/* A4 横の場合: size: A4 landscape; */
-/* A4 縦の場合: size: A4 portrait; */
-@page {
-  size: 16in 9in;
-  margin: 0;
-}
-
-/* 2. @media print ルール */
-@media print {
-  html, body {
-    background-color: transparent !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* 操作ツールバーや不要なUIを完全非表示 */
-  .no-print {
-    display: none !important;
-  }
-
-  /* スライドコンテナの余白やFlex/Gridの隙間をゼロ化 */
-  .slide-viewport {
-    padding: 0 !important;
-    margin: 0 !important;
-    gap: 0 !important;
-    display: block !important;
-  }
-
-  /* 各スライド要素の完全フィット & 強制改ページ */
-  /* ※アスペクト比・用紙サイズに合わせて width / height を同期 (16in 9in / 4in 3in / 297mm 210mm / 210mm 297mm) */
-  .slide {
-    width: 16in !important;
-    height: 9in !important;
-    max-width: none !important;
-    max-height: none !important;
-    page-break-after: always !important;
-    break-after: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-    margin: 0 auto !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    border: none !important;
-  }
-}
-```
+エージェントが手動で記述・コピーする必要はありません。内部では以下の核となるルールが自動適用されます：
+- **`@page { size: <比率ごとの用紙サイズ>; margin: 0; }`**: ブラウザ標準の印刷マージンをゼロ化
+- **`@media print { .no-print { display: none !important; } }`**: ツールバーや修正指示入力欄を印刷対象から完全除外
+- **`.slide { page-break-after: always; break-after: page; }`**: スライドごとの厳密な改ページを保証
 </zero_margin_print_css>
 
 ---

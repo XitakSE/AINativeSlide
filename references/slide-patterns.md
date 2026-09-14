@@ -67,6 +67,8 @@
   </div>
 </section>
 ```
+> 💡 **自動採番・メタボックスの決定論的注入**:
+> フッターのスライド番号（`02 / 06`）の再計算や、スライド直下の修正指示入力欄（`.slide-meta-box`）の注入は、`scripts/assemble_deck.py` および `scripts/verify_slide.py --fix` が自動処理します。エージェントは各スライドの内部コンテンツ生成（Action Titleとワイヤーフレーム）に専念してください。
 </base_anatomy>
 
 ---

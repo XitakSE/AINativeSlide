@@ -55,12 +55,9 @@ description: >-
 
 <step id="2_skeleton">
 ### 手順2: ベース骨格の読み込み（ゼロからの自作禁止）
-- **必須手順**: ユーザーの承認を得た後、必ずベース骨格（[assets/template_base.html](./assets/template_base.html)）を取得し、検証済みのヘッダーツールバー、モーダル、JavaScriptエンジンをスケルトンとして使用すること。
-  - **ツールが使える環境（Antigravity, Claude Code等）**: `view_file` ツールを用いて `assets/template_base.html` を読み込む。
-  - **CLI / Python実行環境（Antigravity, Cursor, Claude Code, Code Interpreter等 - 最優先推奨）**:
-    - **決定論的合体パイプライン（Token節約 & 100%完全動作保証）**: LLMはスライドコンテンツの断片（`<section class="slide ...">...</section>`）のHTML出力に集中し、全体の骨格・メタボックス・番号再計算・印刷CSSの統合は `scripts/assemble_deck.py` で決定論的に処理する。
-  - **プレーンチャット環境（ChatGPT Enterprise, Claude Web等）**:
-    - `template_base.html` の軽量化スクリプト（約210行）を中略（`// ...` 等）することなく、完全な単一コードブロックとして出力する。
+- **環境に応じたアプローチ**:
+  - **CLI / Python実行環境（最優先推奨・Token節約 & 完全動作保証）**: LLMが `template_base.html` を読み込む必要はない。LLMはスライド断片（`<section class="slide ...">...</section>`）のHTML出力に専念し、全体の骨格・メタボックス・番号再計算・印刷CSSの統合は `scripts/assemble_deck.py` で決定論的に処理する。
+  - **プレーンチャット環境（ChatGPT Enterprise, Claude Web等）**: `view_file` またはプロンプト参照で `template_base.html` をベースとし、中略（`// ...` 等）することなく完全な単一コードブロックとして出力する。
 - 自社公式デザイン（CIカラー・ロゴ枠）が指定されている場合は、[assets/corporate_default.html](./assets/corporate_default.html) を参照すること。
 </step>
 
@@ -153,25 +150,8 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 4. **ゼロからのHTML独自記述の禁止**: 必ず [assets/template_base.html](./assets/template_base.html) を複製・ベースとすること。
 5. **外部重量級JSライブラリの読み込み禁止**: Chart.js, D3, Reveal.js, Mermaid CDN, React, Vue 等を勝手に読み込んではならない。
 6. **スライド内HTMLダウンロードボタンの再導入禁止**: `downloadHtmlWithComments` などのブラウザ内Blob保存ボタンを設置してはならない（AI環境自体の保存機能および「指示をコピー」に集約済み）。
-7. **スライド枠とメタボックスの 1:1 不一致の禁止**: `.slide` の数と `.slide-meta-box` の数は常に完全一致させること。
-8. **余白ゼロ印刷CSSの破壊禁止**: 以下の印刷用CSSブロック（トップレベル `@page` および `@media print`）を改変・削除してはならない：
-   ```css
-   @page {
-     size: 16in 9in; /* 比率に応じて 4in 3in / A4 landscape / A4 portrait */
-     margin: 0;
-   }
-   @media print {
-     body { background: transparent !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-     .no-print { display: none !important; }
-     .slide-viewport { padding: 0 !important; gap: 0 !important; display: block !important; }
-     .slide {
-       width: 16in !important; height: 9in !important; max-width: none !important; max-height: none !important;
-       page-break-after: always !important; break-after: page !important;
-       page-break-inside: avoid !important; break-inside: avoid !important;
-       margin: 0 auto !important; border-radius: 0 !important; box-shadow: none !important; border: none !important;
-     }
-   }
-   ```
+7. **スライド枠とメタボックスの 1:1 不一致の禁止**: `.slide` の数と `.slide-meta-box` の数は常に完全一致させること（CLI環境では `scripts/assemble_deck.py` が100%自動対配置し、`scripts/verify_slide.py --fix` が自動修復）。
+8. **余白ゼロ印刷CSSの改変・破壊の禁止**: トップレベル `@page { margin: 0; }` および `@media print` の余白ゼロ・改ページ設定を削除・改変してはならない（CLI環境では `scripts/assemble_deck.py` が比率に合わせて自動注入し、`scripts/verify_slide.py --fix` が自動修復）。
 9. **テキスト許容量超過の禁止**: 横長スライドでは推奨目安500〜600文字・絶対上限700文字（A4縦の場合は推奨目安約850文字・絶対上限1,100文字）を超えてはならない（`scripts/verify_slide.py` の警告・エラー判定基準と完全連動）。
 10. **無意味な3均等カード化の禁止 (Anti-AI-Smell)**: 3つ並ぶブロックの幅・文字量・強調度を均等にしてはならない。必ず推奨案や重要カードに視覚的アンカーを設定すること（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
 11. **抽象バズワード連呼の禁止 (Anti-AI-Smell)**: 「シナジー」「推進」等、具体的動作が想起できない空虚な語彙を出力してはならない（詳細: [slide-patterns.md §1.1](./references/slide-patterns.md#11-禁止事項do-not)）。
