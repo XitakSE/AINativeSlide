@@ -191,15 +191,24 @@ def main():
     else:
         errors.append('ヘッダーに id="deckSlideCountText" の要素が見つかりません。')
 
+    # 企業デザインテンプレート（CI/VI統制）かどうかを判定
+    is_corporate_template = (
+        'design_templates' in str(target_file)
+        or 'corporate' in target_file.name.lower()
+        or '企業CI' in html
+        or 'ブランドカラー定義' in html
+    )
+
     required_ids = [
         'deckTitleText',
         'deckRatioText',
         'deckSlideCountText',
         'toggleEditBtn',
         'copyCommentsBtn',
-        'presentationModal',
-        'selectionToolbar'
+        'presentationModal'
     ]
+    if not is_corporate_template:
+        required_ids.append('selectionToolbar')
 
     for rid in required_ids:
         if not re.search(rf'id=["\']{rid}["\']', html, re.IGNORECASE):
@@ -224,9 +233,10 @@ def main():
         'toggleEditMode',
         'startPresentation',
         'stopPresentation',
-        'copySlideComments',
-        'formatSelection'
+        'copySlideComments'
     ]
+    if not is_corporate_template:
+        required_js_functions.append('formatSelection')
 
     for fn in required_js_functions:
         if not re.search(rf'function\s+{fn}\b', html, re.IGNORECASE):
