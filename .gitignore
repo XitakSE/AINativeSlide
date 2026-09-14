@@ -24,6 +24,5 @@ ENTERPRISE_*.md
 legacy/
 
 # Demo files and assets
-demo_assets/
 demo_*.html
 speech_script_*.md
