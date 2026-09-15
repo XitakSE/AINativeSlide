@@ -172,8 +172,8 @@ AINativeSlide/
 ├── README_EN.md             # 英語ドキュメント
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
 ├── agents/                  # 各種AIエージェント向けマニフェスト定義
-│   ├── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
-│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT Enterprise / Custom GPTs ラッパー導入設定ガイド
+│   ├── SLIDE_ORCHESTRATOR_AGENT.md # 共通マスターオーケストレーター
+│   └── openai.yaml          # ChatGPT / OpenAI Agent 実行仕様マニフェスト
 ├── assets/                  # Agent Skills 標準資材ディレクトリ
 │   ├── template_base.html   # 汎用HTMLベーステンプレート（機能エンジン）
 │   ├── speech_script_example.md # 発表台本文書サンプル
@@ -194,7 +194,7 @@ AINativeSlide/
 > **💡 利用環境に応じた不要ファイルの整理・削除について**:
 > 本リポジトリは、Google Antigravity、Claude Code、ChatGPT、Cursor 等のあらゆる主要エージェントですぐに動作するよう各環境向けの設定ファイルを同梱しています。ご自身の利用環境に合わせて、不要なファイルは各自自由に削除してご利用ください：
 > - **必須のコア資材**: `SKILL.md`（スキル実行契約の正本）および `assets/`（HTML骨格・テンプレート資材）
-> - **ChatGPT 環境を使わない場合**: `agents/` ディレクトリは削除可能です。（※ChatGPT Enterprise では、ワークスペースSkillsに本リポジトリを登録し、`agents/GPT_CUSTOM_INSTRUCTIONS.md` を使ってCustom GPTラッパーを構築します）
+> - **ChatGPT 環境を使わない場合**: `agents/` ディレクトリは削除可能です。（※ChatGPT Enterprise では、ワークスペースSkillsに本リポジトリを登録し、`agents/SLIDE_ORCHESTRATOR_AGENT.md` を使ってマスターオーケストレーターとして運用します）
 > - **Claude Code を使わない場合**: `CLAUDE.md` は削除可能です。
 > - **自律コーディング開発を行わない場合**: `AGENTS.md` は削除可能です。
 

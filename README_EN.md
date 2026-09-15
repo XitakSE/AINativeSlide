@@ -171,8 +171,8 @@ AINativeSlide/
 ├── README_EN.md             # English documentation
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
 ├── agents/                  # Multi-Agent manifest definitions
-│   ├── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
-│   └── GPT_CUSTOM_INSTRUCTIONS.md # ChatGPT Enterprise / Custom GPTs wrapper setup guide
+│   ├── SLIDE_ORCHESTRATOR_AGENT.md # Universal master orchestrator
+│   └── openai.yaml          # ChatGPT / OpenAI Agent execution manifest
 ├── assets/                  # Agent Skills standard assets directory
 │   ├── template_base.html   # Base HTML template engine optimized for AI stability
 │   ├── speech_script_example.md # Speaker speech script sample document
@@ -193,7 +193,7 @@ AINativeSlide/
 > **💡 Pruning Unused Files for Your Target Environment**:
 > This repository is pre-configured to work out-of-the-box across Google Antigravity, Claude Code, ChatGPT, Cursor, and other agent platforms. Feel free to prune files you do not need:
 > - **Core Essentials**: `SKILL.md` (the primary execution contract) and `assets/` (HTML skeletons and assets)
-> - **If not using ChatGPT**: You can safely delete the `agents/` directory. (Note: In ChatGPT Enterprise, install this skill into workspace Skills and build a Custom GPT wrapper using `agents/GPT_CUSTOM_INSTRUCTIONS.md`).
+> - **If not using ChatGPT**: You can safely delete the `agents/` directory. (Note: In ChatGPT Enterprise, install this skill into workspace Skills and coordinate agents using `agents/SLIDE_ORCHESTRATOR_AGENT.md`).
 > - **If not using Claude Code**: You can safely delete `CLAUDE.md`.
 > - **If not using autonomous coding agents**: You can safely delete `AGENTS.md`.
 

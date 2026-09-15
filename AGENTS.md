@@ -44,8 +44,7 @@ AINativeSlide/
 ├── index.html                      # GitHub Pages root & 16:9 interactive showcase
 ├── agents/                         # Multi-Agent orchestrator definitions
 │   ├── SLIDE_ORCHESTRATOR_AGENT.md # Universal Japanese master orchestrator prompt (All platforms)
-│   ├── openai.yaml                 # OpenAI Agent / ChatGPT specification
-│   └── GPT_CUSTOM_INSTRUCTIONS.md  # (Deprecated / Legacy wrapper guide)
+│   └── openai.yaml                 # OpenAI Agent / ChatGPT specification
 ├── assets/                         # Standard Agent Skills assets directory
 │   ├── template_base.html          # Clean base template skeleton for new decks
 │   ├── speech_script_example.md    # Speaker script document example
