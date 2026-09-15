@@ -17,10 +17,14 @@ assets:
     description: "Presentation speaker script template (speech_script.md)"
   - path: "assets/corporate_default.html"
     description: "Corporate design template scaffold"
+  - path: "themes/default_theme.json"
+    description: "Standard corporate CI design token schema"
 
 references:
+  - path: "agents/SLIDE_ORCHESTRATOR_AGENT.md"
+    description: "Universal Japanese master orchestrator prompt for multi-agent coordination"
   - path: "agents/GPT_CUSTOM_INSTRUCTIONS.md"
-    description: "ChatGPT Enterprise / Custom GPTs wrapper instructions and skill orchestration guide"
+    description: "(Legacy) ChatGPT Enterprise / Custom GPTs wrapper guide"
   - path: "references/slide-patterns.md"
     description: "Layout patterns, wireframes, and enterprise deck meta skeleton"
   - path: "references/components-consulting.md"
@@ -37,6 +41,12 @@ references:
     description: "AI concept imagery prompt guidelines and Zero-Cropping rules"
 
 scripts:
+  - path: "scripts/assemble_deck.py"
+    description: "Deterministic slide deck assembler with theme token injection"
+    interpreter: "python3"
+  - path: "scripts/apply_theme.py"
+    description: "Theme JSON design token applier engine"
+    interpreter: "python3"
   - path: "scripts/verify_slide.py"
     description: "Zero-dependency Python automated slide deck quality and layout verifier"
     interpreter: "python3"

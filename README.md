@@ -83,10 +83,10 @@ git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativesl
 2. 解凍したフォルダを `ainativeslide` にリネーム。
 3. 作業スペースの `.agents/skills/ainativeslide` に直接配置します（フォルダ直下に `SKILL.md` がある状態）。
 
-### 手順C. ChatGPT Enterprise での導入（ワークスペースSkills ＆ Custom GPTラッパー連携）
-ChatGPT Enterprise（または Team / Business）環境では、ワークスペースのスキル機能と Custom GPT を組み合わせて利用します：
-1. **ワークスペースSkillsへの登録**: 本リポジトリ一式を ChatGPT Enterprise のワークスペース Skills にインストールします（`@ainativeslide` として登録）。
-2. **Custom GPT ラッパーの作成（推奨）**: 初手プロンプトの曖昧さによらず厳格なGrill（スライド構成提案書）を一発出力させるため、[`agents/GPT_CUSTOM_INSTRUCTIONS.md`](agents/GPT_CUSTOM_INSTRUCTIONS.md) に記載の手順で社内公開用 Custom GPT を作成します（裏で `@ainativeslide` を呼び出すオーケストレーション構成）。
+### 手順C. 共通マスターオーケストレーターによる導入（ChatGPT, Claude, Gemini, IDE共通）
+ChatGPT Enterprise（Workspace Agents）、Claude Projects、Gemini Gems、各種IDEエージェントで運用する場合：
+1. **スキルの配置**: ワークスペースに本スキル（`@ainativeslide`）および企画サブスキル（`@ainativeslide-planner`）を配置します。
+2. **マスターオーケストレーターの設定（推奨）**: 初手での暴走を防ぎ、Grillからデザイン・生成までを一気通貫で自律統括させるため、[`agents/SLIDE_ORCHESTRATOR_AGENT.md`](agents/SLIDE_ORCHESTRATOR_AGENT.md) の共通プロンプトを各サービスの Instructions に設定（またはチャットの1通目に貼り付け）します。
 
 ---
 

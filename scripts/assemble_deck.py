@@ -17,7 +17,17 @@ import sys
 import os
 import re
 import argparse
+import json
 from pathlib import Path
+
+# テーマ適用エンジンのインポート
+try:
+    from scripts.apply_theme import ThemeApplier
+except ImportError:
+    try:
+        from apply_theme import ThemeApplier
+    except ImportError:
+        ThemeApplier = None
 
 # アスペクト比・寸法仕様マッピング
 RATIO_SPECS = {
@@ -285,6 +295,7 @@ def main():
     parser.add_argument('-o', '--output', default='deck.html', help='出力先HTMLファイルパス (デフォルト: deck.html)')
     parser.add_argument('-t', '--template', default=None, help='ベーステンプレートHTMLパス (デフォルト: assets/template_base.html)')
     parser.add_argument('--title', default='', help='スライドデッキのタイトル (省略時はスライドから自動推論)')
+    parser.add_argument('--theme', default=None, help='テーマ定義JSONファイルのパス (指定時はテンプレートにスタイルを上書き適用)')
     parser.add_argument('-r', '--ratio', default='16:9', choices=['16:9', '4:3', 'a4_landscape', 'a4_portrait', '16-9', '4-3', 'a4', 'a4_l', 'a4-landscape', 'a4_p', 'a4-portrait'], help='アスペクト比・用紙サイズ (デフォルト: 16:9)')
     parser.add_argument('--lang', default='ja', choices=['ja', 'en'], help='言語設定 (ja または en, デフォルト: ja)')
     parser.add_argument('--no-meta-box', action='store_true', help='メタ情報ボックスを配置しない (デザインテンプレート用)')
@@ -304,6 +315,23 @@ def main():
 
     with open(template_path, 'r', encoding='utf-8') as f:
         template_html = f.read()
+
+    # テーマJSONの適用（指定時）
+    if args.theme:
+        theme_path = Path(args.theme).resolve()
+        if not theme_path.exists():
+            print(f'❌ [ERROR] 指定されたテーマJSONが見つかりません: {theme_path}', file=sys.stderr)
+            sys.exit(1)
+        if ThemeApplier is None:
+            print('❌ [ERROR] apply_theme モジュールをロードできませんでした。', file=sys.stderr)
+            sys.exit(1)
+        with open(theme_path, 'r', encoding='utf-8') as f:
+            theme_data = json.load(f)
+        applier = ThemeApplier(theme_data, template_html)
+        template_html = applier.apply_all()
+        # テーマ内に ratio 指定があれば採用
+        if 'ratio' in theme_data and args.ratio == '16:9':
+            args.ratio = theme_data['ratio']
 
     # スライド入力の読み込み
     if args.input_files:

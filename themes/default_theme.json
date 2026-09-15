@@ -1,0 +1,53 @@
+{
+  "theme_id": "ibm_carbon_default",
+  "name": "IBM Carbon Enterprise (Anti-AI-Smell Standard)",
+  "ratio": "16:9",
+  "typography": {
+    "font_family_en": "IBM Plex Sans",
+    "font_family_ja": "IBM Plex Sans JP",
+    "google_fonts_url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
+  },
+  "colors": {
+    "brand": {
+      "50": "#edf5ff",
+      "100": "#d0e2ff",
+      "200": "#a6c8ff",
+      "300": "#78a9ff",
+      "400": "#4589ff",
+      "500": "#0f62fe",
+      "600": "#0043ce",
+      "700": "#002d9c",
+      "800": "#001d6c",
+      "900": "#001141",
+      "950": "#000820"
+    },
+    "accent": {
+      "400": "#33b1ff",
+      "500": "#1192e8",
+      "600": "#0072c3"
+    },
+    "surface": {
+      "bg_slide": "#f4f4f4",
+      "bg_dark": "#161616",
+      "border": "#e0e0e0"
+    }
+  },
+  "components": {
+    "card_radius": "rounded-none",
+    "card_shadow": "shadow-none",
+    "table_header_bg": "bg-gray-900"
+  },
+  "fixed_elements": {
+    "confidential_badge": {
+      "enabled": true,
+      "text": "CONFIDENTIAL / 社外秘",
+      "style": "bg-red-50 text-red-700 border-red-200"
+    },
+    "company_name": "Enterprise Holdings, Inc.",
+    "copyright": "© 2026 Enterprise Holdings, Inc. All rights reserved.",
+    "logo": {
+      "type": "svg",
+      "content": "<svg class=\"w-6 h-6 text-brand-600\" fill=\"none\" stroke=\"currentColor\" viewBox=\"0 0 24 24\"><path stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M13 10V3L4 14h7v7l9-11h-7z\"/></svg>"
+    }
+  }
+}

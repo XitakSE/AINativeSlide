@@ -1,8 +1,12 @@
-# ChatGPT Enterprise / Custom GPTs 連携・導入ガイド (GPT Wrapper Instructions)
+# ChatGPT Enterprise / Custom GPTs 連携・導入ガイド (Legacy GPT Wrapper)
 
-本ドキュメントは、OpenAIの **ChatGPT Enterprise（または ChatGPT Team / Business）** にインストールされた Agent Skill（`@ainativeslide`）と連携し、社員からの短文依頼に対しても**「初手から100%厳格なスライド構成提案書（Grill）を出力させ、承認後に裏でスキルを実行する」** ための Custom GPT（窓口ラッパー）設定ガイドおよび専用システムプロンプトです。
+> ⚠️ **【重要: 移行のご案内】**  
+> OpenAI Custom GPTs の再編・仕様変更に伴い、本ガイドは **レガシー（互換用）** となりました。  
+> 現在は、ChatGPT Enterprise / Workspace Agents、Claude Projects、Gemini Gems、および各種IDEエージェントで共通して利用可能な **[SLIDE_ORCHESTRATOR_AGENT.md](./SLIDE_ORCHESTRATOR_AGENT.md)** への移行を強く推奨します。
 
 ---
+
+本ドキュメントは、従来の **ChatGPT Enterprise（または ChatGPT Team / Business）** において Custom GPT を窓口ラッパーとして運用していた際の設定リファレンスです。
 
 ## 1. アーキテクチャの役割分担（なぜCustom GPTをラッパーにするのか）
 

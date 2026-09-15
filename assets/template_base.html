@@ -6,30 +6,30 @@
   <title>スライドプレゼンテーション</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Google Fonts: Plus Jakarta Sans & Noto Sans JP -->
+  <!-- Google Fonts: IBM Plex Sans & IBM Plex Sans JP (IBM Carbon Design System) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+JP:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <script>
     tailwind.config = {
       theme: {
         extend: {
           fontFamily: {
-            sans: ['"Plus Jakarta Sans"', '"Noto Sans JP"', 'sans-serif'],
+            sans: ['"IBM Plex Sans"', '"IBM Plex Sans JP"', 'sans-serif'],
           },
           colors: {
             brand: {
-              50: 'var(--brand-50, #eef2ff)',
-              100: 'var(--brand-100, #e0e7ff)',
-              200: 'var(--brand-200, #c7d2fe)',
-              300: 'var(--brand-300, #a5b4fc)',
-              400: 'var(--brand-400, #818cf8)',
-              500: 'var(--brand-500, #6366f1)',
-              600: 'var(--brand-600, #4f46e5)',
-              700: 'var(--brand-700, #4338ca)',
-              900: 'var(--brand-900, #312e81)',
-              950: 'var(--brand-950, #1e1b4b)',
+              50: 'var(--brand-50, #edf5ff)',
+              100: 'var(--brand-100, #d0e2ff)',
+              200: 'var(--brand-200, #a6c8ff)',
+              300: 'var(--brand-300, #78a9ff)',
+              400: 'var(--brand-400, #4589ff)',
+              500: 'var(--brand-500, #0f62fe)',
+              600: 'var(--brand-600, #0043ce)',
+              700: 'var(--brand-700, #002d9c)',
+              900: 'var(--brand-900, #001141)',
+              950: 'var(--brand-950, #000820)',
             },
             accent: {
               400: 'var(--accent-400, #38bdf8)',
@@ -43,21 +43,21 @@
   </script>
 
   <style>
-    /* CSS変数による動的カラー制御（デフォルト: Indigo） */
+    /* CSS変数による動的カラー制御（IBM Carbon: IBM Blue & Cool Gray） */
     :root {
-      --brand-50: #eef2ff;
-      --brand-100: #e0e7ff;
-      --brand-200: #c7d2fe;
-      --brand-300: #a5b4fc;
-      --brand-400: #818cf8;
-      --brand-500: #6366f1;
-      --brand-600: #4f46e5;
-      --brand-700: #4338ca;
-      --brand-900: #312e81;
-      --brand-950: #1e1b4b;
-      --accent-400: #38bdf8;
-      --accent-500: #0ea5e9;
-      --accent-600: #0284c7;
+      --brand-50: #edf5ff;
+      --brand-100: #d0e2ff;
+      --brand-200: #a6c8ff;
+      --brand-300: #78a9ff;
+      --brand-400: #4589ff;
+      --brand-500: #0f62fe;
+      --brand-600: #0043ce;
+      --brand-700: #002d9c;
+      --brand-900: #001141;
+      --brand-950: #000820;
+      --accent-400: #33b1ff;
+      --accent-500: #1192e8;
+      --accent-600: #0072c3;
     }
 
     /* ========================================================
@@ -223,7 +223,7 @@
         <h1 id="deckTitleText" class="text-sm font-semibold tracking-wide max-w-[260px] truncate">スライドタイトル</h1>
         <div class="flex items-center gap-2 text-[11px] text-slate-400">
           <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-          <span id="deckRatioText">16:9 ワイド (1280 × 720)</span>
+          <span id="deckRatioText">16:9 ワイド</span>
           <span class="text-slate-600">|</span>
           <span id="deckSlideCountText">全1スライド</span>
         </div>

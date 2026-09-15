@@ -477,6 +477,31 @@ class SlideVerifier:
                     f'無意味な均等カード化を避け、推奨案や重要要素に色枠やバッジ等のアンカーを設定してください。'
                 )
 
+        # (4) 視覚的AI臭検査（IBM Carbon Design System 原則違反検知）
+        # 1. 丸すぎるカード (rounded-2xl, rounded-3xl)
+        excessive_radius = re.findall(r'\brounded-(?:2xl|3xl)\b', inner_html)
+        if excessive_radius:
+            self.warnings.append(
+                f'Slide {slide_num}: 過度な角丸クラス ({", ".join(set(excessive_radius))}) が検出されました (Anti-AI-Smell / IBM Carbon)。'
+                f'AI特有のカジュアル・幼稚な印象を排除するため、完全な直角 (rounded-none) または最小限 (rounded-sm) に修正してください。'
+            )
+
+        # 2. ぼやけたドロップシャドウ (shadow-lg, shadow-xl, shadow-2xl)
+        excessive_shadows = re.findall(r'\bshadow-(?:lg|xl|2xl)\b', inner_html)
+        if excessive_shadows:
+            self.warnings.append(
+                f'Slide {slide_num}: ぼやけたドロップシャドウ ({", ".join(set(excessive_shadows))}) が検出されました (Anti-AI-Smell / IBM Carbon)。'
+                f'影を全廃し (shadow-none)、1pxの精密境界線 (border-gray-200) と面レイヤリングで立体感を表現してください。'
+            )
+
+        # 3. 安易なネオングラデーション (from-purple-, from-pink-)
+        neon_gradients = re.findall(r'\b(?:from|to|via)-(?:purple|pink|fuchsia)-\d+\b', inner_html)
+        if neon_gradients:
+            self.warnings.append(
+                f'Slide {slide_num}: 安易なAIネオングラデーション ({", ".join(set(neon_gradients))}) が検出されました (Anti-AI-Smell / IBM Carbon)。'
+                f'グラデーションを廃止し、IBM Blue / Carbon Gray のソリッドな直線アクセントバー (border-l-4) を使用してください。'
+            )
+
     def check_meta_boxes(self):
         """メタボックス内のバッジ番号表記を検証する"""
         slide_count = len(self.slides)

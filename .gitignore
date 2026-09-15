@@ -29,3 +29,8 @@ demo_output/
 demo_*.html
 speech_script_*.md
 
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+

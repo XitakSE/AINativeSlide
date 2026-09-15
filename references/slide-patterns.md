@@ -21,12 +21,19 @@
 7. **外部画像パス参照の禁止**: 画像は必ず Base64 Data URI（`data:image/...`）でインライン埋め込みし、単一ファイル完結を死守する。
 8. **無意味な装飾AI画像の禁止（Anti-Decorative Imagery Rule）**: 単なる雰囲気出しのイメージ画像（アイキャッチ、意味のない3Dキューブ、抽象CG等）をスライド内に置くことを厳禁とする。画像は「UIモックアップ」「現場の実態」「物理製品」「AS-IS/TO-BEの構造的対比」等の不可欠な視覚証拠に限定する。
 9. **豆粒フォント（text-xs / text-[10px]）乱用の禁止（Minimum Font Size Guardrails）**: スライド本文やカード内で `text-xs` (12px) や `text-[10px]` を多用することを禁止する（豆粒フォントの撲滅）。本文は最低 `text-sm` (14px) 以上、カード見出しは `text-base`〜`text-lg` (16〜18px)、Action Titleは `text-2xl`〜`text-3xl` (24〜28px) を厳守し、文字数を絞って余白を確保する。
+10. **視覚的AI臭の根絶 ＆ IBM Carbon 原則の死守（Visual Anti-AI-Smell Rule）**:
+    - **No Rounded-2XL (ハードエッジ)**: 丸すぎるカード（`rounded-xl`, `rounded-2xl`, `rounded-3xl`）を厳禁とし、完全な直角（`rounded-none`）または最小限（`rounded-sm: 4px`）を標準化する。
+    - **No Drop Shadows (アンチシャドウ)**: ぼやけたドロップシャドウ（`shadow-md`, `shadow-lg`, `shadow-xl`）を全廃し、影ゼロ（`shadow-none`）＋ 1pxの精密境界線（`border border-gray-300`）および背景色のコントラスト階層（Gray 10 上の White）のみで面を構築する。
+    - **No Neon Gradients (直線アクセントバー)**: 紫〜ピンク等の安易なAIネオングラデーションを禁止し、強調には 4px の直線アクセントバー（`border-l-4 border-blue-600` または `border-t-4 border-blue-600`）を用いる。
+    - **IBM Plex Family の遵守**: フォントは `IBM Plex Sans` + `IBM Plex Sans JP` を標準とし、シャープで知的なエンジニアリング・エンタープライズ品質を担保する。
 
 <self_reflection_checklist>
 ### 出力前自己内省チェックリスト
 - [ ] リード文は動詞結びの完全な1文（40〜60文字のAction Title）になっているか？
 - [ ] 現場担当者が読んだ時に「明日から誰が何をすべきか」の具体動作・数値が想起できるか？
 - [ ] 本文フォントは `text-sm` (14px) 以上が確保されているか？（`text-xs` や `text-[10px]` を乱用していないか？）
+- [ ] カードは IBM Carbon 準拠のハードエッジ（`rounded-none`）および影ゼロ（`shadow-none` + 1pxボーダー）になっているか？（`rounded-2xl` や `shadow-lg` 等の視覚的AI臭を出していないか？）
+- [ ] 安易なネオングラデーションに頼らず、直線アクセントバー（`border-l-4`）で強調しているか？
 - [ ] 配置された画像は単なる装飾ではなく、スライドの論理を証明する実質的意味を持っているか？
 - [ ] エグゼクティブサマリに画像をねじ込んで標準の横スプリット4段構造を破壊していないか？
 - [ ] `overflow-hidden` 親要素内で `-top-` バッジを使って見切れ（クリッピング）を発生させていないか？

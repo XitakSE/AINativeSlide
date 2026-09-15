@@ -73,5 +73,28 @@ class TestSlideVerifier(unittest.TestCase):
         self.assertGreater(len(verifier.errors), 0)
         self.assertIn('一致していません', verifier.errors[0])
 
+    def test_carbon_anti_ai_smell_detection(self):
+        html = '''
+        <!DOCTYPE html>
+        <html lang="ja">
+        <body>
+            <section class="slide" contenteditable="true">
+                <div class="rounded-3xl shadow-xl bg-gradient-to-r from-purple-500 to-pink-500">
+                    <h2>AI Smelly Card</h2>
+                </div>
+                <div class="slide-footer">01 / 01</div>
+            </section>
+        </body>
+        </html>
+        '''
+        verifier = SlideVerifier(html, Path("dummy.html"), is_strict=False)
+        verifier.check_slides_content()
+
+        # Carbon 原則違反（過度な角丸、影、ネオングラデーション）の警告が3件検知されること
+        warn_texts = " ".join(verifier.warnings)
+        self.assertIn("過度な角丸クラス", warn_texts)
+        self.assertIn("ぼやけたドロップシャドウ", warn_texts)
+        self.assertIn("安易なAIネオングラデーション", warn_texts)
+
 if __name__ == '__main__':
     unittest.main()

@@ -82,10 +82,10 @@ git clone https://github.com/XitakSE/AINativeSlide.git .agents/skills/ainativesl
 2. Extract the archive and rename the folder to `ainativeslide`.
 3. Move it to `.agents/skills/ainativeslide` in your project root (ensure `SKILL.md` is directly inside).
 
-### Method C: ChatGPT Enterprise Deployment (Workspace Skills & Custom GPT Wrapper)
-In ChatGPT Enterprise (or Team / Business) environments, combine Workspace Skills with a Custom GPT:
-1. **Workspace Skills Installation**: Upload this repository to your ChatGPT Enterprise workspace Skills library (registered as `@ainativeslide`).
-2. **Custom GPT Wrapper (Recommended)**: To guarantee an immediate, rigorous Grill proposal regardless of user prompt brevity, build a dedicated Custom GPT using [`agents/GPT_CUSTOM_INSTRUCTIONS.md`](agents/GPT_CUSTOM_INSTRUCTIONS.md) that orchestrates `@ainativeslide` in the background.
+### Method C: Universal Master Orchestrator Deployment (ChatGPT, Claude, Gemini, IDEs)
+When deploying across ChatGPT Enterprise (Workspace Agents), Claude Projects, Gemini Gems, or IDE agents:
+1. **Skill Placement**: Install `@ainativeslide` and the planning sub-skill `@ainativeslide-planner` in your workspace.
+2. **Master Orchestrator Setup (Recommended)**: To coordinate discovery, design, and deterministic assembly autonomously, configure your agent's system instructions (or paste into your initial chat prompt) using [`agents/SLIDE_ORCHESTRATOR_AGENT.md`](agents/SLIDE_ORCHESTRATOR_AGENT.md).
 
 ---
 
