@@ -24,6 +24,7 @@ ENTERPRISE_*.md
 legacy/
 
 # Demo files and assets
+demo/
 demo_assets/
 demo_output/
 demo_*.html
