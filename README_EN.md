@@ -58,8 +58,8 @@
 | **AI Visuals** | **Concept Imagery Generation** | Curated prompts across 4 visual styles: Photorealistic, Manga/Comic, 3D Isometric, and Flat Vector. |
 | | **Zero-Cropping Aspect Alignment** | Pre-aligns container ratios with prompt aspect ratios to eliminate unwanted CSS cropping (supports drag-and-drop replacement). |
 | | **Pure Base64 Inlining** | Embeds all AI imagery and brand logos directly as Data URIs for true Single-File zero-dependency portability. |
-| **Review & Present** | **Mandatory Smart Grill (Approval Gate)** | Alignment interview prior to code generation to establish outline, ratio, and image styles, eliminating cognitive drift. |
-| | **Speech Script Markdown (`speech_script.md`)** | Simultaneously generates estimated timings, key takeaways, and conversational speaker notes (optional Grill choice). |
+| **Review & Present** | **Mandatory Smart Grill (Approval Gate)** | Alignment interview prior to code generation (via `@ainativeslide-planner`) to establish outline, ratio, and image styles, eliminating cognitive drift. |
+| | **Speech Script Markdown (`speech_script.md`)** | Simultaneously generates estimated timings, key takeaways, and conversational speaker notes (optional Planner choice). |
 | | **In-Browser Direct Editing & Mini Toolbar** | Click to edit slide text directly with floating format bar (bold, colors, highlighter, font sizing). |
 | | **Fullscreen Slideshow & Read-Only Mode** | Press **`F`** to present fullscreen, **`E`** to toggle read-only mode (prevents accidental clicks), and **`Esc`** to exit. |
 | | **Batch Feedback Prompts & Auto-Save** | Aggregates per-slide notes into formatted revision prompts via **"📋 Copy Instructions"**. Background `localStorage` auto-save. |
@@ -166,7 +166,7 @@ Open the generated HTML in Chrome, Edge, or Safari:
 AINativeSlide/
 ├── AGENTS.md                # General AI coding agent instructions
 ├── CLAUDE.md                # Claude Code CLI entrypoint directives
-├── SKILL.md                 # AI Agent Skill specification (Grill, auto-testing, patterns)
+├── SKILL.md                 # AI Agent Skill specification (auto-testing, patterns, Fail-fast delegation)
 ├── README.md                # Japanese documentation
 ├── README_EN.md             # English documentation
 ├── index.html               # GitHub Pages root & 16:9 interactive live showcase
@@ -184,7 +184,6 @@ AINativeSlide/
     ├── slide-patterns.md    # Information structuring & wireframe patterns (Anti-AI-Smell)
     ├── components-consulting.md # Executive consulting visual components (Mekko, Gantt, Harvey balls)
     ├── data-visual-binding.md # Data-to-visual binding protocols from CSV/Markdown tables
-    ├── grill-workflow.md    # Cognitive alignment interview specification
     ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 aspect ratio & print CSS specs
     ├── ai-concept-imagery.md # Concept image generation prompt guidelines
     └── design-system.md     # Typography & robust box model specifications

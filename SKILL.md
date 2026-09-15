@@ -24,13 +24,13 @@ description: >-
 ```
 
 <step id="1_manifest_input">
-### 手順1: スライド構成仕様（`deck_manifest.json`）の受付 ＆ フォールバック
-本スキルは、確定したスライド構成仕様（`deck_manifest.json`）およびデザイントークン（`themes/theme.json`）を入力として受け取り、決定論的にHTMLを実装・ビルドするエンジンである。
+### 手順1: スライド構成仕様（`deck_manifest.json`）の受付（Fail-fast）
+本スキルは、確定したスライド構成仕様（`deck_manifest.json`）およびデザイントークン（`themes/theme.json`）を入力として受け取り、決定論的にHTMLを実装・ビルドする専門エンジンである。
 
-- **正規ルート（マニフェスト指定時・推奨）**:
-  `deck_manifest.json`（または企画スキル `@ainativeslide-planner` で合意済みの構成案）が提供されている場合、**Grill等の対話を挟まず、直ちに手順2（ベース骨格読込）および手順3（HTML生成）へ進むこと**。
-- **フォールバック（マニフェスト未指定の直接依頼時のみ）**:
-  ユーザーから構成案なしで直接「スライドを作って」と依頼された場合のみ、いきなりコードを出力せず、仮説構築型でタイトル・比率・全スライド構成（パターン・Action Title）を提示し、ユーザーの「OK」承認を得てから生成へ移行すること（詳細仕様: [references/grill-workflow.md](./references/grill-workflow.md)）。
+- **正規ルート**:
+  `deck_manifest.json`（または企画スキル `@ainativeslide-planner` で合意済みの確定構成案）が提供されている場合、直ちに手順2（ベース骨格読込）および手順3（HTML生成）へ進むこと。
+- **Fail-fast ルール（マニフェスト未指定の直接依頼時）**:
+  ユーザーから構成案なしで直接「スライドを作って」と依頼された場合、**本スキル自身でGrill（構成案の壁打ち）を行ってはならない**。直ちに処理を停止し、ユーザー（またはマスターオーケストレーター）に対して「スライドの企画・構成案を作成するため、先に `@ainativeslide-planner` を呼び出してください」と案内し、処理を委譲すること。
 </step>
 
 <step id="2_skeleton">
@@ -142,7 +142,7 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 16. **外部画像ファイルパス・URL参照の禁止 (Single-File純度の死守)**: `<img src="./images/..." >` や `<img src="https://..." >` などの外部パス参照を行ってはならない。画像は必ず Base64 Data URI（`data:image/jpeg;base64,...` または `data:image/png;base64,...`）として HTML 内に直接インライン埋め込みし、HTMLファイル単体での完全動作を死守すること。
 17. **スライドへの `contenteditable="true"` および `body` への `is-editable` 欠落の禁止 (Fail-safe Editability)**: スライドへの静的編集属性付与（`<section class="slide ... contenteditable="true">`）や初期クラス（`<body class="... is-editable">`）を省略してはならない。万が一スクリプトが停止しても、ブラウザ標準機能による直接編集を常に担保すること。
 18. **スライド全域への `pointer-events: none` 适用の禁止**: スライド要素へのマウスクリックやテキスト選択を完全遮断するような CSS（`pointer-events: none`）をスライドや body に適用してはならない。
-19. **マニフェスト未指定時の白紙質問攻め禁止 (Fallback Grill Rule)**: マニフェスト未指定で直接作成を求められた場合、ユーザーに白紙のオープンクエスチョンを投げ返してはならない。必ず仮説構築型で全スロットを埋めた提案書を提示し、承認を得てから生成へ移行すること。
+19. **マニフェスト未指定時の自力Grillの禁止 (Fail-fast Rule)**: マニフェスト未指定で直接作成を求められた場合、本スキル自身で企画・構成案の提案（Grill）を行ってはならない。必ず `@ainativeslide-planner` の使用を促し、企画フェーズを完全に委譲すること。
 </strictly_forbidden>
 
 ---
@@ -168,7 +168,6 @@ HTMLコードをユーザーに提示する前に、環境に応じた品質チ�
 - [references/slide-patterns.md](./references/slide-patterns.md): スライド情報構造＆レイアウトパターン集（Anti-AI-Smell ガードレール、Base Anatomy、Deck全体骨格、厳選6大パターン、JSON Schema）
 - [references/components-consulting.md](./references/components-consulting.md): 戦略コンサル型 示唆・高度コンポーネント集（差分矢印、ハーベイボール、章トラッカー、実績/予測境界線、軸ブレイク、マリメッコ、ガント）
 - [references/data-visual-binding.md](./references/data-visual-binding.md): データ表（CSV/Markdown）からの直接ビジュアル化プロトコル（決定論的パターン変換マトリクス）
-- [references/grill-workflow.md](./references/grill-workflow.md): Grill詳細フロー、構成提案書テンプレート、台本文書仕様
 - [references/ratio-and-print-specs.md](./references/ratio-and-print-specs.md): 各比率の寸法計算、余白ゼロ印刷CSS、解像度換算
 - [references/ai-concept-imagery.md](./references/ai-concept-imagery.md): 4大テイスト別プロンプト構文、D&D差し替えJS仕様
 - [references/design-system.md](./references/design-system.md): タイポグラフィ階層、堅牢ボックスモデル、カラーパレット

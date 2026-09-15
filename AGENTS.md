@@ -46,8 +46,6 @@ AINativeSlide/
 │   ├── SLIDE_ORCHESTRATOR_AGENT.md # Universal Japanese master orchestrator prompt (All platforms)
 │   ├── openai.yaml                 # OpenAI Agent / ChatGPT specification
 │   └── GPT_CUSTOM_INSTRUCTIONS.md  # (Deprecated / Legacy wrapper guide)
-├── skills/                         # Sub-skills within repository
-│   └── ainativeslide-planner/      # Discovery & Grill sub-skill (manifest generator)
 ├── assets/                         # Standard Agent Skills assets directory
 │   ├── template_base.html          # Clean base template skeleton for new decks
 │   ├── speech_script_example.md    # Speaker script document example
@@ -58,18 +56,20 @@ AINativeSlide/
 │   ├── slide-patterns.md           # Information structuring, layout patterns, and core wireframes
 │   ├── components-consulting.md    # Executive consulting visual components (Mekko, Gantt, Harvey balls)
 │   ├── data-visual-binding.md      # Data-to-visual binding protocols from CSV/Markdown tables
-│   └── grill-workflow.md           # Cognitive-drift prevention grill protocol
 └── scripts/
     ├── apply_theme.py              # Theme JSON token injection engine
     ├── assemble_deck.py            # Deterministic deck assembler (--theme supported)
     └── verify_slide.py             # Automated quality & layout regression checker (with --fix)
 ```
 
-### 3-Skill Decoupled Architecture
-1. **`ainativeslide-planner`**: Conducts hypothesis-driven Grill and produces validated `deck_manifest.json`.
-2. **`ainativeslide-template-builder`**: Ingests corporate assets and produces `themes/theme.json` design tokens.
-3. **`ainativeslide`**: Consumes `deck_manifest.json` + `theme.json` to synthesize Single-File HTML with deterministic scripts.
-4. **`SLIDE_ORCHESTRATOR_AGENT.md`**: Universal state-machine prompt to coordinate the 3 skills on any platform.
+### Companion 3-Skill Ecosystem
+- **`AINativeSlide-Planner`** (`../AINativeSlide-Planner/`):
+  - Companion skill for discovery, Grill interview, and `deck_manifest.json` generation.
+  - Workspace Skill Mirror: `.agents/skills/ainativeslide-planner/`
+- **`AINativeSlide-Template-Builder`** (`../AINativeSlide-Template-Builder/`):
+  - Companion skill for extracting corporate design tokens into `themes/theme.json`.
+  - Workspace Skill Mirror: `.agents/skills/ainativeslide-template-builder/`
+- **`SLIDE_ORCHESTRATOR_AGENT.md`**: Universal state-machine prompt coordinating the 3 skills.
 </directory_structure>
 
 ---
@@ -215,13 +215,13 @@ When generating slide content, strictly avoid generic "AI-smelling" outputs:
 - **Static `contenteditable="true"`**: Every slide element must statically declare `<section class="slide ... contenteditable="true">`. Even if runtime scripts fail, are omitted by token limits, or are blocked, standard in-browser direct editing must remain fully operational.
 - **No Pointer Events Blocking**: Never apply `pointer-events: none` to slides in CSS. Mouse clicks, caret positioning, and text selection must never be completely suppressed.
 
-### Rule 11: Manifest-Driven Synthesis & Hypothesis Grill Separation
+### Rule 11: Strict Sub-Skill Delegation (Fail-Fast Rule)
 - **Sub-Skill Delegation**:
   - Slide discovery, hypothesis outline formulation, and user approval gates are governed by `ainativeslide-planner`.
   - When invoked with an approved `deck_manifest.json`, the builder engine (`ainativeslide`) immediately transitions to HTML fragment synthesis without redundant grill rounds.
-- **Zero-Question Principle (Fallback Mode)**:
-  - If invoked directly without a manifest, the builder engine falls back to conducting 1 round of hypothesis-driven grill strictly per `references/grill-workflow.md`.
-  - Never interrogate the user with open-ended questions. Even for short prompts, proactively populate every slot of the proposal template, ensure 40–60 character Action Titles with active verbs, and halt for user confirmation before writing HTML.
+- **Strict Fail-Fast on Missing Manifest**:
+  - If invoked directly without an approved manifest, the builder engine MUST NOT conduct grill by itself.
+  - It must immediately halt execution and instruct the user or the orchestrator to invoke `@ainativeslide-planner` to finalize the outline first.
 </golden_architectural_rules>
 
 ---

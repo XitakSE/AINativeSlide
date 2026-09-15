@@ -59,8 +59,8 @@
 | **AIビジュアル** | **AI生成画像 (Concept Imagery)** | 4大テイスト（リアル／漫画／3Dアイコン／フラット）の日本語プロンプト設計 |
 | | **Zero-Cropping 構図同期** | スライド枠比率とプロンプト比率を事前同期し、CSSトリミング切り落としをゼロ化（D&D差し替え対応） |
 | | **Base64 完全インライン化** | 生成画像やCIロゴをData URIとしてHTML内に直接埋め込み、単一ファイル（Single-File）で完全完結 |
-| **推敲・発表** | **事前スマートGrill（承認ゲート）** | いきなりコードを出力せず、スライド構成提案書で合意を得る認知ドリフト防止策 |
-| | **発表用台本文書（MD）セット生成** | スライドHTMLと口語体トーク原稿（`speech_script.md`）を同時出力（Grill選択制） |
+| **推敲・発表** | **事前スマートGrill（承認ゲート）** | いきなりコードを出力せず、スライド構成提案書で合意を得る認知ドリフト防止策（`@ainativeslide-planner` 連携時） |
+| | **発表用台本文書（MD）セット生成** | スライドHTMLと口語体トーク原稿（`speech_script.md`）を同時出力（Planner選択制） |
 | | **ブラウザ直接推敲 & ミニ書式バー** | スライド文字をクリック編集。太字・文字色・マーカー・個別フォントサイズ調整 |
 | | **全画面スライドショー & 閲覧モード** | キーボード **`F`** で投影、**`E`** で閲覧専用（誤操作防止）、**`Esc`** で復帰 |
 | | **修正指示の一括コピー ＆ 保存** | 各スライドの要望を整形プロンプトとしてクリップボードへ集約。`localStorage` 自動保存 |
@@ -167,7 +167,7 @@ flowchart LR
 AINativeSlide/
 ├── AGENTS.md                # AIコーディングエージェント向け総合指示書
 ├── CLAUDE.md                # Claude Code CLI 向けエントリポイント指示書
-├── SKILL.md                 # スキル仕様書（スマートGrill・自律検証ループ・パターン規約）
+├── SKILL.md                 # スキル仕様書（自律検証ループ・パターン規約・Fail-fast委譲）
 ├── README.md                # 本ドキュメント（日本語）
 ├── README_EN.md             # 英語ドキュメント
 ├── index.html               # GitHub Pages ルート & 16:9 実動ショーケース
@@ -185,7 +185,6 @@ AINativeSlide/
     ├── slide-patterns.md    # スライド情報構造＆厳選6大パターン集（Anti-AI-Smell・Deck骨格）
     ├── components-consulting.md # 戦略コンサル型示唆パーツ集（マリメッコ・ガント・ハーベイボール）
     ├── data-visual-binding.md # データ表（CSV/MD）からの自動ビジュアル化プロトコル
-    ├── grill-workflow.md    # 認知ドリフト防止 Grill仕様
     ├── ratio-and-print-specs.md # 16:9 / 4:3 / A4 比率・印刷CSS仕様
     ├── ai-concept-imagery.md # コンセプト画像プロンプト設計仕様
     └── design-system.md     # タイポグラフィ・堅牢ボックスモデル仕様
